@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "244592105398",
+    "firebase_url": "https://snowin-92584.firebaseio.com",
+    "project_id": "snowin-92584",
+    "storage_bucket": "snowin-92584.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244592105398:android:aff0ae536b352e920d5317",
+        "android_client_info": {
+          "package_name": "com.snowin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244592105398-nvr7j7hokg6qpcrp87iekv7hc7m380a7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.snowin",
+            "certificate_hash": "d569a6ed9d260dcf41a9f49ceaf2beef2dec1a05"
+          }
+        },
+        {
+          "client_id": "244592105398-9fu0j4r57as49633tg00flgo8lgghl4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5FptKJwd1pu5uaXYogvo5mO-r-aTK3gU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244592105398-9fu0j4r57as49633tg00flgo8lgghl4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
