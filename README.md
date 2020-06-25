@@ -9,11 +9,8 @@
 PROYECTO SNOWIN APP
 ------------------------------------------
 
-La app está creada con flutter.
+# DOCUMENTACIÓN PARA EL DESARROLLO DE LA APP
 
-
-DOCUMENTACIÓN PARA EL DESARROLLO DE LA APP
-------------------------------------------
-# Flutter
+## Flutter
 - [Sitio Oficial](https://flutter.dev/)
 
