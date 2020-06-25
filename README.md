@@ -1,16 +1,19 @@
-# snowin
+<p align="center">
+    <a href="https://alternativasinteligentes.com/" target="_blank">
+        <img src="https://alternativasinteligentes.com/wp-content/uploads/2019/03/logo-aisa.png" height="100px">
+    </a>
+    <h1 align="center">Alterativas Inteligentes SA</h1>
+    <br>
+</p>
 
-Aplicación Mobile Snowin.
+PROYECTO SNOWIN APP
+------------------------------------------
 
-## Getting Started
+La app está creada con flutter.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+DOCUMENTACIÓN PARA EL DESARROLLO DE LA APP
+------------------------------------------
+# Flutter
+- [Sitio Oficial](https://flutter.dev/)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
