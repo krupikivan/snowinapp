@@ -6,10 +6,11 @@
     <br>
 </p>
 
-PROYECTO SNOWIN APP
-------------------------------------------
+# PROYECTO SNOWIN APP
 
-# DOCUMENTACIÓN PARA EL DESARROLLO DE LA APP
+
+DOCUMENTACIÓN PARA EL DESARROLLO DE LA APP
+------------------------------------------
 
 ## Flutter
 - [Sitio Oficial](https://flutter.dev/)
