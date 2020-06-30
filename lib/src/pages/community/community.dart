@@ -6,6 +6,7 @@ import 'package:snowin/src/pages/community/search_tab.dart';
 import 'package:snowin/src/pages/community/widget/notification_avatar.dart';
 import 'package:snowin/src/widgets/custom_appbar_pages.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
+import 'package:snowin/src/widgets/custom_fab_icon.dart';
 
 import '../../widgets/main_menu.dart';
 
@@ -93,29 +94,30 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
               builder: (context, tab, _) => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  FloatingActionButton(
-                      heroTag: "btnFilter",
-                      backgroundColor: Theme.of(context).backgroundColor,
-                      child: Icon(Icons.filter_list),
-                      onPressed: () {}),
+                  CustomFabIcon(
+                    heroTag: "btnFilter",
+                    icon: Icons.filter_list,
+                    action: () => null,
+                    isPrimary: false,
+                  ),
                   SizedBox(
                     width: 15,
                   ),
                   tab.currentIndex == 1
-                      ? FloatingActionButton(
+                      ? CustomFabIcon(
                           heroTag: "btnFriend",
-                          backgroundColor: Theme.of(context).primaryColor,
-                          child: Icon(Icons.person_add),
-                          onPressed: () {})
+                          isPrimary: true,
+                          icon: Icons.person_add,
+                          action: () => null)
                       : SizedBox(),
                   SizedBox(
                     width: 15,
                   ),
-                  FloatingActionButton(
+                  CustomFabIcon(
                       heroTag: "btnSearch",
-                      backgroundColor: Theme.of(context).backgroundColor,
-                      child: Icon(Icons.search),
-                      onPressed: () {}),
+                      isPrimary: false,
+                      icon: Icons.search,
+                      action: () => null),
                 ],
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/blocs/app_instance.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
+import 'package:snowin/src/pages/drawer/provider/award_provider.dart';
 import 'package:snowin/src/pages/splashscreen_page.dart';
 import 'package:snowin/src/routes/routes.dart';
 import 'package:snowin/src/share/preference.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 //import 'package:snowin/src/providers/push_notifications_provider.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:snowin/theme/my_theme.dart';
-import 'package:snowin/theme/style.dart';
 
 import 'src/pages/benefits/provider/benefit_provider.dart';
 
@@ -46,13 +46,13 @@ class _MyAppState extends State<MyApp> {
             create: (context) => CommunityTabsProvider.init()),
         ChangeNotifierProvider(create: (context) => MarkerProvider.init()),
         ChangeNotifierProvider(create: (context) => BenefitProvider.init()),
-        // ChangeNotifierProvider(create: (context) => AwardsProvider.init()),
+        ChangeNotifierProvider(create: (context) => AwardsProvider.init()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Snowin',
         onGenerateRoute: (RouteSettings settings) => getRoute(settings),
-        //**TODO: Cambie la ruta inicial para poder trabajar en ella
+        //**TODO: Comentar initialRoute y descomentar la home
         initialRoute: '/home',
         // home: SplashScreen(),
         localizationsDelegates: [

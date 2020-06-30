@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:snowin/src/pages/benefits/benefit_detail.dart';
 import 'package:snowin/src/pages/benefits/benefits.dart';
 import 'package:snowin/src/pages/community/community.dart';
-import 'package:snowin/src/pages/community/provider/user_chat.dart';
+import 'package:snowin/src/pages/community/user_chat.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
+import 'package:snowin/src/pages/drawer/export.dart';
 import 'package:snowin/src/pages/home/home.dart';
 import 'package:snowin/src/pages/sos/sos.dart';
 import 'package:snowin/src/pages/wellcome/wellcome_carousel.dart';
@@ -105,6 +106,27 @@ MaterialPageRoute getRoute(RouteSettings settings) {
         builder: (_) => new UserChat(),
         settings: settings,
       );
+/**
+ * *---------------------Navigator managing drawer pages
+ */
+    case '/myBenefits':
+      return new MyCustomRoute(
+        builder: (_) => new MyBenefits(),
+        settings: settings,
+      );
+
+    case '/myAwards':
+      return new MyCustomRoute(
+        builder: (_) => new MyAwards(),
+        settings: settings,
+      );
+
+    case '/ask':
+      return new MyCustomRoute(
+        builder: (_) => new Ask(),
+        settings: settings,
+      );
+
 /**
  * *---------------------Navigator managing benefits pages
  */

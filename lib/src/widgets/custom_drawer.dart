@@ -98,7 +98,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
         txt,
         style: style,
       ),
-      onTap: () => Navigator.pop(context),
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, _getRoute(txt));
+      },
     );
+  }
+
+  String _getRoute(name) {
+    switch (name) {
+      case 'Mis beneficios':
+        return '/myBenefits';
+      case 'Mis premios':
+        return '/myAwards';
+      case 'Consultas':
+        return '/ask';
+        break;
+      default:
+        return '';
+    }
   }
 }

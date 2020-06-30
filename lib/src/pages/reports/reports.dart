@@ -15,6 +15,7 @@ import 'package:snowin/src/providers/snowin_provider.dart';
 
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
+import 'package:snowin/src/widgets/custom_fab_icon.dart';
 import 'package:snowin/src/widgets/main_menu.dart';
 import 'package:snowin/src/pages/reports/widgets/reports_list_tab.dart';
 import 'package:snowin/src/pages/reports/widgets/ranking_list_tab.dart';
@@ -368,19 +369,19 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FloatingActionButton(
+          CustomFabIcon(
               heroTag: "btn1",
-              backgroundColor: Theme.of(context).backgroundColor,
-              child: Icon(Icons.filter_list),
-              onPressed: () {}),
+              isPrimary: false,
+              icon: Icons.filter_list,
+              action: () => null),
           SizedBox(
             width: 10,
           ),
-          FloatingActionButton(
+          CustomFabIcon(
               heroTag: "btn2",
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(Icons.add),
-              onPressed: () {}),
+              isPrimary: true,
+              icon: Icons.add,
+              action: () => null),
         ],
       ),
     );

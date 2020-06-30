@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:snowin/src/widgets/custom_appbar_pages.dart';
+import 'package:snowin/src/widgets/custom_drawer.dart';
 
 import '../../widgets/main_menu.dart';
 
 class Home extends StatelessWidget {
+  final GlobalKey<ScaffoldState> scaffoldDrawer =
+      new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "MI PERFIL",
-          style: TextStyle(fontSize: 23),
-        ),
-        backgroundColor: Color.fromRGBO(30, 112, 183, 1),
-        leading: Icon(Icons.arrow_back),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.menu),
+      key: scaffoldDrawer,
+      appBar: PreferredSize(
+          child: CustomAppbarPages(
+            scaffoldDrawer: scaffoldDrawer,
+            back: false,
+            context: context,
+            title: "MI PERFIL",
           ),
-        ],
-      ),
+          preferredSize: Size(double.infinity, 70)),
+      drawerScrimColor: Colors.black54,
+      endDrawer: CustomDrawer(),
       bottomNavigationBar: MainMenu(
         item: 1,
       ),
       body: Container(
         child: ListView(
           children: [
-            Divider(
-              height: 1,
-            ),
             Container(
               alignment: Alignment.center,
               width: double.infinity,

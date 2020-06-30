@@ -60,7 +60,7 @@ class UserList extends StatelessWidget {
         ),
         onTap: () {
           userProvider.userTapped = user;
-          Navigator.pushReplacementNamed(context, '/userProfile');
+          Navigator.pushNamed(context, '/userChat');
         });
   }
 }

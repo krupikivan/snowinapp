@@ -4,6 +4,7 @@ import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/widgets/custom_appbar_pages.dart';
 import 'package:snowin/src/widgets/custom_benefit_card.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
+import 'package:snowin/src/widgets/custom_fab_icon.dart';
 
 import '../../widgets/main_menu.dart';
 
@@ -17,6 +18,7 @@ class Benefits extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldDrawer,
       appBar: PreferredSize(
           child: CustomAppbarPages(
             scaffoldDrawer: scaffoldDrawer,
@@ -92,19 +94,19 @@ class Benefits extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FloatingActionButton(
+            CustomFabIcon(
                 heroTag: "btnFilter",
-                backgroundColor: Theme.of(context).backgroundColor,
-                child: Icon(Icons.filter_list),
-                onPressed: () {}),
+                isPrimary: false,
+                icon: Icons.filter_list,
+                action: () => null),
             SizedBox(
               width: 15,
             ),
-            FloatingActionButton(
+            CustomFabIcon(
                 heroTag: "btnScan",
-                backgroundColor: Theme.of(context).backgroundColor,
-                child: Icon(Icons.camera_enhance),
-                onPressed: () {}),
+                isPrimary: false,
+                icon: Icons.camera_enhance,
+                action: () => null),
           ],
         ),
       ),

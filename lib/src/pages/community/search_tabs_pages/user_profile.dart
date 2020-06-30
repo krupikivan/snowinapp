@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/widgets/custom_appbar_profile.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
+import 'package:snowin/src/widgets/custom_fab_icon.dart';
 import 'package:snowin/src/widgets/custom_list_info.dart';
 import 'package:snowin/src/widgets/main_menu.dart';
 
@@ -35,7 +36,7 @@ class _UserProfileState extends State<UserProfile> {
           preferredSize: Size(double.infinity, 70)),
       endDrawer: CustomDrawer(),
       bottomNavigationBar: MainMenu(
-        item: 3,
+        item: 2,
       ),
       body: ListView(
         shrinkWrap: true,
@@ -67,14 +68,11 @@ class _UserProfileState extends State<UserProfile> {
               Positioned(
                 right: 20,
                 bottom: -20,
-                child: FloatingActionButton(
+                child: CustomFabIcon(
                   heroTag: 'btnProfileFriend',
-                  backgroundColor: _inviteSent == false
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey,
-                  child: Icon(Icons.person_add, size: 30),
-                  onPressed: () =>
-                      _inviteSent == true ? null : _showPopup(context),
+                  isPrimary: !_inviteSent,
+                  icon: Icons.person_add,
+                  action: () => _inviteSent ? null : _showPopup(context),
                 ),
               )
             ],
