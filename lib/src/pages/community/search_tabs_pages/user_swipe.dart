@@ -19,6 +19,7 @@ class UserSwipe extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 userProvider.userTapped = userProvider.userList[index];
+                Navigator.pushNamed(context, '/userProfile');
               },
               child: Image.network(
                 userProvider.userList[index].profile,

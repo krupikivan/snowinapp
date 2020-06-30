@@ -12,6 +12,8 @@ import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:snowin/theme/my_theme.dart';
 import 'package:snowin/theme/style.dart';
 
+import 'src/pages/benefits/provider/benefit_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = new Preferences();
@@ -43,12 +45,14 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
             create: (context) => CommunityTabsProvider.init()),
         ChangeNotifierProvider(create: (context) => MarkerProvider.init()),
+        ChangeNotifierProvider(create: (context) => BenefitProvider.init()),
+        // ChangeNotifierProvider(create: (context) => AwardsProvider.init()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Snowin',
         onGenerateRoute: (RouteSettings settings) => getRoute(settings),
-        //TODO: Cambie la ruta inicial para poder trabajar en ella
+        //**TODO: Cambie la ruta inicial para poder trabajar en ella
         initialRoute: '/home',
         // home: SplashScreen(),
         localizationsDelegates: [

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:snowin/src/pages/benefits/benefit_detail.dart';
+import 'package:snowin/src/pages/benefits/benefits.dart';
 import 'package:snowin/src/pages/community/community.dart';
 import 'package:snowin/src/pages/community/provider/user_chat.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
 import 'package:snowin/src/pages/home/home.dart';
+import 'package:snowin/src/pages/sos/sos.dart';
 import 'package:snowin/src/pages/wellcome/wellcome_carousel.dart';
 import 'package:snowin/src/pages/wellcome/conditions.dart';
 import 'package:snowin/src/pages/wellcome/location.dart';
@@ -66,12 +69,26 @@ MaterialPageRoute getRoute(RouteSettings settings) {
         settings: settings,
       );
 
+    case '/home':
+      return new MyCustomRoute(
+        builder: (_) => new Home(),
+        settings: settings,
+      );
+
     case '/reports':
       return new MyCustomRoute(
         builder: (_) => new Reports(),
         settings: settings,
       );
 
+    case '/sos':
+      return new MyCustomRoute(
+        builder: (_) => new Sos(),
+        settings: settings,
+      );
+/**
+ * *---------------------Navigator managing community pages
+ */
     case '/community':
       return new MyCustomRoute(
         builder: (_) => new Community(),
@@ -88,10 +105,18 @@ MaterialPageRoute getRoute(RouteSettings settings) {
         builder: (_) => new UserChat(),
         settings: settings,
       );
-
-    case '/home':
+/**
+ * *---------------------Navigator managing benefits pages
+ */
+    case '/benefits':
       return new MyCustomRoute(
-        builder: (_) => new Home(),
+        builder: (_) => new Benefits(),
+        settings: settings,
+      );
+
+    case '/benefitDetail':
+      return new MyCustomRoute(
+        builder: (_) => new BenefitDetail(),
         settings: settings,
       );
 

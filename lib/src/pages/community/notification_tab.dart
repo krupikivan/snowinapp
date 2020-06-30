@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
-import 'package:snowin/src/pages/community/provider/user_chat.dart';
 
 class NotificationsTab extends StatelessWidget {
   final String title = "Tu amigo Carlitos94 esta en Chapelco ahora.";
@@ -55,13 +54,7 @@ class NotificationsTab extends StatelessWidget {
         ),
         onTap: () {
           userProvider.userTapped = user;
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (ctx) => UserChat(
-          //               context: ctx,
-          //             )));
-          Navigator.pushReplacementNamed(context, '/userChat');
+          Navigator.pushNamed(context, '/userChat');
         });
   }
 }

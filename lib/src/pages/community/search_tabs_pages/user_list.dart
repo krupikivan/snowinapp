@@ -37,13 +37,13 @@ class UserList extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CircleAvatar(
-              radius: 40,
-              child: Image.network(user.image),
+              radius: 25,
+              backgroundImage: NetworkImage(user.image),
             ),
           ],
         ),
         title: Text(user.nombre),
-        subtitle: Text('Conectados'),
+        subtitle: Text(user.status),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

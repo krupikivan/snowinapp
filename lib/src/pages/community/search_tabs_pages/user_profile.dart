@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
+import 'package:snowin/src/widgets/custom_appbar_profile.dart';
+import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_list_info.dart';
+import 'package:snowin/src/widgets/main_menu.dart';
 
 class UserProfile extends StatefulWidget {
   UserProfile({Key key}) : super(key: key);
@@ -12,7 +15,8 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   bool _inviteSent;
-
+  final GlobalKey<ScaffoldState> scaffoldDrawer =
+      new GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -22,55 +26,67 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false);
-    return ListView(
-      shrinkWrap: true,
-      children: <Widget>[
-        Stack(
-          overflow: Overflow.visible,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.zero,
-              child: Image.network(
-                user.userTapped.profile,
-                fit: BoxFit.fitWidth,
+    return Scaffold(
+      key: scaffoldDrawer,
+      appBar: PreferredSize(
+          child: CustomAppbarProfile(
+            scaffoldDrawer: scaffoldDrawer,
+          ),
+          preferredSize: Size(double.infinity, 70)),
+      endDrawer: CustomDrawer(),
+      bottomNavigationBar: MainMenu(
+        item: 3,
+      ),
+      body: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          Stack(
+            overflow: Overflow.visible,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.zero,
+                child: Image.network(
+                  user.userTapped.profile,
+                  fit: BoxFit.fitWidth,
+                ),
               ),
-            ),
-            Container(
-              height: 90,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Theme.of(context).hoverColor, Colors.transparent],
-              )),
-            ),
-            Positioned(
+              Container(
+                height: 90,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Theme.of(context).hoverColor, Colors.transparent],
+                )),
+              ),
+              Positioned(
+                  right: 20,
+                  top: 10,
+                  child: Text("a 500 m",
+                      style: TextStyle(color: Colors.grey[300]))),
+              Positioned(
                 right: 20,
-                top: 10,
-                child:
-                    Text("a 500 m", style: TextStyle(color: Colors.grey[300]))),
-            Positioned(
-              right: 20,
-              bottom: -20,
-              child: FloatingActionButton(
-                heroTag: 'btnProfileFriend',
-                backgroundColor: _inviteSent == false
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey,
-                child: Icon(Icons.person_add, size: 30),
-                onPressed: () =>
-                    _inviteSent == true ? null : _showPopup(context),
-              ),
-            )
-          ],
-        ),
-        CustomListInfo(
-            title: 'Bio',
-            info:
-                'Buscadora incansable de aventura. RRPP en Sky Restor Chapelco'),
-        CustomListInfo(title: 'Practica', info: 'Ski'),
-        CustomListInfo(title: 'Nivel', info: 'Intermedio'),
-      ],
+                bottom: -20,
+                child: FloatingActionButton(
+                  heroTag: 'btnProfileFriend',
+                  backgroundColor: _inviteSent == false
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey,
+                  child: Icon(Icons.person_add, size: 30),
+                  onPressed: () =>
+                      _inviteSent == true ? null : _showPopup(context),
+                ),
+              )
+            ],
+          ),
+          CustomListInfo(
+              title: 'Bio',
+              info:
+                  'Buscadora incansable de aventura. RRPP en Sky Restor Chapelco'),
+          CustomListInfo(title: 'Practica', info: 'Ski'),
+          CustomListInfo(title: 'Nivel', info: 'Intermedio'),
+        ],
+      ),
     );
   }
 
