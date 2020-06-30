@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:snowin/src/pages/community/community.dart';
-import 'package:snowin/src/pages/benefits/benefits.dart';
+import 'package:snowin/src/pages/community/provider/user_chat.dart';
+import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
 import 'package:snowin/src/pages/home/home.dart';
-import 'package:snowin/src/pages/sos/sos.dart';
-
 import 'package:snowin/src/pages/wellcome/wellcome_carousel.dart';
 import 'package:snowin/src/pages/wellcome/conditions.dart';
 import 'package:snowin/src/pages/wellcome/location.dart';
@@ -12,8 +11,6 @@ import 'package:snowin/src/pages/wellcome/level.dart';
 import 'package:snowin/src/pages/wellcome/get_started.dart';
 
 import 'package:snowin/src/pages/reports/reports.dart';
-
-
 
 class MyCustomRoute<T> extends MaterialPageRoute<T> {
   MyCustomRoute({WidgetBuilder builder, RouteSettings settings})
@@ -75,6 +72,23 @@ MaterialPageRoute getRoute(RouteSettings settings) {
         settings: settings,
       );
 
+    case '/community':
+      return new MyCustomRoute(
+        builder: (_) => new Community(),
+        settings: settings,
+      );
+
+    case '/userProfile':
+      return new MyCustomRoute(
+        builder: (_) => new UserProfile(),
+        settings: settings,
+      );
+    case '/userChat':
+      return new MyCustomRoute(
+        builder: (_) => new UserChat(),
+        settings: settings,
+      );
+
     case '/home':
       return new MyCustomRoute(
         builder: (_) => new Home(),
@@ -83,7 +97,8 @@ MaterialPageRoute getRoute(RouteSettings settings) {
 
     default:
       return new MyCustomRoute(
-        builder: (_) => new WellcomeCarousel(),
+        builder: (_) => new Home(),
+        // builder: (_) => new WellcomeCarousel(),
         settings: settings,
       );
   }

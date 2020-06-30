@@ -13,7 +13,7 @@ class CustomAppbar extends StatelessWidget {
     @required this.image,
     @required this.height,
     @required this.back,
-    this.title="",
+    this.title = "",
   });
 
   @override
@@ -24,10 +24,10 @@ class CustomAppbar extends StatelessWidget {
         color: Colors.red,
         boxShadow: [
           BoxShadow(
-              color: Colors.black,
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            color: Colors.black,
+            blurRadius: 2.0,
+            spreadRadius: 0.0,
+            offset: Offset(2.0, 2.0), // shadow direction: bottom right
           )
         ],
       ),
@@ -47,28 +47,40 @@ class CustomAppbar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                back?
-                  Container(
-                    child: IconButton(
-                      onPressed: (){
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(Icons.arrow_back, size: 35, color: Colors.white,),
-                    ),
-                  ) : Container(width: 35.0,),
-                (title!="")?
-                  Container(
-                    child: AutoSizeText(title, style: TextStyle(color: Colors.white, fontSize: 20),),
-                  )
-                : Image(
-                  height: 60,
-                  image: AssetImage("assets/images/logo-snowin.png"),
-                ),
+                back
+                    ? Container(
+                        child: IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: Icon(
+                            Icons.arrow_back,
+                            size: 35,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        width: 35.0,
+                      ),
+                (title != "")
+                    ? Container(
+                        child: AutoSizeText(
+                          title,
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      )
+                    : Image(
+                        height: 60,
+                        image: AssetImage("assets/images/logo-snowin.png"),
+                      ),
                 IconButton(
-                  onPressed: (){
-                      Scaffold.of(context).openEndDrawer();
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
                   },
-                  icon: Icon(Icons.menu, size: 35, color: Colors.white,),
+                  icon: Icon(
+                    Icons.menu,
+                    size: 35,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
