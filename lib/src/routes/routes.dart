@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snowin/src/pages/community/community.dart';
+
 import 'package:snowin/src/pages/benefits/benefits.dart';
 import 'package:snowin/src/pages/home/home.dart';
 import 'package:snowin/src/pages/sos/sos.dart';
@@ -12,6 +12,7 @@ import 'package:snowin/src/pages/wellcome/level.dart';
 import 'package:snowin/src/pages/wellcome/get_started.dart';
 
 import 'package:snowin/src/pages/reports/reports.dart';
+import 'package:snowin/src/pages/community/community.dart';
 
 
 
@@ -72,6 +73,12 @@ MaterialPageRoute getRoute(RouteSettings settings) {
     case '/reports':
       return new MyCustomRoute(
         builder: (_) => new Reports(),
+        settings: settings,
+      );
+
+    case '/community':
+      return new MyCustomRoute(
+        builder: (_) => new Community(),
         settings: settings,
       );
 

@@ -32,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
     animationController = AnimationController(
         duration: Duration(milliseconds: 1000), vsync: this);
 
@@ -43,17 +44,17 @@ class _SplashScreenState extends State<SplashScreen>
             end: BorderRadius.circular(0.0))
         .animate(
             CurvedAnimation(parent: animationController, curve: Curves.ease));
+
     fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(animationController);
     animationController.forward();
-    new Timer(new Duration(seconds: 3), () {        
-      // if (_preferences.token != '') {
-      //   _comprobarPermisos();
-      // } else {
-      //   Navigator.of(context)
-      //       .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-      // }
-      Navigator.of(context)
-            .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+
+    new Timer(new Duration(seconds: 3), () {
+      if (_preferences.token != '') {
+          _comprobarPermisos();
+      } else {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        }
     });
 
     firebaseAnalyticsProvider.logLogin();

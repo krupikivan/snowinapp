@@ -52,8 +52,8 @@ class Report {
     this.clima = data.containsKey('clima')? data['clima'].toString() : "";
     this.sensacionGeneral = data.containsKey('sensacion_general')? data['sensacion_general'].toString() : "";
     this.compartir = data.containsKey('compartir')? data['compartir'].toString() : "";
-    this.cantComentarios = data.containsKey('cant_comentarios')? data['cant_comentarios'].toString() : "";
-    this.copos = data.containsKey('copos')? data['copos'].toString() : "";
+    this.cantComentarios = data.containsKey('cant_comentarios')? data['cant_comentarios'] : 0;
+    this.copos = data.containsKey('copos')? data['copos'] : 0;
 
     this.user = data.containsKey('user')? User.map(data['user']) : null;
 

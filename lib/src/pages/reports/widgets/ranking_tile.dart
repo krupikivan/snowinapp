@@ -123,11 +123,11 @@ class RankingTileState extends State<RankingTile> {
 
   Widget _description({BuildContext context, String position, String user, String level, String reports, String points, String awards, Size size}) {
     return Container(
-      width: 0.7*size.width,
+      width: 0.69*size.width,
       child: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,6 +136,7 @@ class RankingTileState extends State<RankingTile> {
                   AutoSizeText(level, style: TextStyle(fontSize: 13),),
                 ],
               ),
+              Expanded(child: Container()),
               Container(
                 alignment: Alignment.center,
                 width: 35,
@@ -149,13 +150,14 @@ class RankingTileState extends State<RankingTile> {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
                 children: <Widget>[
                   AutoSizeText("$reports reportes - $points pts", style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),)
                 ],
               ),
+              Expanded(child: Container()),
               Row(
                 children: <Widget>[
                   Container(

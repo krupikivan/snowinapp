@@ -2,35 +2,34 @@ import 'package:flutter/material.dart';
 
 import 'package:snowin/src/utils/session.dart';
 
-import 'package:snowin/src/models/report.dart';
+import 'package:snowin/src/models/notifications.dart';
 import 'package:snowin/src/models/item_kv.dart';
 
 import 'package:snowin/src/providers/snowin_provider.dart';
 
-import 'package:snowin/src/pages/reports/widgets/reports_tile.dart';
-import 'package:snowin/src/pages/reports/new_report.dart';
+import 'package:snowin/src/pages/community/widgets/notifications_tile.dart';
 import 'package:snowin/src/widgets/custom_dropdown.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
 import 'package:snowin/src/widgets/custom_sort.dart';
 
 
 
-class ReportsListTab extends StatefulWidget {
+class NotificationsListTab extends StatefulWidget {
 
-  ReportsListTab({ Key key}) : super(key: key);
+  NotificationsListTab({ Key key}) : super(key: key);
 
   @override
-  ReportsListTabState createState() => new ReportsListTabState();
+  NotificationsListTabState createState() => new NotificationsListTabState();
 }
 
-class ReportsListTabState extends State<ReportsListTab> {
+class NotificationsListTabState extends State<NotificationsListTab> {
   Session _session = new Session();
 
   double deviceHeight = 0;
   int page = 0, qtty = 10;
   bool _isLoading = false, _showTopButon = false;
   ScrollController _scrollController;
-  List<Report> _allReports = new List<Report>();
+  List<Notifications> _allNotifications = new List<Notifications>();
 
   TextEditingController _controllerTitle;
   String _title = '';
@@ -49,8 +48,8 @@ class ReportsListTabState extends State<ReportsListTab> {
   List<ItemKV> _esperaMediosItems;
   String _esperaMedios = '';
 
-  bool _sortIdReporte = false;
-  bool _sortFecha = false;
+  bool _sortIdNotifications = false;
+  bool _sortSeed = false;
   bool _sortCalificacion = false;
 
 
@@ -73,13 +72,6 @@ class ReportsListTabState extends State<ReportsListTab> {
     _scrollController = new ScrollController()..addListener(scrollListener);
     startLoader();
 
-    loadTraks().then((value) {
-        setState(() {});
-    });
-
-    loadEmuns().then((value) {
-        setState(() {});
-    });
   }
 
   @override
@@ -99,7 +91,7 @@ class ReportsListTabState extends State<ReportsListTab> {
                   child: new Scrollbar(
                     child: new Stack(
                           children: <Widget>[
-                              buildReportsTiles(),
+                              buildNotificationsTiles(),
                               buildflotingActionButtons(),
                           ],
                       ),
@@ -112,15 +104,15 @@ class ReportsListTabState extends State<ReportsListTab> {
 
 
 //////////////////////////////////////////////////////////////////////////// Widget
-  Widget buildReportsTiles() {
-    return _allReports.length > 0?
+  Widget buildNotificationsTiles() {
+    return _allNotifications.length > 0?
             new ListView.builder(
                 padding: const EdgeInsets.all(5.0),
                 controller: _scrollController,
-                itemCount: _allReports.length + 1,
+                itemCount: _allNotifications.length + 1,
                 itemBuilder: (context, i) {
-                  if(i < _allReports.length)
-                      return ReportsTile(report: _allReports[i]);
+                  if(i < _allNotifications.length)
+                      return NotificationsTile(notifications: _allNotifications[i]);
                   else
                       return SizedBox(height: 70.0);
                 })
@@ -162,26 +154,9 @@ class ReportsListTabState extends State<ReportsListTab> {
                   SizedBox(width: 10,),
                   FloatingActionButton(
                     heroTag: "btn2",
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: Icon(Icons.add),
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.search),
                     onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => NewReport(
-                                              youAre: _session.center.name.toString(),
-                                              trackItems: _trackItems,
-                                              calidadNieveItems: _calidadNieveItems,
-                                              climaItems: _climaItems,
-                                              vientoItems: _vientoItems,
-                                              sensacionGeneralItems: _sensacionGeneralItems,
-                                              esperaMediosItems: _esperaMediosItems,
-                                              onSend: () {
-                                                  refreshing();
-                                              },
-                                          ),
-                              )
-                          );
                       }
                   ),
                   SizedBox(width: 10,),
@@ -265,14 +240,14 @@ class ReportsListTabState extends State<ReportsListTab> {
                                         })),
                                         ListTile(
                                             title: Text('Ordenar'),
-                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Id de reporte', value: _sortIdReporte, onChanged: (value) {
+                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Id de reporte', value: _sortIdNotifications, onChanged: (value) {
                                                 print(value);
-                                                setState(() { _sortIdReporte = value; });
+                                                setState(() { _sortIdNotifications = value; });
                                         })),
                                         ListTile(
-                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Fecha', value: _sortFecha, onChanged: (value) {
+                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Fecha', value: _sortSeed, onChanged: (value) {
                                                 print(value);
-                                                setState(() { _sortFecha = value; });
+                                                setState(() { _sortSeed = value; });
                                         })),
                                         ListTile(
                                             subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Calificación', value: _sortCalificacion, onChanged: (value) {
@@ -354,14 +329,14 @@ class ReportsListTabState extends State<ReportsListTab> {
   }
 
   fetchData() async {
-    loadReports(qtty, (page * qtty)).then((elements) {
+    loadNotifications(qtty, (page * qtty)).then((elements) {
         if(mounted) setState(() {
             if(page == 0) {
-              _allReports.clear();
+              _allNotifications.clear();
             }
 
             setState(() {
-                _allReports.addAll(elements);
+                _allNotifications.addAll(elements);
                 _isLoading = !_isLoading;
                 page++;
             });
@@ -374,35 +349,154 @@ class ReportsListTabState extends State<ReportsListTab> {
   Future<Null> refreshing() async {
     print(" refreshing ... ");
     page = 0;
-    _allReports.clear();
+    _allNotifications.clear();
     setState(() { });
     startLoader();
   }
 
   String prepareFilters() {
       List<String> filters = List<String>();
-      if(_title.isNotEmpty) filters.add('filtros[titulo]='+_title);
-      if(_comment.isNotEmpty) filters.add('filtros[comentario]='+_comment);
-      if(_calidadNieve.isNotEmpty) filters.add('filtros[calidad_nieve]='+_calidadNieve);
-      if(_clima.isNotEmpty) filters.add('filtros[clima]='+_clima);
-      if(_viento.isNotEmpty) filters.add('filtros[viento]='+_viento);
-      if(_esperaMedios.isNotEmpty) filters.add('filtros[espera_medios]='+_esperaMedios);
+      // if(_title.isNotEmpty) filters.add('filtros[titulo]='+_title);
+      // if(_comment.isNotEmpty) filters.add('filtros[comentario]='+_comment);
+      // if(_calidadNieve.isNotEmpty) filters.add('filtros[calidad_nieve]='+_calidadNieve);
+      // if(_clima.isNotEmpty) filters.add('filtros[clima]='+_clima);
+      // if(_viento.isNotEmpty) filters.add('filtros[viento]='+_viento);
+      // if(_esperaMedios.isNotEmpty) filters.add('filtros[espera_medios]='+_esperaMedios);
 
-      filters.add(_sortIdReporte? 'ordenes[idreporte]=ASC' : 'ordenes[idreporte]=DESC');
-      filters.add(_sortFecha? 'ordenes[fecha]=ASC' : 'ordenes[fecha]=DESC');
-      filters.add(_sortCalificacion? 'ordenes[calificacion]=ASC' : 'ordenes[calificacion]=DESC');
+      filters.add(_sortIdNotifications? 'ordenes[idnotificaciones]=ASC' : 'ordenes[idnotificaciones]=DESC');
+      filters.add(_sortSeed? 'ordenes[visto]=ASC' : 'ordenes[visto]=DESC');
 
       return filters.join('&');
 
   }
 
-  Future<List<Report>> loadReports(int limit, int offset) async {
-      List<Report> elements = new List<Report>();
+  Future<List<Notifications>> loadNotifications(int limit, int offset) async {
+      List<Notifications> elements = new List<Notifications>();
 
-      await SnowinProvider().reportes(limit.toString(), offset.toString(), prepareFilters()).then((response) { print('reporte/listar response: '); print(response);
+      await SnowinProvider().notifications(limit.toString(), offset.toString(), prepareFilters()).then((response) { print('notificaciones/listar response: '); print(response);
           if(response['ok']) {
-              final _castDataType = response['data'].cast<Map<String, dynamic>>();
-              elements = _castDataType.map<Report>((json) => Report.map(json)).toList();
+              // final _castDataType = response['data'].cast<Map<String, dynamic>>();
+              // elements = _castDataType.map<Notifications>((json) => Notifications.map(json)).toList();
+              elements = [
+                            Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "67", 
+                              "points": "450", 
+                              "awards": "3", 
+                              "comments": "12",
+                              "ranking": "4",
+                              "votes": "140",
+                              "position": "01",
+                            }),
+                            Notifications.map({
+                              "user": "Anaski1986", 
+                              "level": "Principiante", 
+                              "image": "https://mpre.center/Site/themed-images/placeholders/480x360/holder1-480x360.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "50", 
+                              "points": "259", 
+                              "awards": "2", 
+                              "comments": "04",
+                              "ranking": "3",
+                              "votes": "32",
+                              "position": "02",
+                            }),
+                            Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRIln0T3wlvVL6nps0e-jj3WPdE3zvyjvnQjPAoQN-k_EoxOF9s&usqp=CAU",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "46", 
+                              "points": "230", 
+                              "awards": "1", 
+                              "comments": "12",
+                              "ranking": "2",
+                              "votes": "140",
+                              "position": "03",
+                            }),
+                            Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "35", 
+                              "points": "450", 
+                              "awards": "1", 
+                              "comments": "14",
+                              "ranking": "3",
+                              "votes": "98",
+                              "position": "04",
+                            }),
+                             Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "35", 
+                              "points": "450", 
+                              "awards": "1", 
+                              "comments": "14",
+                              "ranking": "3",
+                              "votes": "98",
+                              "position": "04",
+                            }),
+                             Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "35", 
+                              "points": "450", 
+                              "awards": "1", 
+                              "comments": "14",
+                              "ranking": "3",
+                              "votes": "98",
+                              "position": "04",
+                            }),
+                             Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "35", 
+                              "points": "450", 
+                              "awards": "1", 
+                              "comments": "14",
+                              "ranking": "3",
+                              "votes": "98",
+                              "position": "04",
+                            }),
+                             Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "35", 
+                              "points": "450", 
+                              "awards": "1", 
+                              "comments": "14",
+                              "ranking": "3",
+                              "votes": "98",
+                              "position": "04",
+                            }),
+                             Notifications.map({
+                              "user": "Juanilu", 
+                              "level": "Avanzado", 
+                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
+                              "time": "Hoy 10:35 AM.", 
+                              "reports": "35", 
+                              "points": "450", 
+                              "awards": "1", 
+                              "comments": "14",
+                              "ranking": "3",
+                              "votes": "98",
+                              "position": "04",
+                            }),
+                          ];
+
           } else {
               throw new Exception('Error');
           }

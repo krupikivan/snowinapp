@@ -56,6 +56,9 @@ dependencies:
   sweetalert: any
   flutter_sequence_animation: "^3.0.0"
   flutter_webview_plugin: ^0.3.11
+  video_thumbnail: ^0.2.2
+  path_provider: ^1.6.11
+  dio: ^3.0.9
 
 dev_dependencies:
   flutter_test:

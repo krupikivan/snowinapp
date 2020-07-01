@@ -6,10 +6,10 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:snowin/src/models/ski_center.dart';
 import 'package:snowin/src/models/pist.dart';
-import 'package:snowin/src/models/report.dart';
-import 'package:snowin/src/models/ranking.dart';
 import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/share/preference.dart';
+
+import 'package:snowin/src/utils/session.dart';
 
 import 'package:snowin/src/providers/snowin_provider.dart';
 
@@ -17,6 +17,7 @@ import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/main_menu.dart';
 import 'package:snowin/src/pages/reports/widgets/reports_list_tab.dart';
 import 'package:snowin/src/pages/reports/widgets/ranking_list_tab.dart';
+import 'package:snowin/src/pages/reports/widgets/my_reports_list_tab.dart';
 
 class Reports extends StatefulWidget {
   @override
@@ -24,12 +25,11 @@ class Reports extends StatefulWidget {
 }
 
 class _ReportsState extends State<Reports> with TickerProviderStateMixin{
+  Session _session = new Session();
+
   Timer _positionTimer;
   final _preferences = new Preferences();
 
-  SkiCenter _skiCenter;
-  Pist _pist;
-  List<User> _friends;
   String _speed;
   bool _speedOn = false;
 
@@ -37,61 +37,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
   List<User> _closestFriends;
 
   TabController _tabControllerReports;
-  List<Report> _reports;
-  List<Ranking> _ranking = [
-    Ranking.map({
-      "user": "Juanilu", 
-      "level": "Avanzado", 
-      "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-      "time": "Hoy 10:35 AM.", 
-      "reports": "67", 
-      "points": "450", 
-      "awards": "3", 
-      "comments": "12",
-      "ranking": "4",
-      "votes": "140",
-      "position": "01",
-    }),
-    Ranking.map({
-      "user": "Anaski1986", 
-      "level": "Principiante", 
-      "image": "https://mpre.center/Site/themed-images/placeholders/480x360/holder1-480x360.jpg",
-      "time": "Hoy 10:35 AM.", 
-      "reports": "50", 
-      "points": "259", 
-      "awards": "2", 
-      "comments": "04",
-      "ranking": "3",
-      "votes": "32",
-      "position": "02",
-    }),
-    Ranking.map({
-      "user": "Juanilu", 
-      "level": "Avanzado", 
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRIln0T3wlvVL6nps0e-jj3WPdE3zvyjvnQjPAoQN-k_EoxOF9s&usqp=CAU",
-      "time": "Hoy 10:35 AM.", 
-      "reports": "46", 
-      "points": "230", 
-      "awards": "1", 
-      "comments": "12",
-      "ranking": "2",
-      "votes": "140",
-      "position": "03",
-    }),
-    Ranking.map({
-      "user": "Juanilu", 
-      "level": "Avanzado", 
-      "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-      "time": "Hoy 10:35 AM.", 
-      "reports": "35", 
-      "points": "450", 
-      "awards": "1", 
-      "comments": "14",
-      "ranking": "3",
-      "votes": "98",
-      "position": "04",
-    }),
-  ];
 
 
 
@@ -99,12 +44,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
   void initState() {
     super.initState();
     _tabControllerReports = TabController(vsync: this, length: 3);
-
-    _skiCenter = null;
-    _pist = null;
-    _friends = List<User> ();
-    _reports = new List<Report>();
-    // _ranking = new List<Ranking>();
     _speed = '0.00';
 
     _recomendedTranks = List<Pist>();
@@ -114,18 +53,14 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     centroSki().then((value) {
         if(mounted) setState(() {});
 
-        //cargando reportes
-        reportes().then((value) {
+        //cargar pistas recomendadas
+        recomendedTraks().then((value) {
+            print(_session.recomendedTraks.length.toString());
 
-            //cargar pistas recomendadas
-            recomendedTraks().then((value) {
-                print(_recomendedTranks.length.toString());
+            //cargar amigos serca
+            closestFriends().then((value) {
+                print(_session.closestFriends.length.toString());
 
-                //cargar amigos serca
-                closestFriends().then((value) {
-                    print(_closestFriends.length.toString());
-
-                });
             });
         });
     });
@@ -145,7 +80,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     return WillPopScope(
           child: Scaffold(
             bottomNavigationBar: MainMenu(item: 1,),
-            floatingActionButton: _flotingActionButtons(context),
             endDrawer: Container(width: 100.0, height: 200.0, color: Colors.blue,),
             body: SafeArea(
               child: Container(
@@ -201,13 +135,9 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                             child: TabBarView(
                               controller: _tabControllerReports,
                               children: <Widget>[
-                                ReportsListTab(reports: _reports,),
-                                RankingListTab(ranking: _ranking,),
-                                Container(
-                                  child: Center(
-                                    child: Text("Mis reportes"),
-                                  ),
-                                ),
+                                ReportsListTab(),
+                                RankingListTab(),
+                                MyReportsListTab(),
                               ]
                             ),
                           )
@@ -223,6 +153,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     );
   }
 
+
+//////////////////////////////////////////////////////////////Widgets
   Widget _topInfo(){
     return Container(
       height: 60,
@@ -238,11 +170,11 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AutoSizeText(_skiCenter != null? _skiCenter.name.toString() : '', maxLines: 1, style: TextStyle(fontSize: 14, color: Colors.white)),
+                  AutoSizeText(_session.center != null? _session.center.name.toString() : '', maxLines: 1, style: TextStyle(fontSize: 14, color: Colors.white)),
                   Row(
                     children: [
                       AutoSizeText('Pista: ', maxLines: 1, style: TextStyle(fontSize: 14, color: Colors.white)),
-                      AutoSizeText(_pist != null? _pist.descripcion.toString() : '', maxLines: 1, style: TextStyle(fontSize: 14, color: Color.fromRGBO(255, 224, 0, 1))),
+                      AutoSizeText(_session.pist != null? _session.pist.descripcion.toString() : '', maxLines: 1, style: TextStyle(fontSize: 14, color: Color.fromRGBO(255, 224, 0, 1))),
                       Icon(Icons.info, size: 15, color: Color.fromRGBO(255, 224, 0, 1),),
                     ],
                   )
@@ -295,7 +227,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                   shape: BoxShape.circle,
                   color: Color.fromRGBO(255, 255, 255, 1),
                 ),
-                child: AutoSizeText(_friends.length.toString(), maxLines: 1, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                child: AutoSizeText(_session.closestFriends.length.toString(), maxLines: 1, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -304,28 +236,87 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     );
   }
 
-  Widget _flotingActionButtons(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 32),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton(
-            heroTag: "btn1",
-            backgroundColor: Color.fromRGBO(29, 29, 27, 1.0),
-            child: Icon(Icons.filter_list), 
-            onPressed: (){} 
-          ),
-          SizedBox(width: 10,),
-          FloatingActionButton(
-            heroTag: "btn2",
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(Icons.add), 
-            onPressed: (){} 
-          ),
-        ],
-      ),
-    );
+  void showNoCentersNearWarning(String message) {
+    print('show no center near warnings dialog');
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: SingleChildScrollView(
+              child: Column(
+                  children: <Widget>[
+
+                      Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 224, 0, 1),
+                                  border: Border.all(style:BorderStyle.none),
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0))
+                              ),
+                              child: ListTile(
+                                  title: Column(
+                                    children: <Widget>[
+                                        // Row(children: <Widget>[
+                                        //     Expanded(child: Container()),
+                                        //     IconButton(icon: Icon(Icons.cancel),
+                                        //               onPressed: () {
+                                        //                   Navigator.of(context).pop(false);
+                                        //               })
+                                        // ]),
+                                        Padding(padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0)),
+                                        ListTile(
+                                            title: Text(message, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16), softWrap: true,),
+                                        ),
+                                        Padding(padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0)),
+                                    ],
+                                  ),
+                              ),
+                        ),
+                  ],
+              ),
+            ),
+          );
+    });
+  }
+
+  void showGeolocationDisabledWarning() {
+    print('show geolocation disabled warning dialog');
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: SingleChildScrollView(
+              child: Column(
+                  children: <Widget>[
+
+                      Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 224, 0, 1),
+                                  border: Border.all(style:BorderStyle.none),
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0))
+                              ),
+                              child: ListTile(
+                                  title: Column(
+                                    children: <Widget>[
+                                        Padding(padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0)),
+                                        ListTile(
+                                            title: Text('Dispositivo GPS desactivado', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16), softWrap: true,),
+                                        ),
+                                        Padding(padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0)),
+                                    ],
+                                  ),
+                              ),
+                        ),
+                  ],
+              ),
+            ),
+          );
+    });
   }
 
   void showWarningsDialog() {
@@ -340,7 +331,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
               child: Column(
                   children: <Widget>[
 
-                    _recomendedTranks.length > 0?
+                    _session.recomendedTraks.length > 0?
                         Container(
                               width: MediaQuery.of(context).size.width * 0.9,
                               decoration: BoxDecoration(
@@ -409,7 +400,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
 
                     Padding(padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0)),
 
-                    _closestFriends.length > 0?
+                    _session.closestFriends.length > 0?
                         Container(
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: 200.0,
@@ -476,19 +467,18 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////NEW CODE
 //////////////////////////////////////////////////////////////Functions
   Future<void> centroSki() async {
-      SnowinProvider().centroSki().then((response) { print(response);
+      SnowinProvider().centroSki().then((response) { print('centro-ski response: '); print(response);
           if(response['ok']) {
               var data = response['data'];
 
               setState(() {
-                  _skiCenter = data['centroSki'] != null? SkiCenter.map(data['centroSki']) : SkiCenter(0, 'No hay centro', 0.0, 0.0);
-                  _pist = data['pista'] != null? Pist.map(data['pista']) : Pist(0, 'No hay pista', 0, 0, '', '', '', 0.0, 0.0);
+                  _session.center = data['centroSki'] != null? SkiCenter.map(data['centroSki']) : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
+                  _session.pist = data['pista'] != null? Pist.map(data['pista']) : Pist(0, 'No hay pista', 0, 0, '', '', '', 0.0, 0.0);
                   if(data['amigos'] != null) {
                     final _castDataType = data['amigos'].cast<Map<String, dynamic>>();
-                    _friends = _castDataType.map<User>((json) => User.map(json)).toList();
+                    _session.closestFriends = _castDataType.map<User>((json) => User.map(json)).toList();
                   }
               });
           } else {
@@ -499,31 +489,18 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
       });
   }
 
-  Future<void> reportes() async {
-      SnowinProvider().reportes().then((response) { print(response);
-          if(response['ok']) {
-              var data = response['data'];
-
-              setState(() {
-                  final _castDataType = data['data'].cast<Map<String, dynamic>>();
-                  _reports = _castDataType.map<Report>((json) => Report.map(json)).toList();
-              });
-          } else {
-              throw new Exception('Error');
-          }
-      }).catchError((error) {
-          print(error.toString());
-      });
-  }
-
   Future<void> recomendedTraks() async {
-      SnowinProvider().recomendedTraks().then((response) { print(response);
+      SnowinProvider().recomendedTraks().then((response) { print('advertencias response: '); print(response);
           if(response['ok']) {
               var data = response['data'];
 
               if(data != false) {
-                  final _castDataType = data.cast<Map<String, dynamic>>();
-                  _recomendedTranks = _castDataType.map<Pist>((json) => Pist.map(json)).toList();
+                  if(data is String) {
+                      showNoCentersNearWarning(data.toString());
+                  } else {
+                      final _castDataType = data.cast<Map<String, dynamic>>();
+                      _recomendedTranks = _castDataType.map<Pist>((json) => Pist.map(json)).toList();
+                  }
               }
           } else {
               throw new Exception('Error');
@@ -534,7 +511,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
   }
 
   Future<void> closestFriends() async {
-      SnowinProvider().closestFriends().then((response) { print(response);
+      SnowinProvider().closestFriends().then((response) { print('coordenadas-amigos response: '); print(response);
           if(response['ok']) {
               var data = response['data'];
 
@@ -586,15 +563,21 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
       });
   }
 
-  void speedOnOff() {
-      if(_speedOn) {
-          if(_positionTimer.isActive) _positionTimer.cancel();
-          setState(() { _speed = '0.00'; });
-      } else {
-          var interval = _preferences.updatePositionInterval.toString().isNotEmpty? _preferences.updatePositionInterval : '5';
-          _positionTimer = Timer.periodic(Duration(seconds: int.parse(interval.toString())), (Timer t) => updateGeoPosition());
-      }
-      _speedOn = !_speedOn;
+  void speedOnOff() { print('on off speed');
+      Geolocator().isLocationServiceEnabled().then((enabled) {
+          if(enabled) {
+              if(_speedOn) {
+                  if(_positionTimer.isActive) _positionTimer.cancel();
+                  setState(() { _speed = '0.00'; });
+              } else {
+                  var interval = _preferences.updatePositionInterval.toString().isNotEmpty? _preferences.updatePositionInterval : '5';
+                  _positionTimer = Timer.periodic(Duration(seconds: int.parse(interval.toString())), (Timer t) => updateGeoPosition());
+              }
+              _speedOn = !_speedOn;
+          } else {
+              showGeolocationDisabledWarning();
+          }
+      });
   }
 
   Future<bool> goBack() async{

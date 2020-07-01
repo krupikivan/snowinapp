@@ -1,36 +1,47 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:snowin/src/utils/session.dart';
 
-import 'package:snowin/src/models/report.dart';
+import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/models/item_kv.dart';
 
 import 'package:snowin/src/providers/snowin_provider.dart';
 
-import 'package:snowin/src/pages/reports/widgets/reports_tile.dart';
-import 'package:snowin/src/pages/reports/new_report.dart';
+import 'package:snowin/src/pages/community/widgets/friend_tile_list.dart';
+import 'package:snowin/src/pages/community/widgets/friend_tile_profile.dart';
+import 'package:snowin/src/pages/community/widgets/friend_tile_map.dart';
 import 'package:snowin/src/widgets/custom_dropdown.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
 import 'package:snowin/src/widgets/custom_sort.dart';
 
 
 
-class ReportsListTab extends StatefulWidget {
-
-  ReportsListTab({ Key key}) : super(key: key);
-
-  @override
-  ReportsListTabState createState() => new ReportsListTabState();
+enum FriendVisualization {
+  list,
+  profile,
+  map
 }
 
-class ReportsListTabState extends State<ReportsListTab> {
+class FriendsListTap extends StatefulWidget {
+
+  FriendsListTap({ Key key}) : super(key: key);
+
+  @override
+  FriendsListTapState createState() => new FriendsListTapState();
+}
+
+class FriendsListTapState extends State<FriendsListTap> {
   Session _session = new Session();
 
   double deviceHeight = 0;
   int page = 0, qtty = 10;
   bool _isLoading = false, _showTopButon = false;
   ScrollController _scrollController;
-  List<Report> _allReports = new List<Report>();
+  List<User> _allFriend = new List<User>();
+  int _friendQtty = 0, _userQtty = 0;
+  FriendVisualization _visualization = FriendVisualization.list;
 
   TextEditingController _controllerTitle;
   String _title = '';
@@ -49,9 +60,9 @@ class ReportsListTabState extends State<ReportsListTab> {
   List<ItemKV> _esperaMediosItems;
   String _esperaMedios = '';
 
-  bool _sortIdReporte = false;
-  bool _sortFecha = false;
-  bool _sortCalificacion = false;
+  bool _sortIdFriend = false;
+  bool _sortLocation = false;
+  bool _sortUsername = false;
 
 
 
@@ -73,13 +84,6 @@ class ReportsListTabState extends State<ReportsListTab> {
     _scrollController = new ScrollController()..addListener(scrollListener);
     startLoader();
 
-    loadTraks().then((value) {
-        setState(() {});
-    });
-
-    loadEmuns().then((value) {
-        setState(() {});
-    });
   }
 
   @override
@@ -95,32 +99,129 @@ class ReportsListTabState extends State<ReportsListTab> {
     // final size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical:15),
-      child: new RefreshIndicator(
-                  child: new Scrollbar(
-                    child: new Stack(
-                          children: <Widget>[
-                              buildReportsTiles(),
-                              buildflotingActionButtons(),
-                          ],
+       child: new Stack(
+          children: <Widget>[
+              _topFriendBarr(),
+              Padding(
+                  padding: EdgeInsets.only(top: 125.0),
+                  child: new RefreshIndicator(
+                      child: new Scrollbar(
+                        child: new Stack(
+                              children: <Widget>[
+                                  buildFriendTiles(),
+                                  buildflotingActionButtons(),
+                              ],
+                          ),
                       ),
-                  ),
-                  onRefresh: refreshing,
-                ),
+                      onRefresh: refreshing,
+                    ),
+              )
+          ]
+      ),
     );
   }
 
 
 
 //////////////////////////////////////////////////////////////////////////// Widget
-  Widget buildReportsTiles() {
-    return _allReports.length > 0?
+  Widget _topFriendBarr(){
+    return Container(
+      height: 130.0,
+      child : Column(
+        children: <Widget> [
+          Container(
+            height: 45.0,
+            decoration: ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                  color: Color.fromRGBO(74, 74, 73, 1),
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+              ),
+            ),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget> [
+                    AutoSizeText(_friendQtty.toString() + ' Amigos y ', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                    AutoSizeText(_userQtty.toString() + ' usuarios ', style: TextStyle(fontWeight: FontWeight.bold,)),
+                    AutoSizeText(' en ' , style: TextStyle(fontWeight: FontWeight.bold,)),
+                ],
+            )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget> [
+              Column(
+                children: <Widget>[
+                  IconButton(icon: Icon(Icons.reorder), onPressed: () {
+                      if(_visualization != FriendVisualization.list) {
+                          setState(() {
+                              _visualization = FriendVisualization.list;
+                          });
+                      }
+                  }),
+                  Text('Lista'),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  IconButton(icon: Icon(Icons.view_column), onPressed: () {
+                      if(_visualization != FriendVisualization.profile) {
+                          setState(() {
+                              _visualization = FriendVisualization.profile;
+                          });
+                      }
+                  }),
+                  Text('Perfil'),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  IconButton(icon: Icon(Icons.map), onPressed: () {
+                      if(_visualization != FriendVisualization.map) {
+                          setState(() {
+                              _visualization = FriendVisualization.map;
+                          });
+                      }
+                  }),
+                  Text('Mapa'),
+                ],
+              )
+            ],
+          ),
+          SizedBox(height: 10.0,),
+          Divider(height: 1.0, color: Colors.grey,),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFriendTiles() {
+    return _allFriend.length > 0?
             new ListView.builder(
                 padding: const EdgeInsets.all(5.0),
                 controller: _scrollController,
-                itemCount: _allReports.length + 1,
+                itemCount: _allFriend.length + 1,
                 itemBuilder: (context, i) {
-                  if(i < _allReports.length)
-                      return ReportsTile(report: _allReports[i]);
+                  if(i < _allFriend.length) {
+                      Widget widget = Container();
+
+                      switch(_visualization) {
+                        case FriendVisualization.profile:
+                          widget = FriendTileProfile(friend: _allFriend[i]);
+                          break;
+                        case FriendVisualization.map:
+                          widget = FriendTileMap(friend: _allFriend[i]);
+                          break;
+                        default:
+                          widget = FriendTileList(friend: _allFriend[i]);
+                          break;
+                      }
+
+                      return widget;
+                  }
                   else
                       return SizedBox(height: 70.0);
                 })
@@ -162,26 +263,9 @@ class ReportsListTabState extends State<ReportsListTab> {
                   SizedBox(width: 10,),
                   FloatingActionButton(
                     heroTag: "btn2",
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: Icon(Icons.add),
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.search),
                     onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => NewReport(
-                                              youAre: _session.center.name.toString(),
-                                              trackItems: _trackItems,
-                                              calidadNieveItems: _calidadNieveItems,
-                                              climaItems: _climaItems,
-                                              vientoItems: _vientoItems,
-                                              sensacionGeneralItems: _sensacionGeneralItems,
-                                              esperaMediosItems: _esperaMediosItems,
-                                              onSend: () {
-                                                  refreshing();
-                                              },
-                                          ),
-                              )
-                          );
                       }
                   ),
                   SizedBox(width: 10,),
@@ -265,19 +349,19 @@ class ReportsListTabState extends State<ReportsListTab> {
                                         })),
                                         ListTile(
                                             title: Text('Ordenar'),
-                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Id de reporte', value: _sortIdReporte, onChanged: (value) {
+                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Id de reporte', value: _sortIdFriend, onChanged: (value) {
                                                 print(value);
-                                                setState(() { _sortIdReporte = value; });
+                                                setState(() { _sortIdFriend = value; });
                                         })),
                                         ListTile(
-                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Fecha', value: _sortFecha, onChanged: (value) {
+                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Fecha', value: _sortLocation, onChanged: (value) {
                                                 print(value);
-                                                setState(() { _sortFecha = value; });
+                                                setState(() { _sortLocation = value; });
                                         })),
                                         ListTile(
-                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Calificación', value: _sortCalificacion, onChanged: (value) {
+                                            subtitle: CustomSort(width: size.width*0.9, height: 50, text: 'Calificación', value: _sortUsername, onChanged: (value) {
                                                 print(value);
-                                                setState(() { _sortCalificacion = value; });
+                                                setState(() { _sortUsername = value; });
                                         })),
                                         SizedBox(height: size.height*0.03,),
                                     ],
@@ -354,14 +438,14 @@ class ReportsListTabState extends State<ReportsListTab> {
   }
 
   fetchData() async {
-    loadReports(qtty, (page * qtty)).then((elements) {
+    loadFriend(qtty, (page * qtty)).then((elements) {
         if(mounted) setState(() {
             if(page == 0) {
-              _allReports.clear();
+              _allFriend.clear();
             }
 
             setState(() {
-                _allReports.addAll(elements);
+                _allFriend.addAll(elements);
                 _isLoading = !_isLoading;
                 page++;
             });
@@ -374,35 +458,41 @@ class ReportsListTabState extends State<ReportsListTab> {
   Future<Null> refreshing() async {
     print(" refreshing ... ");
     page = 0;
-    _allReports.clear();
+    _friendQtty = 0;
+    _userQtty = 0;
+    _allFriend.clear();
     setState(() { });
     startLoader();
   }
 
   String prepareFilters() {
       List<String> filters = List<String>();
-      if(_title.isNotEmpty) filters.add('filtros[titulo]='+_title);
-      if(_comment.isNotEmpty) filters.add('filtros[comentario]='+_comment);
-      if(_calidadNieve.isNotEmpty) filters.add('filtros[calidad_nieve]='+_calidadNieve);
-      if(_clima.isNotEmpty) filters.add('filtros[clima]='+_clima);
-      if(_viento.isNotEmpty) filters.add('filtros[viento]='+_viento);
-      if(_esperaMedios.isNotEmpty) filters.add('filtros[espera_medios]='+_esperaMedios);
+      // if(_title.isNotEmpty) filters.add('filtros[titulo]='+_title);
+      // if(_comment.isNotEmpty) filters.add('filtros[comentario]='+_comment);
+      // if(_calidadNieve.isNotEmpty) filters.add('filtros[calidad_nieve]='+_calidadNieve);
+      // if(_clima.isNotEmpty) filters.add('filtros[clima]='+_clima);
+      // if(_viento.isNotEmpty) filters.add('filtros[viento]='+_viento);
+      // if(_esperaMedios.isNotEmpty) filters.add('filtros[espera_medios]='+_esperaMedios);
 
-      filters.add(_sortIdReporte? 'ordenes[idreporte]=ASC' : 'ordenes[idreporte]=DESC');
-      filters.add(_sortFecha? 'ordenes[fecha]=ASC' : 'ordenes[fecha]=DESC');
-      filters.add(_sortCalificacion? 'ordenes[calificacion]=ASC' : 'ordenes[calificacion]=DESC');
+      filters.add(_sortIdFriend? 'ordenes[id]=ASC' : 'ordenes[id]=DESC');
+      filters.add(_sortLocation? 'ordenes[localidad]=ASC' : 'ordenes[localidad]=DESC');
+      filters.add(_sortUsername? 'ordenes[username]=ASC' : 'ordenes[username]=DESC');
 
       return filters.join('&');
 
   }
 
-  Future<List<Report>> loadReports(int limit, int offset) async {
-      List<Report> elements = new List<Report>();
+  Future<List<User>> loadFriend(int limit, int offset) async {
+      List<User> elements = new List<User>();
 
-      await SnowinProvider().reportes(limit.toString(), offset.toString(), prepareFilters()).then((response) { print('reporte/listar response: '); print(response);
+      await SnowinProvider().nearestUsers(limit.toString(), offset.toString(), prepareFilters()).then((response) { print('notificaciones/listar response: '); print(response);
           if(response['ok']) {
-              final _castDataType = response['data'].cast<Map<String, dynamic>>();
-              elements = _castDataType.map<Report>((json) => Report.map(json)).toList();
+              var data = response['data'];
+              _friendQtty += int.parse(data['cantidadAmigos'].toString());
+              _userQtty += int.parse(data['cantidadUsuarios'].toString());
+
+              final _castDataType = data['dat'].cast<Map<String, dynamic>>();
+              elements = _castDataType.map<User>((json) => User.map(json)).toList();
           } else {
               throw new Exception('Error');
           }

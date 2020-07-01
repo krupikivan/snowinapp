@@ -1,11 +1,16 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import 'package:snowin/src/share/preference.dart';
 
 import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/providers/connectivity_provider.dart';
+
+
 
 class SnowinProvider {
   static final _prefs = new Preferences();
@@ -82,11 +87,14 @@ class SnowinProvider {
     }
   }
 
-  Future<Map> reportes() async {
-    print('call end point: reportes');
+  Future<Map> reportes(String limit, String offset, [String filters = '']) async {
+    print('call end point: reporte/listar');
+    print(filters);
 
     //configurar servicio
-    String service = Config.apiReportsUrl + "reportes";
+    String service = Config.apiReportsUrl + "listar";
+    service += '?limit=' + limit + '&offset=' + offset;
+    service += filters.isNotEmpty? ('&' + filters) : '';
 
     //Respuesta
     http.Response response;
@@ -212,6 +220,166 @@ class SnowinProvider {
     }
   }
 
+  Future<Map> loadEmuns() async {
+    print('call end point: enums');
+
+    //configurar servicio
+    String service = Config.apiReportsUrl + "enums";
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> sendReport(String pistaId, String titulo, String comentario, String calidadNieve,
+                         String esperaMedios, String viento, String clima, String sensacionGeneral,
+                         List<File> multimedias) async {
+    print('call end point: crear');
+    print(pistaId);
+    print(titulo);
+    print(comentario);
+    print(calidadNieve);
+    print(esperaMedios);
+    print(viento);
+    print(clima);
+    print(sensacionGeneral);
+    print(multimedias.length.toString());
+
+    //configurar servicio
+    String service = Config.apiReportsUrl + "crear";
+
+    //Respuesta
+    var response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        var request = new http.MultipartRequest("POST", Uri.parse(service));
+            request.fields['pista_id'] = pistaId;
+            request.fields['titulo'] = titulo;
+            request.fields['comentario'] = comentario;
+            request.fields['calidad_nieve'] = calidadNieve;
+            request.fields['espera_medios'] = esperaMedios;
+            request.fields['viento'] = viento;
+            request.fields['clima'] = clima;
+            request.fields['sensacion_general'] = sensacionGeneral;
+
+            multimedias.forEach((media) {
+                var stream = new http.ByteStream(DelegatingStream.typed(media.openRead()));
+                media.length().then((length) {
+                    var mediaFile = new http.MultipartFile('foto', stream, length, filename: basename(media.path));
+                    request.files.add(mediaFile);
+                });
+            });
+
+            request.headers['Authorization'] =  'Bearer '+ _prefs.token;
+
+            response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> notifications(String limit, String offset, [String filters = '']) async {
+    print('call end point: notificaciones/listar');
+    print(filters);
+
+    //configurar servicio
+    String service = Config.apiNotificationsUrl + "listar";
+    service += '?limit=' + limit + '&offset=' + offset;
+    service += filters.isNotEmpty? ('&' + filters) : '';
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> nearestUsers(String limit, String offset, [String filters = '']) async {
+    print('call end point: usuarios-cercanos');
+    print(filters);
+
+    //configurar servicio
+    String service = Config.apiUserUrl + "usuarios-cercanos";
+    service += '?limit=' + limit + '&offset=' + offset;
+    service += filters.isNotEmpty? ('&' + filters) : '';
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
 
 
 

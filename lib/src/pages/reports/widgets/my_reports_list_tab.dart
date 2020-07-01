@@ -15,22 +15,22 @@ import 'package:snowin/src/widgets/custom_sort.dart';
 
 
 
-class ReportsListTab extends StatefulWidget {
+class MyReportsListTab extends StatefulWidget {
 
-  ReportsListTab({ Key key}) : super(key: key);
+  MyReportsListTab({ Key key}) : super(key: key);
 
   @override
-  ReportsListTabState createState() => new ReportsListTabState();
+  MyReportsListTabState createState() => new MyReportsListTabState();
 }
 
-class ReportsListTabState extends State<ReportsListTab> {
+class MyReportsListTabState extends State<MyReportsListTab> {
   Session _session = new Session();
 
   double deviceHeight = 0;
   int page = 0, qtty = 10;
   bool _isLoading = false, _showTopButon = false;
   ScrollController _scrollController;
-  List<Report> _allReports = new List<Report>();
+  List<Report> _allMyReports = new List<Report>();
 
   TextEditingController _controllerTitle;
   String _title = '';
@@ -84,9 +84,6 @@ class ReportsListTabState extends State<ReportsListTab> {
 
   @override
   void dispose(){
-    _controllerTitle.dispose();
-    _controllerComment.dispose();
-
     super.dispose();
   }
 
@@ -99,8 +96,10 @@ class ReportsListTabState extends State<ReportsListTab> {
                   child: new Scrollbar(
                     child: new Stack(
                           children: <Widget>[
-                              buildReportsTiles(),
+                              buildMyReportsTiles(),
                               buildflotingActionButtons(),
+                              //buildLoader(),
+                              //buildGoTopButton(),
                           ],
                       ),
                   ),
@@ -112,15 +111,15 @@ class ReportsListTabState extends State<ReportsListTab> {
 
 
 //////////////////////////////////////////////////////////////////////////// Widget
-  Widget buildReportsTiles() {
-    return _allReports.length > 0?
+  Widget buildMyReportsTiles() {
+    return _allMyReports.length > 0?
             new ListView.builder(
                 padding: const EdgeInsets.all(5.0),
                 controller: _scrollController,
-                itemCount: _allReports.length + 1,
+                itemCount: _allMyReports.length + 1,
                 itemBuilder: (context, i) {
-                  if(i < _allReports.length)
-                      return ReportsTile(report: _allReports[i]);
+                  if(i < _allMyReports.length)
+                      return ReportsTile(report: _allMyReports[i]);
                   else
                       return SizedBox(height: 70.0);
                 })
@@ -354,14 +353,14 @@ class ReportsListTabState extends State<ReportsListTab> {
   }
 
   fetchData() async {
-    loadReports(qtty, (page * qtty)).then((elements) {
+    loadMyReports(qtty, (page * qtty)).then((elements) {
         if(mounted) setState(() {
             if(page == 0) {
-              _allReports.clear();
+              _allMyReports.clear();
             }
 
             setState(() {
-                _allReports.addAll(elements);
+                _allMyReports.addAll(elements);
                 _isLoading = !_isLoading;
                 page++;
             });
@@ -374,13 +373,14 @@ class ReportsListTabState extends State<ReportsListTab> {
   Future<Null> refreshing() async {
     print(" refreshing ... ");
     page = 0;
-    _allReports.clear();
+    _allMyReports.clear();
     setState(() { });
     startLoader();
   }
 
   String prepareFilters() {
       List<String> filters = List<String>();
+      filters.add('filtros[propios]=1');
       if(_title.isNotEmpty) filters.add('filtros[titulo]='+_title);
       if(_comment.isNotEmpty) filters.add('filtros[comentario]='+_comment);
       if(_calidadNieve.isNotEmpty) filters.add('filtros[calidad_nieve]='+_calidadNieve);
@@ -396,13 +396,16 @@ class ReportsListTabState extends State<ReportsListTab> {
 
   }
 
-  Future<List<Report>> loadReports(int limit, int offset) async {
+  Future<List<Report>> loadMyReports(int limit, int offset) async {
       List<Report> elements = new List<Report>();
 
-      await SnowinProvider().reportes(limit.toString(), offset.toString(), prepareFilters()).then((response) { print('reporte/listar response: '); print(response);
+      await SnowinProvider().reportes(limit.toString(), offset.toString(), prepareFilters()).then((response) { print(response);
           if(response['ok']) {
+              //var data = response['data'];
+
               final _castDataType = response['data'].cast<Map<String, dynamic>>();
               elements = _castDataType.map<Report>((json) => Report.map(json)).toList();
+
           } else {
               throw new Exception('Error');
           }
@@ -418,19 +421,16 @@ class ReportsListTabState extends State<ReportsListTab> {
 
       _trackItems = new List<ItemKV>();
       _trackItems.add(ItemKV('', ''));
-
-      if(_session.center != null) {
-          _session.center.pistas.forEach((pista) {
-              _trackItems.add(new ItemKV(pista.id, pista.descripcion));
-              if(_trackItems.length == 1) _track = pista.id.toString();
-          });
-      }
+      _session.center.pistas.forEach((pista) {
+          _trackItems.add(new ItemKV(pista.id, pista.descripcion));
+          if(_trackItems.length == 1) _track = pista.id.toString();
+      });
   }
 
   Future<void> loadEmuns() async {
       setState(() { });
 
-      await SnowinProvider().loadEmuns().then((response) { print('enums response: '); print(response);
+      await SnowinProvider().loadEmuns().then((response) { print(response);
           if(response['ok']) {
               var data = response['data'];
 
