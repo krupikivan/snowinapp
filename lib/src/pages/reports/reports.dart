@@ -33,9 +33,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
   String _speed;
   bool _speedOn = false;
 
-  List<Pist> _recomendedTranks;
-  List<User> _closestFriends;
-
   TabController _tabControllerReports;
 
 
@@ -45,9 +42,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     super.initState();
     _tabControllerReports = TabController(vsync: this, length: 3);
     _speed = '0.00';
-
-    _recomendedTranks = List<Pist>();
-    _closestFriends = List<User>();
 
     //centro-ski
     centroSki().then((value) {
@@ -61,6 +55,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
             closestFriends().then((value) {
                 print(_session.closestFriends.length.toString());
 
+                setState(() {});
             });
         });
     });
@@ -184,9 +179,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
           ),
           SizedBox(width: 2,),
           GestureDetector(
-            onTap: (){
-              Navigator.pushNamed(context, 'pistes-map');
-            },
+            onTap: goToMapPage,
             child: Container(
               padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
@@ -321,6 +314,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
 
   void showWarningsDialog() {
     print('show warnings dialog');
+    _session.showReportWarnning = false;
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -373,9 +367,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                                                         icon: const Icon(Icons.map, color: Color.fromRGBO(255, 224, 0, 1),),
                                                         label: const Text('MAPA DE PISTAS', style: TextStyle(color: Color.fromRGBO(255, 224, 0, 1)),),
                                                         color: Colors.grey,
-                                                        onPressed: (){
-                                                            //go to map
-                                                        },
+                                                        onPressed: goToMapPage,
                                                     ),
 
                                                     //entendido
@@ -456,7 +448,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
   List<Widget> buildRecomendedTraks() {
     List<Widget> elements = new List<Widget>();
 
-    _recomendedTranks.forEach((element) {
+    _session.recomendedTraks.forEach((element) {
         elements.add(Text(element.descripcion));
     });
 
@@ -499,7 +491,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                       showNoCentersNearWarning(data.toString());
                   } else {
                       final _castDataType = data.cast<Map<String, dynamic>>();
-                      _recomendedTranks = _castDataType.map<Pist>((json) => Pist.map(json)).toList();
+                      _session.recomendedTraks = _castDataType.map<Pist>((json) => Pist.map(json)).toList();
                   }
               }
           } else {
@@ -516,9 +508,9 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
               var data = response['data'];
 
               final _castDataType = data['amigos_serca'].cast<Map<String, dynamic>>();
-              _closestFriends = _castDataType.map<User>((json) => User.map(json)).toList();
+              _session.closestFriends = _castDataType.map<User>((json) => User.map(json)).toList();
 
-              if(_recomendedTranks.isNotEmpty || _closestFriends.isNotEmpty) {
+              if(_session.showReportWarnning && (_session.recomendedTraks.isNotEmpty || _session.closestFriends.isNotEmpty)) {
                   showWarningsDialog();
               }
           } else {
@@ -547,9 +539,10 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
               _speed = speedArr.first + '.' + speedArr.elementAt(1).substring(0, 2);
           }
 
-          SnowinProvider().posicion(position.latitude.toString(),
-                                    position.longitude.toString(),
-                                    position.altitude.toString())
+          // SnowinProvider().posicion(position.latitude.toString(),
+          //                           position.longitude.toString(),
+          //                           position.altitude.toString())
+          SnowinProvider().posicion('-34.4833333','-58.5166667','1000')
                           .then((response) { print(response);
                               if(response['ok']) {
 
@@ -578,6 +571,16 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
               showGeolocationDisabledWarning();
           }
       });
+  }
+
+  void goToMapPage() {
+    Navigator.popUntil(context, ModalRoute.withName('/reports'));
+
+    if(_session.center.id != 0) {
+      Navigator.pushNamed(context, '/pistes-map');
+    } else {
+      showNoCentersNearWarning('No está cerca de ningún centro de ski.');
+    }
   }
 
   Future<bool> goBack() async{

@@ -4,7 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:snowin/src/models/report.dart';
 
-import 'package:snowin/src/pages/reports/widgets/ranking.dart';
+import 'package:snowin/src/pages/reports/widgets/ranking_vote.dart';
 import 'package:snowin/src/pages/reports/widgets/time.dart';
 import 'package:snowin/src/pages/reports/widgets/total_comments.dart';
 import 'package:snowin/src/widgets/marquee.dart';
@@ -13,9 +13,9 @@ import 'package:snowin/src/widgets/marquee.dart';
 
 class ReportsTile extends StatefulWidget {
   final Report report;
-  final AfterSendCallback afterSend;
+  final AfterValorateCallback afterValorate;
 
-  ReportsTile({ Key key, this.report, this.afterSend}) : super(key: key);
+  ReportsTile({ Key key, this.report, this.afterValorate}) : super(key: key);
 
   @override
   ReportsTileState createState() => new ReportsTileState(report);
@@ -40,6 +40,7 @@ class ReportsTileState extends State<ReportsTile> {
 
   @override
   Widget build(BuildContext context) {
+    print('repaint');
     final size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical:8),
@@ -132,7 +133,13 @@ class ReportsTileState extends State<ReportsTile> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RankingW(ranking: report.copos.toString(), votes: report.user.ranking.toString()),
+                      RankingVote(
+                        reportId: report.id.toString(),
+                        ranking: report.copos.toString(),
+                        votes: report.user.ranking.toString(),
+                        onValorate: (value, message) {
+                            widget.afterValorate(value, message);
+                        },),
                       TotalComments(total: report.cantComentarios.toString()),
                     ],
                   ),
@@ -145,10 +152,7 @@ class ReportsTileState extends State<ReportsTile> {
     );
   }
 
-
-
-
 }
 
-typedef AfterSendCallback = void Function();
+typedef AfterValorateCallback = void Function(double value, String message);
 

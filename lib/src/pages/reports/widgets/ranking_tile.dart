@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:snowin/src/models/ranking.dart';
+import 'package:snowin/src/models/user.dart';
 
-import 'package:snowin/src/pages/reports/widgets/ranking.dart';
+import 'package:snowin/src/pages/reports/widgets/ranking_vote.dart';
 import 'package:snowin/src/pages/reports/widgets/time.dart';
 import 'package:snowin/src/pages/reports/widgets/total_comments.dart';
 
 
 
 class RankingTile extends StatefulWidget {
-  final Ranking ranking;
+  final User ranking;
   final int index;
   final AfterSendCallback afterSend;
 
@@ -23,7 +23,7 @@ class RankingTile extends StatefulWidget {
 }
 
 class RankingTileState extends State<RankingTile> {
-  Ranking ranking;
+  User ranking;
   int index;
 
   RankingTileState(this.ranking, this.index);
@@ -67,14 +67,14 @@ class RankingTileState extends State<RankingTile> {
                 _avatar(ranking.image.toString(), size),
                 SizedBox(width: 10,),
                 _description(
-                  user: ranking.user.toString(),
-                  reports: ranking.reports.toString(),
-                  points: ranking.points.toString(),
-                  level: ranking.level.toString(),
-                  awards: ranking.awards.toString(),
+                  user: ranking.username.toString(),
+                  //reports: ranking.reports.toString(),
+                  //points: ranking.points.toString(),
+                  level: ranking.nivel.toString(),
+                  //awards: ranking.awards.toString(),
                   size: size,
                   context: context,
-                  position: ranking.position.toString()
+                  //position: ranking.position.toString()
                 ),
               ],
             ),
@@ -87,15 +87,15 @@ class RankingTileState extends State<RankingTile> {
               children: [
                 Container(
                   width: size.width*0.35,
-                  child: Time(time: ranking.time.toString())
+                  child: Time(time: ranking.fechaCambioRanking.toString())
                 ),
                 Container(
                   width: size.width*0.46,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RankingW(ranking: ranking.ranking.toString(), votes: ranking.votes.toString()),
-                      TotalComments(total: ranking.comments.toString(),),
+                      RankingVote(reportId: ranking.id.toString(), ranking: ranking.ranking.toString(), votes: ranking.coposUsuarios.toString()),
+                      TotalComments(total: ranking.coposUsuarios.toString(),),
                     ],
                   ),
                 ),
@@ -137,16 +137,16 @@ class RankingTileState extends State<RankingTile> {
                 ],
               ),
               Expanded(child: Container()),
-              Container(
-                alignment: Alignment.center,
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: AutoSizeText(position, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
-              )
+              // Container(
+              //   alignment: Alignment.center,
+              //   width: 35,
+              //   height: 35,
+              //   decoration: BoxDecoration(
+              //     color: Theme.of(context).primaryColor,
+              //     borderRadius: BorderRadius.circular(50),
+              //   ),
+              //   child: AutoSizeText(position, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
+              // )
             ],
           ),
           Row(

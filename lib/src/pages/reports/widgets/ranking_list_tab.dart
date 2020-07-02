@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:snowin/src/models/ranking.dart';
+import 'package:snowin/src/models/user.dart';
 
 import 'package:snowin/src/providers/snowin_provider.dart';
 
@@ -22,7 +22,7 @@ class RankingListTabState extends State<RankingListTab> {
   int page = 0, qtty = 5;
   bool _isLoading = false, _showTopButon = false;
   ScrollController _scrollController;
-  List<Ranking> _allRanking = new List<Ranking>();
+  List<User> _allRanking = new List<User>();
 
 
 
@@ -31,6 +31,7 @@ class RankingListTabState extends State<RankingListTab> {
     super.initState();
 
     _scrollController = new ScrollController()..addListener(scrollListener);
+
     startLoader();
   }
 
@@ -50,8 +51,6 @@ class RankingListTabState extends State<RankingListTab> {
                           children: <Widget>[
                               buildRankingTiles(),
                               buildflotingActionButtons(),
-                              //buildLoader(),
-                              //buildGoTopButton(),
                           ],
                       ),
                   ),
@@ -71,7 +70,7 @@ class RankingListTabState extends State<RankingListTab> {
                 itemCount: _allRanking.length + 1,
                 itemBuilder: (context, i) {
                   if(i < _allRanking.length)
-                      return RankingTile(ranking: _allRanking[i]);
+                      return RankingTile(ranking: _allRanking[i], index: i,);
                   else
                       return SizedBox(height: 70.0);
                 })
@@ -192,135 +191,13 @@ class RankingListTabState extends State<RankingListTab> {
     startLoader();
   }
 
-  Future<List<Ranking>> loadRanking(int limit, int offset) async {
-      List<Ranking> elements = new List<Ranking>();
+  Future<List<User>> loadRanking(int limit, int offset) async {
+      List<User> elements = new List<User>();
 
-      await SnowinProvider().reportes(limit.toString(), offset.toString()).then((response) { print(response);
+      await SnowinProvider().rankings(limit.toString(), offset.toString()).then((response) { print('listar-ranking: '); print(response);
           if(response['ok']) {
-              //var data = response['data'];
-
-              // final _castDataType = response['data'].cast<Map<String, dynamic>>();
-              // elements = _castDataType.map<Ranking>((json) => Ranking.map(json)).toList();
-              elements = [
-                            Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "67", 
-                              "points": "450", 
-                              "awards": "3", 
-                              "comments": "12",
-                              "ranking": "4",
-                              "votes": "140",
-                              "position": "01",
-                            }),
-                            Ranking.map({
-                              "user": "Anaski1986", 
-                              "level": "Principiante", 
-                              "image": "https://mpre.center/Site/themed-images/placeholders/480x360/holder1-480x360.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "50", 
-                              "points": "259", 
-                              "awards": "2", 
-                              "comments": "04",
-                              "ranking": "3",
-                              "votes": "32",
-                              "position": "02",
-                            }),
-                            Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRIln0T3wlvVL6nps0e-jj3WPdE3zvyjvnQjPAoQN-k_EoxOF9s&usqp=CAU",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "46", 
-                              "points": "230", 
-                              "awards": "1", 
-                              "comments": "12",
-                              "ranking": "2",
-                              "votes": "140",
-                              "position": "03",
-                            }),
-                            Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "35", 
-                              "points": "450", 
-                              "awards": "1", 
-                              "comments": "14",
-                              "ranking": "3",
-                              "votes": "98",
-                              "position": "04",
-                            }),
-                             Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "35", 
-                              "points": "450", 
-                              "awards": "1", 
-                              "comments": "14",
-                              "ranking": "3",
-                              "votes": "98",
-                              "position": "04",
-                            }),
-                             Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "35", 
-                              "points": "450", 
-                              "awards": "1", 
-                              "comments": "14",
-                              "ranking": "3",
-                              "votes": "98",
-                              "position": "04",
-                            }),
-                             Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "35", 
-                              "points": "450", 
-                              "awards": "1", 
-                              "comments": "14",
-                              "ranking": "3",
-                              "votes": "98",
-                              "position": "04",
-                            }),
-                             Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "35", 
-                              "points": "450", 
-                              "awards": "1", 
-                              "comments": "14",
-                              "ranking": "3",
-                              "votes": "98",
-                              "position": "04",
-                            }),
-                             Ranking.map({
-                              "user": "Juanilu", 
-                              "level": "Avanzado", 
-                              "image": "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg",
-                              "time": "Hoy 10:35 AM.", 
-                              "reports": "35", 
-                              "points": "450", 
-                              "awards": "1", 
-                              "comments": "14",
-                              "ranking": "3",
-                              "votes": "98",
-                              "position": "04",
-                            }),
-                          ];
-
+              final _castDataType = response['data'].cast<Map<String, dynamic>>();
+              elements = _castDataType.map<User>((json) => User.map(json)).toList();
           } else {
               throw new Exception('Error');
           }

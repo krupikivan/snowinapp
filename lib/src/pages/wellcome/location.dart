@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Location extends StatelessWidget {
   @override
@@ -89,7 +90,7 @@ class Location extends StatelessWidget {
                       child: RaisedButton(
                         color: primaryColor,
                         onPressed: (){
-                          Navigator.pushNamed(context, '/wellcome-profile-type');
+                          _comprobarPermisos(context);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -113,4 +114,26 @@ class Location extends StatelessWidget {
       ),
     );
   }
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////NEW CODE
+//////////////////////////////////////////////////////////////Functions
+  void _comprobarPermisos(BuildContext context) async {
+    print('check location permission');
+    PermissionHandler().checkPermissionStatus(PermissionGroup.location)
+      .then((PermissionStatus status) {
+          print(status.toString());
+          print('check camera permission');
+          PermissionHandler().checkPermissionStatus(PermissionGroup.camera)
+              .then((PermissionStatus status2) {
+                  print(status2.toString());
+
+                  Navigator.pushNamed(context, '/wellcome-profile-type');
+          });
+    });
+  }
+
 }

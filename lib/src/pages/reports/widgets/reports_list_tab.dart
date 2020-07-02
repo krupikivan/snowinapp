@@ -120,7 +120,14 @@ class ReportsListTabState extends State<ReportsListTab> {
                 itemCount: _allReports.length + 1,
                 itemBuilder: (context, i) {
                   if(i < _allReports.length)
-                      return ReportsTile(report: _allReports[i]);
+                      return ReportsTile(report: _allReports[i], afterValorate: (value, message) {
+                          if(value != 0) {
+                              _allReports.firstWhere((element) => element.id.toString() == _allReports[i].id.toString()).copos = value;
+                              setState(() {});
+                          } else {
+                              showWarningsDialog(message);
+                          }
+                      },);
                   else
                       return SizedBox(height: 70.0);
                 })
@@ -490,6 +497,44 @@ class ReportsListTabState extends State<ReportsListTab> {
       }).catchError((error) {
           print(error.toString());
       });
+  }
+
+  void showWarningsDialog(String message) {
+    print('show warnings dialog');
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: SingleChildScrollView(
+              child: Column(
+                  children: <Widget>[
+
+                      Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 224, 0, 1),
+                                  border: Border.all(style:BorderStyle.none),
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0))
+                              ),
+                              child: ListTile(
+                                  title: Column(
+                                    children: <Widget>[
+                                        Padding(padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0)),
+                                        ListTile(
+                                            title: Text(message, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16), softWrap: true,),
+                                        ),
+                                        Padding(padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0)),
+                                    ],
+                                  ),
+                              ),
+                        ),
+                  ],
+              ),
+            ),
+          );
+    });
   }
 
 

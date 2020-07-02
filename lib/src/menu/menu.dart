@@ -165,7 +165,6 @@ class _MenuState extends State<Menu> {
           ? () {
               Navigator.pop(context);
               if (opcion == 'logout') {
-                _prefs.accessToken = '';
                 _prefs.annoAcoplado = '';
                 _prefs.annoCamion = '';
                 _prefs.apellidos = '';

@@ -15,6 +15,8 @@ class Session {
   List<Pist> _recomendedTraks = List<Pist>();
   List<User> _closestFriends = List<User>();
 
+  bool _showReportWarnning = true;
+
 
 
   //Singleton
@@ -48,5 +50,8 @@ class Session {
 
   List<User> get closestFriends => _closestFriends;
   set closestFriends(newVal) => _closestFriends = newVal;
+
+  bool get showReportWarnning => _showReportWarnning;
+  set showReportWarnning(newVal) => _showReportWarnning = newVal;
 
 }

@@ -3,9 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:photo_view/photo_view.dart';
 
-import '../../widgets/custom_appbar.dart';
+import 'package:snowin/src/utils/session.dart';
 
-class PistesMap extends StatelessWidget {
+import 'package:snowin/src/models/ski_center.dart';
+import 'package:snowin/src/models/pist.dart';
+
+import 'package:snowin/src/providers/snowin_provider.dart';
+
+import 'package:snowin/src/widgets/custom_appbar.dart';
+import 'package:snowin/src/widgets/custom_textfield.dart';
+
+
+
+class PistesMap extends StatefulWidget {
+  @override
+  _PistesMapState createState() => _PistesMapState();
+}
+
+class _PistesMapState extends State<PistesMap> {
+  Session _session = new Session();
+
+  TextEditingController _controllerYouAre;
+  SkiCenter _center;
+  List<Pist> _recomendedTraks = List<Pist>();
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controllerYouAre = TextEditingController();
+    detalleCentroSki();
+  }
+
+  @override
+  void dispose() {
+
+    _controllerYouAre.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -33,9 +72,9 @@ class PistesMap extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          SizedBox(height: 10,),
                           Container(
-                            height: 50,
-                            color: Colors.grey,
+                            child: CustomTextField(width: size.width*0.9, prefix: "Estas en ", controller: _controllerYouAre, readOnly: true,),
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 30),
@@ -43,39 +82,8 @@ class PistesMap extends StatelessWidget {
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              children: [
-                                SizedBox(height: 5,),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 15,
-                                      width: 15,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10,),
-                                    AutoSizeText("CAMINO", style: TextStyle(fontSize: 15), maxLines: 2,),
-                                  ],
-                                ),
-                                SizedBox(height: 3,),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 15,
-                                      width: 15,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10,),
-                                    AutoSizeText("PIONERS, EL PALITO, LA SILLA, DE LA PRADERA", style: TextStyle(fontSize: 15), maxLines: 2,),
-                                  ],
-                                ),
-                              ],
+                            child: Wrap(
+                              children: buildRecomendedTraks(),
                             ),
                           ),
                           SizedBox(height: 15,),
@@ -99,4 +107,58 @@ class PistesMap extends StatelessWidget {
       ),
     );
   }
+
+
+
+
+
+//////////////////////////////////////////////////////////////Functions
+  Future<void> detalleCentroSki() async {
+      SnowinProvider().detalleCentroSki(_session.center.id.toString())
+                      .then((response) { print('detalle-centro-ski response: '); print(response);
+                          if(response['ok']) {
+                              var data = response['data'];
+
+                              setState(() {
+                                  _center = data['centro_ski'] != null? SkiCenter.map(data['centro_ski']) : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
+                                  _recomendedTraks = List<Pist>();
+                                  if(data['pistas_recomendadas'] != null) {
+                                    final _castDataType = data['pistas_recomendadas'].cast<Map<String, dynamic>>();
+                                    _recomendedTraks = _castDataType.map<Pist>((json) => Pist.map(json)).toList();
+                                  }
+                                  _controllerYouAre.text = _center.name;
+                              });
+                          } else {
+                              throw new Exception('Error');
+                          }
+                      }).catchError((error) {
+                          print(error.toString());
+                      });
+  }
+
+  List<Widget> buildRecomendedTraks() {
+    List<Widget> elements = new List<Widget>();
+
+    elements.add(SizedBox(height: 5,));
+
+    _recomendedTraks.forEach((element) {
+        elements.add(Row(
+                        children: [
+                            Container(
+                                height: 15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.green,
+                                ),
+                            ),
+                            SizedBox(width: 10,),
+                            AutoSizeText(element.descripcion, style: TextStyle(fontSize: 15), maxLines: 2,),
+                        ]));
+        elements.add(SizedBox(height: 5,));
+    });
+
+    return elements;
+  }
+
 }

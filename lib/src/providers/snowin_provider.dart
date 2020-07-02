@@ -87,6 +87,37 @@ class SnowinProvider {
     }
   }
 
+  Future<Map> detalleCentroSki(String idCentro) async {
+    print('call end point: detalles-centro-ski');
+
+    //configurar servicio
+    String service = Config.apiCentroSkiUrl + "detalles-centro-ski/" + idCentro;
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
   Future<Map> reportes(String limit, String offset, [String filters = '']) async {
     print('call end point: reporte/listar');
     print(filters);
@@ -103,6 +134,76 @@ class SnowinProvider {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> rankings(String limit, String offset, [String filters = '']) async {
+    print('call end point: listar-ranking');
+    print(filters);
+
+    //configurar servicio
+    String service = Config.apiUserUrl + "listar-ranking";
+    // service += '?limit=' + limit + '&offset=' + offset;
+    // service += filters.isNotEmpty? ('&' + filters) : '';
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> valorar(String reportId, String copos) async {
+    print('call end point: valorar');
+
+    //configurar servicio
+    String service = Config.apiReportsUrl + "valorar";
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.post(Uri.encodeFull(service),
+                                    body: {
+                                      'reporte_id': reportId,
+                                      'copos': copos
+                                    },
+                                    headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);

@@ -19,7 +19,7 @@ class Ranking {
     this.id = data.containsKey('id')? data['id'] : 0;
     this.user = data.containsKey('user')? data['user'].toString() : "";
     this.level = data.containsKey('level')? data['level'].toString() : "";
-    this.image= data.containsKey('image')? data['image'].toString() : "";
+    this.image= data.containsKey('image')? data['image'].toString() : "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg";
     this.time= data.containsKey('time')? data['time'].toString() : "";
     this.reports = data.containsKey('reports')? data['reports'].toString() : "";
     this.points = data.containsKey('points')? data['points'].toString() : "";

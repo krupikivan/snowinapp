@@ -12,6 +12,8 @@ import 'package:snowin/src/pages/wellcome/level.dart';
 import 'package:snowin/src/pages/wellcome/get_started.dart';
 
 import 'package:snowin/src/pages/reports/reports.dart';
+import 'package:snowin/src/pages/reports/pistes_map.dart';
+
 import 'package:snowin/src/pages/community/community.dart';
 
 
@@ -73,6 +75,12 @@ MaterialPageRoute getRoute(RouteSettings settings) {
     case '/reports':
       return new MyCustomRoute(
         builder: (_) => new Reports(),
+        settings: settings,
+      );
+
+    case '/pistes-map':
+      return new MyCustomRoute(
+        builder: (_) => new PistesMap(),
         settings: settings,
       );
 
