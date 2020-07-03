@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:snowin/src/models/benefit.dart';
+import 'package:snowin/src/providers/snowin_provider.dart';
 
 class BenefitProvider with ChangeNotifier {
   List<Benefit> _listBenefit = [];
@@ -17,22 +19,36 @@ class BenefitProvider with ChangeNotifier {
     getBenefits();
   }
 
-  void getBenefits() {
-    final List<Benefit> _list = [];
-    final Benefit benefit1 = Benefit.fromMap(
-        'https://www.chapelcogolf.com/wp-content/uploads/2016/08/Nuevo-Edificio-Club-House-Chapelco-Golf-Resort-2014-DAC_1888-copia-copia-copia.jpg',
-        'Cerro Chapelco',
-        '10%',
-        'Pases, equipos y clases grupales');
-    final Benefit benefit2 = Benefit.fromMap(
-        'https://q-cf.bstatic.com/images/hotel/max1280x900/880/88071318.jpg',
-        'Las leñas',
-        '10%',
-        'Pases, equipos y clases grupales');
-    _list.add(benefit1);
-    _list.add(benefit2);
-    _listBenefit = _list;
-    notifyListeners();
+  Future<List<Benefit>> _fetchBeneficios() async {
+    SnowinProvider().beneficios().then((response) {
+      print(response);
+      if (response['ok']) {
+        _listBenefit =
+            compute(beneficioFromJson, response['data']['data']) as List;
+        print(_listBenefit);
+        notifyListeners();
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
+  }
+
+  void getBenefits() async {
+    SnowinProvider().beneficios().then((response) {
+      print(response);
+      if (response['ok']) {
+        compute(beneficioFromJson, response['data']['data']).then((value) {
+          _listBenefit = value;
+          notifyListeners();
+        });
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 
   Benefit _benefitTapped;

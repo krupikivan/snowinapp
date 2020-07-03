@@ -53,8 +53,8 @@ class _MyAppState extends State<MyApp> {
         title: 'Snowin',
         onGenerateRoute: (RouteSettings settings) => getRoute(settings),
         //**TODO: Comentar initialRoute y descomentar la home
-        initialRoute: '/home',
-        // home: SplashScreen(),
+        // initialRoute: '/home',
+        home: SplashScreen(),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

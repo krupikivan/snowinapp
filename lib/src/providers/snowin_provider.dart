@@ -14,16 +14,16 @@ class SnowinProvider {
     'Content-Type': 'application/json; charset=UTF-8'
   };
   final Map<String, String> securedHeaders = {
-    'Authorization' : 'Bearer '+_prefs.token
+    'Authorization': 'Bearer ' + _prefs.token
+  };
+  final Map<String, String> authToken = {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'Authorization': 'Bearer ' + Config.authToken
   };
 
   static SnowinProvider _instance = new SnowinProvider._internal();
   SnowinProvider._internal();
   factory SnowinProvider() => _instance;
-
-
-
-
 
   Future<Map<String, dynamic>> obtenerwellcome() async {
     try {
@@ -48,8 +48,6 @@ class SnowinProvider {
     }
   }
 
-
-
 /////////////////////////////////////////////////////////////////////////////////SERVICIOS DE USUARIO
   Future<Map> centroSki() async {
     print('call end point: centro-ski');
@@ -63,7 +61,8 @@ class SnowinProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -94,7 +93,8 @@ class SnowinProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -125,7 +125,8 @@ class SnowinProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -156,7 +157,8 @@ class SnowinProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -175,7 +177,8 @@ class SnowinProvider {
     }
   }
 
-  Future<Map> posicion(String latitude, String longitude, String altitude) async {
+  Future<Map> posicion(
+      String latitude, String longitude, String altitude) async {
     print('call end point: posicion');
 
     //configurar servicio
@@ -188,12 +191,12 @@ class SnowinProvider {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         response = await http.post(Uri.encodeFull(service),
-                                    body: {
-                                      'latitud': latitude,
-                                      'longitud': longitude,
-                                      'altura': altitude
-                                    },
-                                    headers: securedHeaders);
+            body: {
+              'latitud': latitude,
+              'longitud': longitude,
+              'altura': altitude
+            },
+            headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -212,12 +215,36 @@ class SnowinProvider {
     }
   }
 
+  Future<Map> beneficios() async {
+    print('call end point: beneficios');
 
+    //configurar servicio
+    String service = Config.apiBeneficiosUrl;
 
+    //Respuesta
+    http.Response response;
 
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: authToken);
 
-
-
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
 
 /////////////////////////////////////////////////////////////////////////////////TRATAMIENTO DE ERRORES
   Future<Map<String, dynamic>> manejadorErroresResp(http.Response resp) async {
@@ -254,5 +281,4 @@ class SnowinProvider {
     });
     return {'ok': false, 'errores': decodeResp};
   }
-
 }

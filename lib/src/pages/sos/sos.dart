@@ -3,8 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:snowin/src/pages/sos/widget/appbar_sos.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 
-import '../../widgets/main_menu.dart';
-
 class Sos extends StatefulWidget {
   @override
   _SosState createState() => _SosState();
@@ -29,6 +27,7 @@ class _SosState extends State<Sos> {
           ),
           preferredSize: Size(double.infinity, 70)),
       drawerScrimColor: Colors.black54,
+      endDrawer: CustomDrawer(),
       body: clicked ? clickedTrue() : clickedFalse(),
     );
   }
