@@ -144,8 +144,8 @@ MaterialPageRoute getRoute(RouteSettings settings) {
 
     default:
       return new MyCustomRoute(
-        builder: (_) => new Home(),
-        // builder: (_) => new WellcomeCarousel(),
+        // builder: (_) => new Home(),
+        builder: (_) => new WellcomeCarousel(),
         settings: settings,
       );
   }
