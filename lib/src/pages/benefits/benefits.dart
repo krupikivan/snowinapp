@@ -74,7 +74,7 @@ class Benefits extends StatelessWidget {
                     itemCount: benefit.listBenefit.length,
                     itemBuilder: (BuildContext context, int index) => benefit
                             .listBenefit.isEmpty
-                        ? SizedBox()
+                        ? CircularProgressIndicator()
                         : BenefitCard(
                             benefit: benefit.listBenefit[index],
                             action: () {
@@ -90,7 +90,7 @@ class Benefits extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.only(bottom: 80),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -104,7 +104,7 @@ class Benefits extends StatelessWidget {
             ),
             CustomFabIcon(
                 heroTag: "btnScan",
-                isPrimary: false,
+                isPrimary: true,
                 icon: Icons.camera_enhance,
                 action: () => null),
           ],

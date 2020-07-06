@@ -4,8 +4,6 @@ import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:snowin/src/share/preference.dart';
 
-
-
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -22,7 +20,6 @@ class _SplashScreenState extends State<SplashScreen>
   final _preferences = new Preferences();
   final firebaseAnalyticsProvider = FirebaseAnalyticsProvider();
   static final FacebookLogin facebookSignIn = new FacebookLogin();
-
   @override
   void initState() {
     super.initState();
@@ -55,14 +52,13 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return AnimatedBuilder(
         animation: animationController,
         builder: (BuildContext context, Widget child) {
           return Scaffold(
             body: new Container(
-              decoration:
-                  new BoxDecoration(color: Colors.white),
+              decoration: new BoxDecoration(color: Colors.white),
               child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -85,25 +81,21 @@ class _SplashScreenState extends State<SplashScreen>
         });
   }
 
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////NEW CODE
 //////////////////////////////////////////////////////////////Functions
   _checkRegistrationStatus() async {
-      print('check registration status ...');
+    print('check registration status ...');
 
-      if (_preferences.token.toString().isNotEmpty) {
-          print('token found: ' + _preferences.token.toString());
-          print('go to reports page');
+    if (_preferences.token.toString().isNotEmpty) {
+      print('token found: ' + _preferences.token.toString());
+      print('go to reports page');
 
-          Navigator.pushNamed(context, '/reports');
-      } else {
-          print('no token found, go to registration page');
+      Navigator.pushNamed(context, '/reports');
+    } else {
+      print('no token found, go to registration page');
 
-          Navigator.of(context).pushNamedAndRemoveUntil('/wellcome', (Route<dynamic> route) => false);
-      }
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/wellcome', (Route<dynamic> route) => false);
+    }
   }
-
 }

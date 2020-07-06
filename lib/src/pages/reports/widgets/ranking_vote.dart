@@ -5,18 +5,23 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import 'package:snowin/src/providers/snowin_provider.dart';
 
-
-
 class RankingVote extends StatefulWidget {
   final String reportId;
   final String ranking;
   final String votes;
   final OnValorateCallback onValorate;
 
-  RankingVote({ Key key, @required this.reportId, @required this.ranking, @required this.votes, this.onValorate}) : super(key: key);
+  RankingVote(
+      {Key key,
+      @required this.reportId,
+      @required this.ranking,
+      @required this.votes,
+      this.onValorate})
+      : super(key: key);
 
   @override
-  RankingVoteState createState() => new RankingVoteState(reportId, ranking, votes);
+  RankingVoteState createState() =>
+      new RankingVoteState(reportId, ranking, votes);
 }
 
 class RankingVoteState extends State<RankingVote> {
@@ -42,34 +47,41 @@ class RankingVoteState extends State<RankingVote> {
               halfFilledIconData: Icons.ac_unit,
               color: Colors.black,
               borderColor: Colors.grey,
-              spacing:0.0
+              spacing: 0.0),
+          SizedBox(
+            width: 5,
           ),
-          SizedBox(width: 5,),
-          AutoSizeText(votes, style: TextStyle(fontSize: 16),),
+          AutoSizeText(
+            votes,
+            style: TextStyle(fontSize: 16),
+          ),
         ],
       ),
     );
   }
 
   void valorar(double copos) {
-    SnowinProvider().valorar(reportId, copos.round().toString()).then((response) { print('valorar: '); print(response);
-          if(response['ok'] && response['data'] == true) {
-              setState(() {
-                  ranking = copos.toString();
-                  int vote = int.parse(votes) + 1;
-                  votes = vote.toString();
-                  widget.onValorate(copos, vote, '');
-              });
-          } else {
-              widget.onValorate(0, 0, response['data']['message']);
-              throw new Exception(response['data']['message']);
-          }
-      }).catchError((error) {
-          print(error.toString());
-      });
+    SnowinProvider()
+        .valorar(reportId, copos.round().toString())
+        .then((response) {
+      print('valorar: ');
+      print(response);
+      if (response['ok'] && response['data'] == true) {
+        setState(() {
+          ranking = copos.toString();
+          int vote = int.parse(votes) + 1;
+          votes = vote.toString();
+          widget.onValorate(copos, vote, '');
+        });
+      } else {
+        widget.onValorate(0, 0, response['data']['message']);
+        throw new Exception(response['data']['message']);
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
-
 }
 
-
-typedef OnValorateCallback = void Function(double ranking, int votes, String message);
+typedef OnValorateCallback = void Function(
+    double ranking, int votes, String message);

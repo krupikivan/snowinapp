@@ -7,8 +7,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:snowin/src/utils/app_localization.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = new Preferences();
@@ -52,9 +50,8 @@ class _MyAppState extends State<MyApp> {
         firebaseAnalyticsProvider.getAnalyticsObserver()
       ],
       theme: ThemeData(
-        primaryColor: Color.fromRGBO(29, 113, 184, 1),
-        canvasColor: Colors.white
-      ),
+          primaryColor: Color.fromRGBO(29, 113, 184, 1),
+          canvasColor: Colors.white),
     );
   }
 }
