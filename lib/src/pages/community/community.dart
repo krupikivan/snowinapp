@@ -11,6 +11,7 @@ import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/pages/community/widgets/notifications_list_tab.dart';
 import 'package:snowin/src/pages/community/widgets/friends_list_tab.dart';
+import 'package:snowin/src/widgets/custom_drawer.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -41,11 +42,8 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
         bottomNavigationBar: CustomBottomMenu(
           item: 2,
         ),
-        endDrawer: Container(
-          width: 100.0,
-          height: 200.0,
-          color: Colors.blue,
-        ),
+        drawerScrimColor: Colors.black54,
+        endDrawer: CustomDrawer(),
         body: SafeArea(
           child: Container(
             height: size.height,

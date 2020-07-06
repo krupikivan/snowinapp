@@ -56,13 +56,12 @@ class MyBenefits extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 30),
+          padding: const EdgeInsets.only(bottom: 80),
           child: CustomFabIcon(
-            heroTag: "btnFilterBenefits",
-            icon: Icons.filter_list,
-            action: () => null,
-            isPrimary: false,
-          ),
+              heroTag: "btnFilter",
+              isPrimary: false,
+              icon: Icons.filter_list,
+              action: () => null),
         ));
   }
 }

@@ -97,7 +97,7 @@ class _BenefitDetailState extends State<BenefitDetail> {
           CustomListInfo(
               title: 'Detalle',
               info:
-                  '20% de Descuento en productos de RENTAL ski y snowboard en tiendas fisicas.'),
+                  '${benefit.benefitTapped.nombre} ${benefit.benefitTapped.descripcion}'),
           CustomListInfo(
             title: 'Modalidad',
             info:
