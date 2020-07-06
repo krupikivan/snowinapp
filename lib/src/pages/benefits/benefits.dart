@@ -70,19 +70,19 @@ class Benefits extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Consumer<BenefitProvider>(
-                builder: (context, benefit, _) => ListView.builder(
-                    itemCount: benefit.listBenefit.length,
-                    itemBuilder: (BuildContext context, int index) => benefit
-                            .listBenefit.isEmpty
-                        ? CircularProgressIndicator()
-                        : BenefitCard(
-                            benefit: benefit.listBenefit[index],
-                            action: () {
-                              benefit.benefitTapped =
-                                  benefit.listBenefit[index];
-                              Navigator.pushNamed(context, '/benefitDetail');
-                            },
-                          )),
+                builder: (context, benefit, _) => benefit.listBenefit.isEmpty
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemCount: benefit.listBenefit.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            BenefitCard(
+                              benefit: benefit.listBenefit[index],
+                              action: () {
+                                benefit.benefitTapped =
+                                    benefit.listBenefit[index];
+                                Navigator.pushNamed(context, '/benefitDetail');
+                              },
+                            )),
               ),
             ),
           ],

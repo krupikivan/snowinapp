@@ -534,10 +534,35 @@ class SnowinProvider {
   Future getBenefits() async {
     //configurar servicio
     String service = Config.apiBeneficiosUrl;
-
     //Respuesta
     http.Response response;
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: authToken);
 
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future getMyBenefits() async {
+    //configurar servicio
+    String service = Config.apiMisBeneficiosUrl;
+    //Respuesta
+    http.Response response;
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {

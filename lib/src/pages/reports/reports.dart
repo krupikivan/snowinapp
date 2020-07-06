@@ -22,6 +22,7 @@ import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/pages/reports/widgets/reports_list_tab.dart';
 import 'package:snowin/src/pages/reports/widgets/ranking_list_tab.dart';
 import 'package:snowin/src/pages/reports/widgets/my_reports_list_tab.dart';
+import 'package:snowin/src/widgets/custom_drawer.dart';
 
 class Reports extends StatefulWidget {
   @override
@@ -75,11 +76,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
         bottomNavigationBar: CustomBottomMenu(
           item: 1,
         ),
-        endDrawer: Container(
-          width: 100.0,
-          height: 200.0,
-          color: Colors.blue,
-        ),
+        drawerScrimColor: Colors.black54,
+        endDrawer: CustomDrawer(),
         body: SafeArea(
           child: Container(
             height: size.height,

@@ -37,4 +37,6 @@ class Config {
   //Service Urls AISA
   static const String apiBeneficiosUrl =
       "https://apisnowin.alternativasinteligentes.com/beneficio";
+  static const String apiMisBeneficiosUrl =
+      "https://apisnowin.alternativasinteligentes.com/user-beneficio";
 }
