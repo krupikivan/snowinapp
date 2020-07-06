@@ -18,7 +18,7 @@ import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/providers/snowin_provider.dart';
 
 import 'package:snowin/src/widgets/custom_appbar.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/pages/reports/widgets/reports_list_tab.dart';
 import 'package:snowin/src/pages/reports/widgets/ranking_list_tab.dart';
 import 'package:snowin/src/pages/reports/widgets/my_reports_list_tab.dart';
@@ -28,7 +28,7 @@ class Reports extends StatefulWidget {
   _ReportsState createState() => _ReportsState();
 }
 
-class _ReportsState extends State<Reports> with TickerProviderStateMixin{
+class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   Session _session = new Session();
 
   final _preferences = new Preferences();
@@ -44,8 +44,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
 
   bool _dialogTopVisible = false, _dialogBottomVisible = false;
 
-
-
   @override
   void initState() {
     super.initState();
@@ -53,7 +51,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     _tabControllerReports = TabController(vsync: this, length: 3);
     _speed = '0.00';
 
-    _locationTimer = Timer.periodic(Duration(seconds: 30), (Timer t) => updateLocation());
+    _locationTimer =
+        Timer.periodic(Duration(seconds: 30), (Timer t) => updateLocation());
 
     //set location state
     //_session.preferences.token = '';
@@ -72,120 +71,160 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return WillPopScope(
-          child: Scaffold(
-            bottomNavigationBar: MainMenu(item: 1,),
-            endDrawer: Container(width: 100.0, height: 200.0, color: Colors.blue,),
-            body: SafeArea(
-              child: Container(
-                height: size.height,
-                child: Stack(
-                  children: [
-                    CustomAppbar(
-                      context: context,
-                      image: "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                      height: 70.0,
-                      back: false,
-                    ),
-
-                    Positioned(
-                      top: 70.0,
-                      left: 0.0,
-                      right: 0.0,
-                      child: Column(
-                        children: [
-                          _topInfo(),
-                          Container(
-                            height: 48,
-                            child: TabBar(
-                              controller: _tabControllerReports,
-                              labelColor: Theme.of(context).primaryColor,
-                              unselectedLabelColor: Color.fromRGBO(159, 159, 159, 1.0),
-                              indicatorColor: Color.fromRGBO(29, 29, 27, 1.0),
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              tabs: [
-                                Tab(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: AutoSizeText('REPORTES', maxLines: 1, style: TextStyle(fontSize: 17)),
-                                  ),
-                                ),
-                                Tab(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: AutoSizeText('RANKING', maxLines: 1, style: TextStyle(fontSize: 17)),
-                                  ),
-                                ),
-                                Tab(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: AutoSizeText('MIS REPORTES', maxLines: 1, style: TextStyle(fontSize: 17)),
-                                  ),
-                                ),
-                              ]
-                            ),
-                          ),
-                          Container(
-                            height: size.height-(70+48+75+70), //El alto de la pantalla menos el AppBar, topInfo, Tabs y MainMenu
-                            child: TabBarView(
-                              controller: _tabControllerReports,
-                              children: <Widget>[
-                                ReportsListTab(),
-                                RankingListTab(),
-                                MyReportsListTab(),
-                              ]
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+      child: Scaffold(
+        bottomNavigationBar: CustomBottomMenu(
+          item: 1,
+        ),
+        endDrawer: Container(
+          width: 100.0,
+          height: 200.0,
+          color: Colors.blue,
+        ),
+        body: SafeArea(
+          child: Container(
+            height: size.height,
+            child: Stack(
+              children: [
+                CustomAppbar(
+                  context: context,
+                  image:
+                      "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                  height: 70.0,
+                  back: false,
                 ),
-              ),
+                Positioned(
+                  top: 70.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Column(
+                    children: [
+                      _topInfo(),
+                      Container(
+                        height: 48,
+                        child: TabBar(
+                            controller: _tabControllerReports,
+                            labelColor: Theme.of(context).primaryColor,
+                            unselectedLabelColor:
+                                Color.fromRGBO(159, 159, 159, 1.0),
+                            indicatorColor: Color.fromRGBO(29, 29, 27, 1.0),
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            tabs: [
+                              Tab(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: AutoSizeText('REPORTES',
+                                      maxLines: 1,
+                                      style: TextStyle(fontSize: 17)),
+                                ),
+                              ),
+                              Tab(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: AutoSizeText('RANKING',
+                                      maxLines: 1,
+                                      style: TextStyle(fontSize: 17)),
+                                ),
+                              ),
+                              Tab(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: AutoSizeText('MIS REPORTES',
+                                      maxLines: 1,
+                                      style: TextStyle(fontSize: 17)),
+                                ),
+                              ),
+                            ]),
+                      ),
+                      Container(
+                        height: size.height -
+                            (70 +
+                                48 +
+                                75 +
+                                70), //El alto de la pantalla menos el AppBar, topInfo, Tabs y MainMenu
+                        child: TabBarView(
+                            controller: _tabControllerReports,
+                            children: <Widget>[
+                              ReportsListTab(),
+                              RankingListTab(),
+                              MyReportsListTab(),
+                            ]),
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          onWillPop: goBack,
+        ),
+      ),
+      onWillPop: goBack,
     );
   }
 
-
 //////////////////////////////////////////////////////////////Widgets
-  Widget _topInfo(){
+  Widget _topInfo() {
     return Container(
       height: 60,
       color: Color.fromRGBO(74, 74, 73, 1),
-      padding: EdgeInsets.symmetric(horizontal:8, vertical: 13),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 13),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
-              Icon(Icons.terrain, size: 22, color: Colors.white,),
-              SizedBox(width: 3,),
+              Icon(
+                Icons.terrain,
+                size: 22,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 3,
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AutoSizeText(_session.center != null? _session.center.name.toString() : '', maxLines: 1, style: TextStyle(fontSize: 14, color: Colors.white)),
+                  AutoSizeText(
+                      _session.center != null
+                          ? _session.center.name.toString()
+                          : '',
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 14, color: Colors.white)),
                   Row(
                     children: [
-                      AutoSizeText('Pista: ', maxLines: 1, style: TextStyle(fontSize: 14, color: Colors.white)),
-                      AutoSizeText(_session.pist != null? _session.pist.descripcion.toString() : '', maxLines: 1, style: TextStyle(fontSize: 14, color: Color.fromRGBO(255, 224, 0, 1))),
-                      Icon(Icons.info, size: 15, color: Color.fromRGBO(255, 224, 0, 1),),
+                      AutoSizeText('Pista: ',
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 14, color: Colors.white)),
+                      AutoSizeText(
+                          _session.pist != null
+                              ? _session.pist.descripcion.toString()
+                              : '',
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Color.fromRGBO(255, 224, 0, 1))),
+                      Icon(
+                        Icons.info,
+                        size: 15,
+                        color: Color.fromRGBO(255, 224, 0, 1),
+                      ),
                     ],
                   )
                 ],
               ),
             ],
           ),
-          SizedBox(width: 2,),
+          SizedBox(
+            width: 2,
+          ),
           GestureDetector(
             onTap: goToMapPage,
             child: Container(
               padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 224, 0, 1),
-                borderRadius: BorderRadius.circular(4)
-              ),
-              child: Icon(Icons.map, size: 23, color: Color.fromRGBO(74, 74, 73, 1)),
+                  color: Color.fromRGBO(255, 224, 0, 1),
+                  borderRadius: BorderRadius.circular(4)),
+              child: Icon(Icons.map,
+                  size: 23, color: Color.fromRGBO(74, 74, 73, 1)),
             ),
           ),
           Container(
@@ -197,11 +236,20 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
             children: [
               IconButton(
                 padding: EdgeInsets.all(0),
-                icon: Icon(Icons.av_timer, size: 28, color: _speedOn? Color.fromRGBO(255, 224, 0, 1) : Colors.white,),
+                icon: Icon(
+                  Icons.av_timer,
+                  size: 28,
+                  color:
+                      _speedOn ? Color.fromRGBO(255, 224, 0, 1) : Colors.white,
+                ),
                 onPressed: speedOnOff,
               ),
-              SizedBox(width: 3,),
-              AutoSizeText(_speed + ' km/h', maxLines: 1, style: TextStyle(fontSize: 15, color: Colors.white)),
+              SizedBox(
+                width: 3,
+              ),
+              AutoSizeText(_speed + ' km/h',
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 15, color: Colors.white)),
             ],
           ),
           Container(
@@ -211,15 +259,24 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
           ),
           Row(
             children: [
-              Icon(Icons.people, size: 31, color: Colors.white,),
-              SizedBox(width: 3,),
+              Icon(
+                Icons.people,
+                size: 31,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 3,
+              ),
               Container(
                 padding: EdgeInsets.all(7),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color.fromRGBO(255, 255, 255, 1),
                 ),
-                child: AutoSizeText(_session.closestFriends.length.toString(), maxLines: 1, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                child: AutoSizeText(_session.closestFriends.length.toString(),
+                    maxLines: 1,
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -228,7 +285,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     );
   }
 
-  void showWarningsDialog(){
+  void showWarningsDialog() {
     print('show warnings dialog');
     final size = MediaQuery.of(context).size;
     _session.showReportWarnning = false;
@@ -240,37 +297,40 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
         color: Colors.transparent,
         child: Column(
           children: [
-            _session.recomendedTraks.length > 0? Container(
-              margin: EdgeInsets.symmetric(vertical:10, horizontal: size.width*0.05),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 216, 52, 1),
-                borderRadius: BorderRadius.circular(15)
-              ),
-              child: _dialogTopContent(),
-            ) : Container(),
-            _session.closestFriends.length > 0? Container(
-              margin: EdgeInsets.symmetric(vertical:10, horizontal: size.width*0.05),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15)
-              ),
-              child: _dialogBottomContent(),
-            ) : Container(),
+            _session.recomendedTraks.length > 0
+                ? Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: 10, horizontal: size.width * 0.05),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 216, 52, 1),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: _dialogTopContent(),
+                  )
+                : Container(),
+            _session.closestFriends.length > 0
+                ? Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: 10, horizontal: size.width * 0.05),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: _dialogBottomContent(),
+                  )
+                : Container(),
           ],
         ),
       ),
     );
   }
 
-  Widget _dialogTopContent(){
+  Widget _dialogTopContent() {
     final size = MediaQuery.of(context).size;
     return Container(
-      width: size.width*0.90,
-      margin: EdgeInsets.symmetric(vertical:10, horizontal: size.width*0.01),
+      width: size.width * 0.90,
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: size.width * 0.01),
       decoration: BoxDecoration(
-        color: Color.fromRGBO(255, 216, 52, 1),
-        borderRadius: BorderRadius.circular(15)
-      ),
+          color: Color.fromRGBO(255, 216, 52, 1),
+          borderRadius: BorderRadius.circular(15)),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -289,7 +349,11 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                     child: Container(
                       color: Color.fromRGBO(29, 29, 27, 1),
                       child: Center(
-                        child: FaIcon(FontAwesomeIcons.exclamation, size: 20, color: Color.fromRGBO(255, 216, 52, 1),),
+                        child: FaIcon(
+                          FontAwesomeIcons.exclamation,
+                          size: 20,
+                          color: Color.fromRGBO(255, 216, 52, 1),
+                        ),
                       ),
                     ),
                   ),
@@ -299,16 +363,25 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AutoSizeText(_t(context, "warning").toUpperCase()+"!", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black, decoration: TextDecoration.none,)),
+                      AutoSizeText(_t(context, "warning").toUpperCase() + "!",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            decoration: TextDecoration.none,
+                          )),
                       Container(
-                        width: size.width*0.6,
-                        child: AutoSizeText(_t(context, "recomendedPistes"), style: TextStyle(fontSize: 14, color: Colors.black, decoration: TextDecoration.none))
-                      ),
+                          width: size.width * 0.6,
+                          child: AutoSizeText(_t(context, "recomendedPistes"),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none))),
                     ],
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     _hideDialog(1);
                   },
                   child: Container(
@@ -336,9 +409,20 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.map, color: Color.fromRGBO(255, 216, 52, 1), size: 20,),
-                        SizedBox(width: 3,),
-                        AutoSizeText(_t(context, "pistesMap").toUpperCase(), style: TextStyle(color: Color.fromRGBO(255, 216, 52, 1), fontSize: 13),),
+                        Icon(
+                          Icons.map,
+                          color: Color.fromRGBO(255, 216, 52, 1),
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        AutoSizeText(
+                          _t(context, "pistesMap").toUpperCase(),
+                          style: TextStyle(
+                              color: Color.fromRGBO(255, 216, 52, 1),
+                              fontSize: 13),
+                        ),
                       ],
                     ),
                   ),
@@ -346,7 +430,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                 Container(
                   child: RaisedButton(
                     color: Color.fromRGBO(29, 29, 27, 1),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.of(context).pop();
                     },
                     shape: RoundedRectangleBorder(
@@ -355,7 +439,10 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AutoSizeText(_t(context, "understood").toUpperCase(), style: TextStyle(color: Colors.white, fontSize: 13),),
+                        AutoSizeText(
+                          _t(context, "understood").toUpperCase(),
+                          style: TextStyle(color: Colors.white, fontSize: 13),
+                        ),
                       ],
                     ),
                   ),
@@ -372,34 +459,42 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
     final size = MediaQuery.of(context).size;
     List<Widget> elements = new List<Widget>();
 
-    elements.add(SizedBox(height: 15.0,));
+    elements.add(SizedBox(
+      height: 15.0,
+    ));
     _session.recomendedTraks.forEach((element) {
-        elements.add(Container(
-                        width: size.width*0.55,
-                        child: AutoSizeText(element.descripcion.toString().trim(), style: TextStyle(fontSize: 15, color: Colors.black, decoration: TextDecoration.none), maxLines: 2,)
-                      ));
-        elements.add(SizedBox(height: 10.0,));
+      elements.add(Container(
+          width: size.width * 0.55,
+          child: AutoSizeText(
+            element.descripcion.toString().trim(),
+            style: TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                decoration: TextDecoration.none),
+            maxLines: 2,
+          )));
+      elements.add(SizedBox(
+        height: 10.0,
+      ));
     });
 
     return elements;
   }
 
-  Widget _dialogBottomContent(){
+  Widget _dialogBottomContent() {
     final size = MediaQuery.of(context).size;
     return Container(
-      width: size.width*0.90,
-      margin: EdgeInsets.symmetric(vertical:10, horizontal: size.width*0.01),
+      width: size.width * 0.90,
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: size.width * 0.01),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15)
-      ),
+          color: Colors.white, borderRadius: BorderRadius.circular(15)),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 _hideDialog(2);
               },
               child: Container(
@@ -408,30 +503,36 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Icon(Icons.group, color: Theme.of(context).primaryColor, size: 35,),
-                  Column(
-                    children: buildFriends(),
-                  ),
-                ],
-              )
-            ),
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Icon(
+                      Icons.group,
+                      color: Theme.of(context).primaryColor,
+                      size: 35,
+                    ),
+                    Column(
+                      children: buildFriends(),
+                    ),
+                  ],
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RaisedButton(
                   color: Theme.of(context).primaryColor,
-                  onPressed: (){},
+                  onPressed: () {},
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AutoSizeText(_t(context, "toContact").toUpperCase(), style: TextStyle(color: Colors.white, fontSize: 13),),
+                      AutoSizeText(
+                        _t(context, "toContact").toUpperCase(),
+                        style: TextStyle(color: Colors.white, fontSize: 13),
+                      ),
                     ],
                   ),
                 ),
@@ -448,226 +549,275 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin{
 
     String friends = '', predicade = '';
 
-    if(_session.closestFriends.length == 1) {
+    if (_session.closestFriends.length == 1) {
       friends = _session.closestFriends.first.username.toString();
       predicade = 'También está en ' + _session.center.name.toString() + '!';
     } else {
-      if(_session.closestFriends.length == 2) {
-        friends = _session.closestFriends.first.username.toString() + ' y ' + _session.closestFriends[1].username.toString();
+      if (_session.closestFriends.length == 2) {
+        friends = _session.closestFriends.first.username.toString() +
+            ' y ' +
+            _session.closestFriends[1].username.toString();
       } else {
-        friends = _session.closestFriends.first.username.toString() + ', ' + _session.closestFriends[1].username.toString() + ' y ' + (_session.closestFriends.length - 2).toString() + ' amigos más';
+        friends = _session.closestFriends.first.username.toString() +
+            ', ' +
+            _session.closestFriends[1].username.toString() +
+            ' y ' +
+            (_session.closestFriends.length - 2).toString() +
+            ' amigos más';
       }
       predicade = 'También están en ' + _session.center.name.toString() + '!';
     }
 
-    elements.add(AutoSizeText(friends, style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold, decoration: TextDecoration.none),),);
-    elements.add(AutoSizeText(predicade, style: TextStyle(fontSize: 15, color: Colors.black, decoration: TextDecoration.none),),);
+    elements.add(
+      AutoSizeText(
+        friends,
+        style: TextStyle(
+            fontSize: 15,
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.bold,
+            decoration: TextDecoration.none),
+      ),
+    );
+    elements.add(
+      AutoSizeText(
+        predicade,
+        style: TextStyle(
+            fontSize: 15, color: Colors.black, decoration: TextDecoration.none),
+      ),
+    );
 
     return elements;
   }
 
-  void _hideDialog(int identifier){
+  void _hideDialog(int identifier) {
     setState(() {
-      (identifier==1)? _dialogTopVisible = false : _dialogBottomVisible = false;
+      (identifier == 1)
+          ? _dialogTopVisible = false
+          : _dialogBottomVisible = false;
     });
     Navigator.pop(context);
     showWarningsDialog();
-    if(!_dialogTopVisible && !_dialogBottomVisible){
+    if (!_dialogTopVisible && !_dialogBottomVisible) {
       Navigator.pop(context);
     }
   }
 
-
-
-
-
 //////////////////////////////////////////////////////////////Functions
   void setLocationState() {
-      centroSki().then((value) {
-          if(mounted) setState(() {});
+    centroSki().then((value) {
+      if (mounted) setState(() {});
 
-          //cargar pistas recomendadas
-          recomendedTraks().then((value) {
-              print(_session.recomendedTraks.length.toString());
+      //cargar pistas recomendadas
+      recomendedTraks().then((value) {
+        print(_session.recomendedTraks.length.toString());
 
-              //cargar amigos serca
-              closestFriends().then((value) {
-                  print(_session.closestFriends.length.toString());
+        //cargar amigos serca
+        closestFriends().then((value) {
+          print(_session.closestFriends.length.toString());
 
-                  setState(() {});
-              });
-          });
+          setState(() {});
+        });
       });
+    });
   }
 
   Future<void> centroSki() async {
-      SnowinProvider().centroSki().then((response) { print('centro-ski response: '); print(response);
-          if(response['ok']) {
-              var data = response['data'];
+    SnowinProvider().centroSki().then((response) {
+      print('centro-ski response: ');
+      print(response);
+      if (response['ok']) {
+        var data = response['data'];
 
-              setState(() {
-                  _session.center = data['centroSki'] != null? SkiCenter.map(data['centroSki']) : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
-                  _session.pist = data['pista'] != null? Pist.map(data['pista']) : Pist(0, 'No hay pista', 0, 0, '', '', '', 0.0, 0.0);
-                  if(data['amigos'] != null) {
-                    final _castDataType = data['amigos'].cast<Map<String, dynamic>>();
-                    _session.closestFriends = _castDataType.map<User>((json) => User.map(json)).toList();
-                  }
-              });
-          } else {
-              throw new Exception('Error');
+        setState(() {
+          _session.center = data['centroSki'] != null
+              ? SkiCenter.map(data['centroSki'])
+              : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
+          _session.pist = data['pista'] != null
+              ? Pist.map(data['pista'])
+              : Pist(0, 'No hay pista', 0, 0, '', '', '', 0.0, 0.0);
+          if (data['amigos'] != null) {
+            final _castDataType = data['amigos'].cast<Map<String, dynamic>>();
+            _session.closestFriends =
+                _castDataType.map<User>((json) => User.map(json)).toList();
           }
-      }).catchError((error) {
-          print(error.toString());
-      });
+        });
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 
   Future<void> recomendedTraks() async {
-      await SnowinProvider().recomendedTraks().then((response) { print('advertencias response: '); print(response);
-          if(response['ok']) {
-              var data = response['data'];
+    await SnowinProvider().recomendedTraks().then((response) {
+      print('advertencias response: ');
+      print(response);
+      if (response['ok']) {
+        var data = response['data'];
 
-              if(data != false) {
-                  if(data is String) {
-                      if(_session.showLocationWarnning) {
-                          DialogHelper.showSimpleDialog(context, data.toString());
-                          _session.showLocationWarnning = false;
-                          _dialogTopVisible = _session.recomendedTraks.length > 0? true : false;
-                      }
-                  } else {
-                      final _castDataType = data.cast<Map<String, dynamic>>();
-                      _session.recomendedTraks = _castDataType.map<Pist>((json) => Pist.map(json)).toList();
-                      _dialogTopVisible = _session.recomendedTraks.length > 0? true : false;
-                  }
-              }
+        if (data != false) {
+          if (data is String) {
+            if (_session.showLocationWarnning) {
+              DialogHelper.showSimpleDialog(context, data.toString());
+              _session.showLocationWarnning = false;
+              _dialogTopVisible =
+                  _session.recomendedTraks.length > 0 ? true : false;
+            }
           } else {
-              throw new Exception('Error');
+            final _castDataType = data.cast<Map<String, dynamic>>();
+            _session.recomendedTraks =
+                _castDataType.map<Pist>((json) => Pist.map(json)).toList();
+            _dialogTopVisible =
+                _session.recomendedTraks.length > 0 ? true : false;
           }
-      }).catchError((error) {
-          print(error.toString());
-      });
+        }
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 
   Future<void> closestFriends() async {
-      await SnowinProvider().closestFriends().then((response) { print('coordenadas-amigos response: '); print(response);
-          if(response['ok']) {
-              var data = response['data'];
+    await SnowinProvider().closestFriends().then((response) {
+      print('coordenadas-amigos response: ');
+      print(response);
+      if (response['ok']) {
+        var data = response['data'];
 
-              final _castDataType = data['amigos_serca'].cast<Map<String, dynamic>>();
-              _session.closestFriends = _castDataType.map<User>((json) => User.map(json)).toList();
-              _dialogBottomVisible = _session.closestFriends.length > 0? true : false;
+        final _castDataType = data['amigos_serca'].cast<Map<String, dynamic>>();
+        _session.closestFriends =
+            _castDataType.map<User>((json) => User.map(json)).toList();
+        _dialogBottomVisible =
+            _session.closestFriends.length > 0 ? true : false;
 
-              if(_session.showReportWarnning && (_dialogTopVisible || _dialogBottomVisible)) {
-                  showWarningsDialog();
-              }
-          } else {
-              throw new Exception('Error');
-          }
-      }).catchError((error) {
-          print(error.toString());
-      });
+        if (_session.showReportWarnning &&
+            (_dialogTopVisible || _dialogBottomVisible)) {
+          showWarningsDialog();
+        }
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 
   void updateGeoPosition() {
-      //get device position
-      Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((position) {
-          print('latitud: ' + position.latitude.toString());
-          print('longitud: ' + position.longitude.toString());
-          print('altitud: ' + position.altitude.toString());
-          print('speed: ' + position.speed.toString());
+    //get device position
+    Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((position) {
+      print('latitud: ' + position.latitude.toString());
+      print('longitud: ' + position.longitude.toString());
+      print('altitud: ' + position.altitude.toString());
+      print('speed: ' + position.speed.toString());
 
-          _preferences.latitude = position.latitude.toString();
-          _preferences.longitude = position.longitude.toString();
-          _preferences.altitude = position.altitude.toString();
-          _preferences.speed = position.speed.toString();
+      _preferences.latitude = position.latitude.toString();
+      _preferences.longitude = position.longitude.toString();
+      _preferences.altitude = position.altitude.toString();
+      _preferences.speed = position.speed.toString();
 
-          if(position.speed > 0) {
-              List<String> speedArr =  (position.speed * 3.6).toString().split('.');
-              _speed = speedArr.first + '.' + speedArr.elementAt(1).substring(0, 2);
-          }
+      if (position.speed > 0) {
+        List<String> speedArr = (position.speed * 3.6).toString().split('.');
+        _speed = speedArr.first + '.' + speedArr.elementAt(1).substring(0, 2);
+      }
 
-          // SnowinProvider().posicion(position.latitude.toString(),
-          //                           position.longitude.toString(),
-          //                           position.altitude.toString())
-          SnowinProvider().posicion('-34.4833333','-58.5166667','1000')
-                          .then((response) { print(response);
-                              if(response['ok']) {
-
-                                  setState(() {});
-                              } else {
-                                  throw new Exception('Error');
-                              }
-                          }).catchError((error) {
-                              print(error.toString());
-                          });
+      // SnowinProvider().posicion(position.latitude.toString(),
+      //                           position.longitude.toString(),
+      //                           position.altitude.toString())
+      SnowinProvider()
+          .posicion('-34.4833333', '-58.5166667', '1000')
+          .then((response) {
+        print(response);
+        if (response['ok']) {
+          setState(() {});
+        } else {
+          throw new Exception('Error');
+        }
+      }).catchError((error) {
+        print(error.toString());
       });
+    });
   }
 
   void updateLocation() {
-      //get device position
-      Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((position) {
-          print('update device location');
-          print('latitud: ' + position.latitude.toString());
-          print('longitud: ' + position.longitude.toString());
-          print('altitud: ' + position.altitude.toString());
-          print('speed: ' + position.speed.toString());
+    //get device position
+    Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((position) {
+      print('update device location');
+      print('latitud: ' + position.latitude.toString());
+      print('longitud: ' + position.longitude.toString());
+      print('altitud: ' + position.altitude.toString());
+      print('speed: ' + position.speed.toString());
 
-          _preferences.latitude = position.latitude.toString();
-          _preferences.longitude = position.longitude.toString();
-          _preferences.altitude = position.altitude.toString();
-          _preferences.speed = position.speed.toString();
+      _preferences.latitude = position.latitude.toString();
+      _preferences.longitude = position.longitude.toString();
+      _preferences.altitude = position.altitude.toString();
+      _preferences.speed = position.speed.toString();
 
-          SnowinProvider().posicion(position.latitude.toString(),
-                                    position.longitude.toString(),
-                                    position.altitude.toString())
-                          .then((response) { print(response);
-                              if(response['ok']) {
-                                  //set location state
-                                  setLocationState();
-                              } else {
-                                  throw new Exception('Error');
-                              }
-                          }).catchError((error) {
-                              print(error.toString());
-                          });
+      SnowinProvider()
+          .posicion(position.latitude.toString(), position.longitude.toString(),
+              position.altitude.toString())
+          .then((response) {
+        print(response);
+        if (response['ok']) {
+          //set location state
+          setLocationState();
+        } else {
+          throw new Exception('Error');
+        }
+      }).catchError((error) {
+        print(error.toString());
       });
+    });
   }
 
-  void speedOnOff() { print('on off speed');
-      Geolocator().isLocationServiceEnabled().then((enabled) {
-          if(enabled) {
-              if(_speedOn) {
-                  if(_speedTimer.isActive) _speedTimer.cancel();
-                  setState(() { _speed = '0.00'; });
-              } else {
-                  var interval = _preferences.updatePositionInterval.toString().isNotEmpty? _preferences.updatePositionInterval : '5';
-                  _speedTimer = Timer.periodic(Duration(seconds: int.parse(interval.toString())), (Timer t) => updateGeoPosition());
-              }
-              _speedOn = !_speedOn;
-          } else {
-              DialogHelper.showErrorDialog(context, 'Dispositivo GPS desactivado');
-          }
-      });
+  void speedOnOff() {
+    print('on off speed');
+    Geolocator().isLocationServiceEnabled().then((enabled) {
+      if (enabled) {
+        if (_speedOn) {
+          if (_speedTimer.isActive) _speedTimer.cancel();
+          setState(() {
+            _speed = '0.00';
+          });
+        } else {
+          var interval =
+              _preferences.updatePositionInterval.toString().isNotEmpty
+                  ? _preferences.updatePositionInterval
+                  : '5';
+          _speedTimer = Timer.periodic(
+              Duration(seconds: int.parse(interval.toString())),
+              (Timer t) => updateGeoPosition());
+        }
+        _speedOn = !_speedOn;
+      } else {
+        DialogHelper.showErrorDialog(context, 'Dispositivo GPS desactivado');
+      }
+    });
   }
 
   void goToMapPage() {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
 
-    if(_session.center.id != 0) {
+    if (_session.center.id != 0) {
       Navigator.pushNamed(context, '/pistes-map');
     } else {
-      DialogHelper.showSimpleDialog(context, 'No está cerca de ningún centro de ski.');
+      DialogHelper.showSimpleDialog(
+          context, 'No está cerca de ningún centro de ski.');
     }
   }
 
-  Future<bool> goBack() async{
+  Future<bool> goBack() async {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
     return false;
   }
 
-
-
-  String _t(BuildContext context, String label){
+  String _t(BuildContext context, String label) {
     return AppLocalizations.of(context).translate(label);
   }
-
 }

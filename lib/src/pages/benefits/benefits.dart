@@ -6,7 +6,7 @@ import 'package:snowin/src/widgets/custom_benefit_card.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_fab_icon.dart';
 
-import '../../widgets/main_menu.dart';
+import '../../widgets/custom_bottom_menu.dart';
 
 class Benefits extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldDrawer =
@@ -29,7 +29,7 @@ class Benefits extends StatelessWidget {
           preferredSize: Size(double.infinity, 70)),
       drawerScrimColor: Colors.black54,
       endDrawer: CustomDrawer(),
-      bottomNavigationBar: MainMenu(
+      bottomNavigationBar: CustomBottomMenu(
         item: 3,
       ),
       body: Container(

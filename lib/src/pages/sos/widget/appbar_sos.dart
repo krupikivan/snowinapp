@@ -21,7 +21,7 @@ class AppBarSos extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () =>
-                          Navigator.pushReplacementNamed(context, 'reports'),
+                          Navigator.pushReplacementNamed(context, '/reports'),
                       icon: Icon(
                         Icons.arrow_back,
                         size: 30,

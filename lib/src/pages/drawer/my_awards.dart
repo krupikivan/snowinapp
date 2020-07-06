@@ -4,7 +4,7 @@ import 'package:snowin/src/pages/drawer/provider/award_provider.dart';
 import 'package:snowin/src/pages/drawer/widget/award_card.dart';
 import 'package:snowin/src/pages/drawer/widget/custom_appbar_drawer.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 
 class MyAwards extends StatelessWidget {
   MyAwards({Key key}) : super(key: key);
@@ -24,7 +24,7 @@ class MyAwards extends StatelessWidget {
             preferredSize: Size(double.infinity, 70)),
         drawerScrimColor: Colors.black54,
         endDrawer: CustomDrawer(),
-        bottomNavigationBar: MainMenu(
+        bottomNavigationBar: CustomBottomMenu(
           item: 3,
         ),
         body: Container(

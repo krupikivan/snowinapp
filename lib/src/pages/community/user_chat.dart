@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/widgets/custom_appbar_chat.dart';
 import 'package:snowin/src/widgets/custom_chat_message.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 
 class UserChat extends StatefulWidget {
   const UserChat({Key key}) : super(key: key);
@@ -35,7 +35,7 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
             context: context,
           ),
           preferredSize: Size(double.infinity, 70)),
-      bottomNavigationBar: MainMenu(
+      bottomNavigationBar: CustomBottomMenu(
         item: 2,
       ),
       body: Container(

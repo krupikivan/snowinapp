@@ -6,7 +6,7 @@ import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/widgets/custom_appbar_pages.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_list_info.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 
 class BenefitDetail extends StatefulWidget {
@@ -34,7 +34,7 @@ class _BenefitDetailState extends State<BenefitDetail> {
           ),
           preferredSize: Size(double.infinity, 70)),
       endDrawer: CustomDrawer(),
-      bottomNavigationBar: MainMenu(
+      bottomNavigationBar: CustomBottomMenu(
         item: 3,
       ),
       body: ListView(
