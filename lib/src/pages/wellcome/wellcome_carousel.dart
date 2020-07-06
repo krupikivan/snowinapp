@@ -323,7 +323,6 @@ class _WellcomeCarouselState extends State<WellcomeCarousel> {
 
                                 LoginProvider().fbLogin(fbResponse.accessToken.token).then((response) {
                                     if(response['success']) {
-                                        _preferences.accessToken = fbResponse.accessToken.token;
                                         _preferences.email       = profile['email'];
                                         _preferences.nombre      = profile['first_name'];
                                         _preferences.apellidos   = profile['last_name'];

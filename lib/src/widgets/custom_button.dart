@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  
+  final OnPressCallback onPressed;
   final String text;
   final Color color;
   final double height;
@@ -12,6 +12,7 @@ class CustomButton extends StatelessWidget {
     this.color,
     this.height,
     this.width,
+    this.onPressed,
   });
   
   @override
@@ -24,9 +25,12 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(25.0),
         ),
         color: color,
-        onPressed: (){},
+        onPressed: onPressed,
         child: Text(text, style: TextStyle(fontSize: 22, color: Colors.white),),
       ),
     );
   }
 }
+
+
+typedef OnPressCallback = void Function();

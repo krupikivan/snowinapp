@@ -1,4 +1,4 @@
-class Ranking {
+class Notifications {
   var id;
   var user;
   var level;
@@ -12,14 +12,14 @@ class Ranking {
   var votes;
   var position;
 
-  Ranking(this.id, this.user, this.level, this.image, this.time, this.reports, this.points, this.awards,
+  Notifications(this.id, this.user, this.level, this.image, this.time, this.reports, this.points, this.awards,
           this.comments, this.ranking, this.votes, this.position);
 
-  Ranking.map(dynamic data) {
+  Notifications.map(dynamic data) {
     this.id = data.containsKey('id')? data['id'] : 0;
     this.user = data.containsKey('user')? data['user'].toString() : "";
     this.level = data.containsKey('level')? data['level'].toString() : "";
-    this.image= data.containsKey('image')? data['image'].toString() : "https://www.clickgest.com/sites/default/files/2016-03/team4-large.jpg";
+    this.image= data.containsKey('img')? data['img'].toString() : "";
     this.time= data.containsKey('time')? data['time'].toString() : "";
     this.reports = data.containsKey('reports')? data['reports'].toString() : "";
     this.points = data.containsKey('points')? data['points'].toString() : "";

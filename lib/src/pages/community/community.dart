@@ -1,14 +1,19 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:snowin/src/pages/community/notification_tab.dart';
-import 'package:snowin/src/pages/community/provider/community_tab_provider.dart';
-import 'package:snowin/src/pages/community/search_tab.dart';
-import 'package:snowin/src/pages/community/widget/notification_avatar.dart';
-import 'package:snowin/src/widgets/custom_appbar_pages.dart';
-import 'package:snowin/src/widgets/custom_drawer.dart';
-import 'package:snowin/src/widgets/custom_fab_icon.dart';
 
-import '../../widgets/main_menu.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
+import 'package:snowin/src/utils/session.dart';
+
+import 'package:snowin/src/providers/snowin_provider.dart';
+
+import 'package:snowin/src/widgets/custom_appbar.dart';
+import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/pages/community/widgets/notifications_list_tab.dart';
+import 'package:snowin/src/pages/community/widgets/friends_list_tab.dart';
+
+
+
 
 class Community extends StatefulWidget {
   @override
@@ -16,138 +21,128 @@ class Community extends StatefulWidget {
 }
 
 class _CommunityState extends State<Community> with TickerProviderStateMixin {
-  TabController _tabController;
-  final GlobalKey<ScaffoldState> scaffoldDrawer =
-      new GlobalKey<ScaffoldState>();
-  @override
+
+  TabController _tabControllerCommunity;
+
+
+   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 2);
+    _tabControllerCommunity = TabController(vsync: this, length: 2);
+
+  }
+
+  @override
+  void dispose() {
+    _tabControllerCommunity.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final tab = Provider.of<CommunityTabsProvider>(context);
-    if (tab.inSecondTab) {
-      _tabController.index = 1;
-    }
-    return Scaffold(
-      key: scaffoldDrawer,
-      appBar: PreferredSize(
-          child: CustomAppbarPages(
-            scaffoldDrawer: scaffoldDrawer,
-            back: false,
-            context: context,
-            title: "COMUNIDAD",
-          ),
-          preferredSize: Size(double.infinity, 70)),
-      drawerScrimColor: Colors.black54,
-      endDrawer: CustomDrawer(),
-      bottomNavigationBar: MainMenu(
-        item: 2,
-      ),
-      body: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: TabBar(
-              unselectedLabelColor: Theme.of(context).disabledColor,
-              labelColor: Theme.of(context).primaryColor,
-              controller: _tabController,
-              onTap: (val) => val == 0 ? tab.currentIndex = 0 : null,
-              indicatorColor: Colors.black,
-              indicatorWeight: 3,
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              tabs: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    NotificationAvatar(notif: "4"),
-                    Flexible(
-                      child: Tab(
-                        child: FittedBox(child: Text('Notificaciones')),
+    final size = MediaQuery.of(context).size;
+    return WillPopScope(
+          child: Scaffold(
+            bottomNavigationBar: MainMenu(item: 2,),
+            endDrawer: Container(width: 100.0, height: 200.0, color: Colors.blue,),
+            body: SafeArea(
+              child: Container(
+                height: size.height,
+                child: Stack(
+                  children: [
+                    CustomAppbar(
+                      context: context,
+                      image: "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                      height: 70.0,
+                      title: 'COMUNIDAD',
+                    ),
+
+                    Positioned(
+                      top: 70.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 48,
+                            child: TabBar(
+                              controller: _tabControllerCommunity,
+                              labelColor: Theme.of(context).primaryColor,
+                              unselectedLabelColor: Color.fromRGBO(159, 159, 159, 1.0),
+                              indicatorColor: Color.fromRGBO(29, 29, 27, 1.0),
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              tabs: [
+                                Tab(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: AutoSizeText('NOTIFICACIONES', maxLines: 1, style: TextStyle(fontSize: 17)),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: AutoSizeText('BUSCAR AMIGOS', maxLines: 1, style: TextStyle(fontSize: 17)),
+                                  ),
+                                ),
+                              ]
+                            ),
+                          ),
+                          Container(
+                            height: size.height-(70+48+75+10), //El alto de la pantalla menos el AppBar, Tabs y MainMenu
+                            child: TabBarView(
+                              controller: _tabControllerCommunity,
+                              children: <Widget>[
+                                NotificationsListTab(),
+                                FriendsListTap(),
+                              ]
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ],
                 ),
-                Tab(
-                  child: FittedBox(child: Text('Buscar Amigos')),
-                ),
-              ],
-            ),
-          ),
-          body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: _tabController,
-            children: [
-              NotificationsTab(),
-              SearchTab(),
-            ],
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: Consumer<CommunityTabsProvider>(
-              builder: (context, tab, _) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CustomFabIcon(
-                    heroTag: "btnFilter",
-                    icon: Icons.filter_list,
-                    action: () => null,
-                    isPrimary: false,
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  tab.currentIndex == 1
-                      ? CustomFabIcon(
-                          heroTag: "btnFriend",
-                          isPrimary: true,
-                          icon: Icons.person_add,
-                          action: () => null)
-                      : SizedBox(),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  CustomFabIcon(
-                      heroTag: "btnSearch",
-                      isPrimary: false,
-                      icon: Icons.search,
-                      action: () => null),
-                ],
               ),
             ),
           ),
-        ),
-      ),
+          onWillPop: goBack,
     );
+  
+
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     centerTitle: true,
+    //     title: Text("COMUNIDAD"),
+    //     backgroundColor: Color.fromRGBO(30, 112, 183, 1),
+    //     leading: Icon(Icons.arrow_back),
+    //     actions: [
+    //       IconButton(
+    //         onPressed: (){},
+    //         icon: Icon(Icons.menu),
+    //       ),
+    //     ],
+    //   ),
+    //   bottomNavigationBar: MainMenu(item: 2,),
+    //   body: Container(
+    //     child: Center(
+    //       child: Text("Comunidad"),
+    //     ),
+    //   ),
+    // );
   }
 
-  Widget _flotingActionButtons(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 32),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton(
-              heroTag: "btnFilter",
-              backgroundColor: Color.fromRGBO(29, 29, 27, 1.0),
-              child: Icon(Icons.filter_list),
-              onPressed: () {}),
-          SizedBox(
-            width: 10,
-          ),
-          FloatingActionButton(
-              heroTag: "btnFriend",
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(Icons.person_add),
-              onPressed: () {}),
-        ],
-      ),
-    );
+
+
+
+
+//////////////////////////////////////////////////////////////Widgets
+
+
+
+//////////////////////////////////////////////////////////////Functions
+  Future<bool> goBack() async{
+    Navigator.popUntil(context, ModalRoute.withName('/reports'));
+    return false;
   }
 }

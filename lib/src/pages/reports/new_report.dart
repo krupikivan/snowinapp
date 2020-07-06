@@ -1,18 +1,92 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../widgets/custom_appbar.dart';
-import '../../widgets/main_menu.dart';
-import '../../widgets/custom_dropdown.dart';
-import '../../widgets/custom_button.dart';
+import 'package:snowin/src/providers/snowin_provider.dart';
+
+import 'package:snowin/src/models/item_kv.dart';
+
+import 'package:snowin/src/widgets/custom_appbar.dart';
+import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_dropdown.dart';
+import 'package:snowin/src/widgets/custom_mood_dropdown.dart';
+import 'package:snowin/src/widgets/custom_textfield.dart';
+import 'package:snowin/src/widgets/custom_button.dart';
+import 'package:snowin/src/widgets/thumbnail.dart';
+import 'package:snowin/src/widgets/custom_checkbox.dart';
+import 'package:snowin/src/widgets/custom_icon_button.dart';
+
+
 
 class NewReport extends StatefulWidget {
+  final OnSendCallback onSend;
+  final String youAre;
+  final List<ItemKV> trackItems;
+  final List<ItemKV> calidadNieveItems;
+  final List<ItemKV> climaItems;
+  final List<ItemKV> vientoItems;
+  final List<ItemKV> sensacionGeneralItems;
+  final List<ItemKV> esperaMediosItems;
+
+  NewReport({ Key key, this.youAre, this.trackItems, this.calidadNieveItems, this.climaItems, this.vientoItems, this.sensacionGeneralItems, this.esperaMediosItems, this.onSend}) : super(key: key);
+
   @override
   _NewReportState createState() => _NewReportState();
 }
 
 class _NewReportState extends State<NewReport> {
+
+  TextEditingController _controllerYouAre;
+  List<ItemKV> reportFromtems = [
+      ItemKV('0', 'Centro de Ski'),
+      ItemKV('1', 'Pista'),
+  ];
+  String _reportFrom = '0';
+  String _track = '';
+  String _calidadNieve = '';
+  String _clima = '';
+  String _viento = '';
+  String _sensacionGeneral = '';
+  String _esperaMedios = '';
+  TextEditingController _controllerTitle;
+  String _title = '';
+  TextEditingController _controllerComment;
+  String _comment = '';
+  List<ItemKV> _medias;
+
+  bool shareFacebook = false;
+  bool shareInstagram = false;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controllerYouAre = TextEditingController();
+    _controllerYouAre.text = widget.youAre;
+
+    _controllerTitle = TextEditingController();
+    _controllerTitle.text = ' ';
+    _controllerComment = TextEditingController();
+    _controllerComment.text = ' ';
+
+    _medias = List<ItemKV>();
+  }
+
+  @override
+  void dispose(){
+
+    _controllerYouAre.dispose();
+    _controllerTitle.dispose();
+    _controllerComment.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -50,50 +124,138 @@ class _NewReportState extends State<NewReport> {
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, label: "Estas en:",),
+
+                          CustomTextField(width: size.width*0.9, prefix: "Estas en ", controller: _controllerYouAre, readOnly: true,),
                           SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, label: "Reporte de:",),
+                          // CustomTextField(width: size.width*0.9, prefix: "Reporte de: ", controller: _controllerYouAre, readOnly: true),
+                          // SizedBox(height: size.height*0.03,),
+                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Reporte de:", items: reportFromtems, value: _reportFrom, onChanged: (value) {
+                              print(value);
+                              setState(() { _reportFrom = value; });
+                          }),
                           SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, label: "Calidad nieve:",),
+                          _reportFrom == '1'?
+                                  CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Pista:", items: widget.trackItems, value: _track, onChanged: (value) {
+                                      print(value);
+                                      setState(() { _track = value; });
+                                  }, error: true, replaceFirst: 'Seleccione')
+                                  :
+                                  CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Pista:", items: widget.trackItems, value: _track, onChanged: (value) {
+                                      print(value);
+                                      setState(() { _track = value; });
+                                  }, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, label: "Clima:",),
+                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Calidad nieve:", items: widget.calidadNieveItems, value: _calidadNieve, onChanged: (value) {
+                              print(value);
+                              setState(() { _calidadNieve = value; });
+                          }, error: true, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, label: "Viento:",),
+                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Clima:", items: widget.climaItems, value: _clima, onChanged: (value) {
+                              print(value);
+                              setState(() { _clima = value; });
+                          }, error: true, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, label: "Espera en medios:",),
+                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Viento:", items: widget.vientoItems, value: _viento, onChanged: (value) {
+                              print(value);
+                              setState(() { _viento = value; });
+                          }, error: true, replaceFirst: 'Seleccione'),
+                          SizedBox(height: size.height*0.03,),
+                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Espera en medios:", items: widget.esperaMediosItems, value: _esperaMedios, onChanged: (value) {
+                              print(value);
+                              setState(() { _esperaMedios = value; });
+                          }, error: true, replaceFirst: 'Seleccione'),
+                          SizedBox(height: size.height*0.03,),
+                          CustomMoodDropdownd(width: size.width*0.9, height: 50, prefix: "Sensacion general:", items: widget.sensacionGeneralItems, value: _sensacionGeneral, onChanged: (value) {
+                              print(value);
+                              setState(() { _sensacionGeneral = value; });
+                          }, error: true, replaceFirst: 'Seleccione'),
+                          SizedBox(height: size.height*0.03,),
+                          CustomTextField(width: size.width*0.9, prefix: "Titulo: ", controller: _controllerTitle, onChanged: (value) {
+                              _title = value;
+                          }, error: _title.isEmpty),
+                          SizedBox(height: size.height*0.03,),
+
                           SizedBox(height: size.height*0.03,),
                           Container(
                             width: size.width*0.9,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _iconItem(size.width*0.25, Icons.video_call),
-                                _iconItem(size.width*0.25, Icons.camera_alt),
-                                _iconItem(size.width*0.25, Icons.image),
+                                CustomIconButton(icon: Icons.video_call, iconColor: Color.fromRGBO(159, 159, 159, 1), iconSize: 30.0, width: size.width*0.25, borderColor: Color.fromRGBO(74, 74, 73, 1), onPressed: () {
+                                    getVideo(ImageSource.camera);
+                                }),
+                                CustomIconButton(icon: Icons.camera_alt, iconColor: Color.fromRGBO(159, 159, 159, 1), iconSize: 30.0, width: size.width*0.25, borderColor: Color.fromRGBO(74, 74, 73, 1), onPressed: () {
+                                    getImage(ImageSource.camera);
+                                }),
+                                CustomIconButton(icon: Icons.image, iconColor: Color.fromRGBO(159, 159, 159, 1), iconSize: 30.0, width: size.width*0.25, borderColor: Color.fromRGBO(74, 74, 73, 1), onPressed: () {
+                                    getImage(ImageSource.gallery);
+                                }),
                               ],
                             ),
                           ),
                           SizedBox(height: size.height*0.03,),
                           Container(
                             width: size.width*0.9,
-                            child: Row(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _imageItem(size.width*0.2, "https://www.urby.in/blog/wp-content/uploads/2017/09/iceskiing-e1506504667758.jpg"),
-                                _imageItem(size.width*0.2, "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Skier-carving-a-turn.jpg/220px-Skier-carving-a-turn.jpg"),
-                                _imageItem(size.width*0.2, "https://photo.kidzworld.com/images/2011113/48f7e559-d395-45e4-9951-776c05683824/gallery_a%20gallery.jpg"),
-                                _imageItem(size.width*0.2, "https://d96xf8nw30hcy.cloudfront.net/SFImage/Images/places-where-you-can-enjoy-snow-sports-in-india.jpg"),
+                              children: <Widget>[
+                                new Wrap(
+                                    alignment: WrapAlignment.spaceBetween,
+                                    children: _buildImageVideoSection(),
+                                  )
                               ],
                             ),
                           ),
                           SizedBox(height: size.height*0.03,),
+
+                          CustomTextField(width: size.width*0.9, prefix: "Comentario: ", maxLength: 700, maxLines: 5, controller: _controllerComment, onChanged: (value) {
+                              _comment = value;
+                          }, error: _comment.isEmpty),
+                          SizedBox(height: size.height*0.03,),
+
+                          Container(
+                            width: size.width*0.9,
+                            child: Row(
+                              //crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                new Wrap(
+                                    alignment: WrapAlignment.center,
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    children: <Widget>[
+                                        Text('Compartir: ', style: TextStyle(color: Colors.black, fontSize: 18),),
+                                        SizedBox(width: 10.0),
+                                        CustomCheckbox(value: shareFacebook, next: Icon(FontAwesomeIcons.facebookSquare, color: Colors.blue,), onChanged: (value) {
+                                            setState(() { shareFacebook = value; });
+                                        }),
+                                        SizedBox(width: 20.0),
+                                        CustomCheckbox(value: shareInstagram, next: Icon(FontAwesomeIcons.instagram, color: Colors.blue,), onChanged: (value) {
+                                            setState(() { shareInstagram = value; });
+                                        }),
+                                    ],
+                                  )
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: size.height*0.03,),
+                          SizedBox(height: size.height*0.03,),
+
                           Container(
                             width: size.width*0.9,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                CustomButton(text: "Cancelar", color: Color.fromRGBO(29, 29, 27, 1), height: 55, width: size.width*0.35,),
-                                CustomButton(text: "Guardar", color: Theme.of(context).primaryColor, height: 55, width: size.width*0.35,),
+                                CustomButton(text: "Cancelar", color: Color.fromRGBO(29, 29, 27, 1), height: 55, width: size.width*0.35,
+                                    onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                    },
+                                ),
+                                CustomButton(text: "Guardar", color: Theme.of(context).primaryColor, height: 55, width: size.width*0.35,
+                                    onPressed: () {
+                                        if(formIsValid()) sendReport();
+                                    },
+                                ),
                               ],
                             ),
                           ),
@@ -111,43 +273,99 @@ class _NewReportState extends State<NewReport> {
     );
   }
 
-  Widget _iconItem(double size, IconData icon){
-    return Container(
-      width: size,
-      padding: EdgeInsets.all(7),
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 1.0,
-            style: BorderStyle.solid,
-            color: Color.fromRGBO(74, 74, 73, 1),
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-      ),
-      child: Icon(icon, size: 30, color: Color.fromRGBO(159, 159, 159, 1),),
-      );
+  List<Widget> _buildImageVideoSection() {
+    final size = MediaQuery.of(context).size;
+    List<Widget> elements = new List<Widget>();
+
+    _medias.forEach((media) {
+        if(media.key.toString() == '0') { //imagen
+            elements.add(new Thumbnail(size: size.width*0.2, path: media.value, showDeleteButton: true, onDelete: () {
+                _medias.removeWhere((element) => element.value.toString() == media.value.toString());
+                setState(() {});
+            },));
+        } else if(media.key.toString() == '1') { //video
+            elements.add(new Thumbnail(isVideo: true, size: size.width*0.2, path: media.value, showDeleteButton: true, onDelete: () {
+                _medias.removeWhere((element) => element.value.toString() == media.value.toString());
+                setState(() {});
+            },));
+        }
+    });
+
+    return elements;
   }
 
-  Widget _imageItem(double size, String image){
-    return Container(
-      child: Stack(
-        children: [
-          Image(
-            height: size,
-            width: size,
-            image: NetworkImage(image),
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            bottom: 5,
-            right: 5,
-            child: Container(
-              child: Icon(Icons.cancel),
-            ),
-          )
-        ],
-      ),
-    );
+
+
+  Future getImage(ImageSource source) async {
+    ImagePicker.pickImage(source: source)
+                .then((image) {
+                    if(image != null) {
+                        _medias.add(ItemKV(0, image.path));
+                        setState(() {});
+                    }
+                })
+                .catchError((error) {
+                    print(error);
+                    ImagePicker.retrieveLostData()
+                                .then((data) {
+                                    if (data != null && data.file != null && data.type == RetrieveType.image) {
+                                        _medias.add(ItemKV(0, data.file.path));
+                                        setState(() {});
+                                    }
+                                });
+                });
   }
+
+  Future getVideo(ImageSource source) async {
+    ImagePicker.pickVideo(source: source)
+                .then((video) {
+                    if(video != null) {
+                        _medias.add(ItemKV(1, video.path));
+                        setState(() {});
+                    }
+                })
+                .catchError((error) {
+                    print(error);
+                    ImagePicker.retrieveLostData()
+                                .then((data) {
+                                    if (data != null && data.file != null && data.type == RetrieveType.image) {
+                                        _medias.add(ItemKV(1, data.file.path));
+                                        setState(() {});
+                                    }
+                                });
+                });
+  }
+
+  bool formIsValid() {
+      return (/*_track.isNotEmpty*/true && _title.isNotEmpty && _comment.isNotEmpty && _calidadNieve.isNotEmpty &&
+              _esperaMedios.isNotEmpty && _viento.isNotEmpty && _clima.isNotEmpty && _sensacionGeneral.isNotEmpty);
+  }
+
+  Future<void> sendReport() async {
+      List<File> multimedias = List<File>();
+      _medias.forEach((media) {
+          multimedias.add(File(media.value));
+      });
+
+      await SnowinProvider().sendReport(/*_track*/ '1', _title, _comment, _calidadNieve, _esperaMedios,
+                                        _viento, _clima, _sensacionGeneral, multimedias)
+                            .then((response) { print(response);
+                                if(response['ok']) {
+                                    widget.onSend();
+                                    Navigator.of(context).pop(false);
+                                } else {
+                                    throw new Exception('Error');
+                                }
+                            })
+                            .catchError((error) {
+                                print(error.toString());
+                                widget.onSend();
+                                Navigator.of(context).pop(false);
+                            });
+  }
+
 }
+
+
+
+typedef OnSendCallback = void Function();

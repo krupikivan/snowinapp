@@ -235,15 +235,6 @@ class Preferences {
     _prefs.setString('anno_acoplado', value);
   }
 
-  //access_token
-  get accessToken {
-    return _prefs.getString('access_token') ?? '';
-  }
-
-  set accessToken(String value) {
-    _prefs.setString('access_token', value);
-  }
-
   //token
   get token {
     return _prefs.getString('token') ?? '';

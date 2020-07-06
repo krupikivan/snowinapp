@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:snowin/src/utils/session.dart';
-import 'package:snowin/src/utils/dialogs.dart';
 
 import 'package:snowin/src/models/report.dart';
 import 'package:snowin/src/models/item_kv.dart';
@@ -16,22 +15,22 @@ import 'package:snowin/src/widgets/custom_sort.dart';
 
 
 
-class ReportsListTab extends StatefulWidget {
+class MyReportsListTab extends StatefulWidget {
 
-  ReportsListTab({ Key key}) : super(key: key);
+  MyReportsListTab({ Key key}) : super(key: key);
 
   @override
-  ReportsListTabState createState() => new ReportsListTabState();
+  MyReportsListTabState createState() => new MyReportsListTabState();
 }
 
-class ReportsListTabState extends State<ReportsListTab> {
+class MyReportsListTabState extends State<MyReportsListTab> {
   Session _session = new Session();
 
   double deviceHeight = 0;
   int page = 0, qtty = 10;
   bool _isLoading = false, _showTopButon = false;
   ScrollController _scrollController;
-  List<Report> _allReports = new List<Report>();
+  List<Report> _allMyReports = new List<Report>();
 
   TextEditingController _controllerTitle;
   String _title = '';
@@ -81,27 +80,22 @@ class ReportsListTabState extends State<ReportsListTab> {
     loadEmuns().then((value) {
         setState(() {});
     });
-
   }
 
   @override
   void dispose(){
-    _controllerTitle.dispose();
-    _controllerComment.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical:15),
       child: new RefreshIndicator(
                   child: new Scrollbar(
                     child: new Stack(
                           children: <Widget>[
-                              buildReportsTiles(),
+                              buildMyReportsTiles(),
                               buildflotingActionButtons(),
                           ],
                       ),
@@ -114,21 +108,21 @@ class ReportsListTabState extends State<ReportsListTab> {
 
 
 //////////////////////////////////////////////////////////////////////////// Widget
-  Widget buildReportsTiles() {
-    return _allReports.length > 0?
+  Widget buildMyReportsTiles() {
+    return _allMyReports.length > 0?
             new ListView.builder(
                 padding: const EdgeInsets.all(5.0),
                 controller: _scrollController,
-                itemCount: _allReports.length + 1,
+                itemCount: _allMyReports.length + 1,
                 itemBuilder: (context, i) {
-                  if(i < _allReports.length)
-                      return ReportsTile(report: _allReports[i], afterValorate: (ranking, votes, message) {
+                  if(i < _allMyReports.length)
+                      return ReportsTile(report: _allMyReports[i], afterValorate: (ranking, votes, message) {
                           if(ranking != 0) {
-                              _allReports.firstWhere((element) => element.id.toString() == _allReports[i].id.toString()).copos = ranking;
-                              _allReports.firstWhere((element) => element.id.toString() == _allReports[i].id.toString()).coposUsuarios = votes;
-                              DialogHelper.showSimpleDialog(context, 'Reporte evaluado');
+                              _allMyReports.firstWhere((element) => element.id.toString() == _allMyReports[i].id.toString()).copos = ranking;
+                              _allMyReports.firstWhere((element) => element.id.toString() == _allMyReports[i].id.toString()).coposUsuarios = votes;
+                              setState(() {});
                           } else {
-                              DialogHelper.showErrorDialog(context, message);
+                              showWarningsDialog(message);
                           }
                       },);
                   else
@@ -403,14 +397,14 @@ class ReportsListTabState extends State<ReportsListTab> {
   }
 
   fetchData() async {
-    loadReports(qtty, (page * qtty)).then((elements) {
+    loadMyReports(qtty, (page * qtty)).then((elements) {
         if(mounted) setState(() {
             if(page == 0) {
-              _allReports.clear();
+              _allMyReports.clear();
             }
 
             setState(() {
-                _allReports.addAll(elements);
+                _allMyReports.addAll(elements);
                 _isLoading = !_isLoading;
                 page++;
             });
@@ -423,13 +417,14 @@ class ReportsListTabState extends State<ReportsListTab> {
   Future<Null> refreshing() async {
     print(" refreshing ... ");
     page = 0;
-    _allReports.clear();
+    _allMyReports.clear();
     setState(() { });
     startLoader();
   }
 
   String prepareFilters() {
       List<String> filters = List<String>();
+      filters.add('filtros[propios]=1');
       if(_title.isNotEmpty) filters.add('filtros[titulo]='+_title);
       if(_comment.isNotEmpty) filters.add('filtros[comentario]='+_comment);
       if(_calidadNieve.isNotEmpty) filters.add('filtros[calidad_nieve]='+_calidadNieve);
@@ -445,13 +440,16 @@ class ReportsListTabState extends State<ReportsListTab> {
 
   }
 
-  Future<List<Report>> loadReports(int limit, int offset) async {
+  Future<List<Report>> loadMyReports(int limit, int offset) async {
       List<Report> elements = new List<Report>();
 
-      await SnowinProvider().reportes(limit.toString(), offset.toString(), prepareFilters()).then((response) { print('reporte/listar response: '); print(response);
+      await SnowinProvider().reportes(limit.toString(), offset.toString(), prepareFilters()).then((response) { print(response);
           if(response['ok']) {
+              //var data = response['data'];
+
               final _castDataType = response['data'].cast<Map<String, dynamic>>();
               elements = _castDataType.map<Report>((json) => Report.map(json)).toList();
+
           } else {
               throw new Exception('Error');
           }
@@ -467,30 +465,25 @@ class ReportsListTabState extends State<ReportsListTab> {
 
       _trackItems = new List<ItemKV>();
       _trackItems.add(ItemKV('', 'Todos'));
-
-      if(_session.center != null) {
-          _session.center.pistas.forEach((pista) {
-              _trackItems.add(new ItemKV(pista.id, pista.descripcion));
-              if(_trackItems.length == 1) _track = pista.id.toString();
-          });
-      }
+      _session.center.pistas.forEach((pista) {
+          _trackItems.add(new ItemKV(pista.id, pista.descripcion));
+          if(_trackItems.length == 1) _track = pista.id.toString();
+      });
   }
 
   Future<void> loadEmuns() async {
       setState(() { });
 
-      await SnowinProvider().loadEmuns().then((response) { print('enums response: '); print(response);
+      await SnowinProvider().loadEmuns().then((response) { print(response);
           if(response['ok']) {
               var data = response['data'];
 
               //cargar combo calidad_nieve
               if(data.containsKey('calidad_nieve')){
                   _calidadNieveItems = new List<ItemKV>();
-                  _session.calidadNieveItems = new List<ItemKV>();
                   _calidadNieveItems.add(ItemKV('', 'Todos'));
                   data['calidad_nieve'].forEach((k,v) {
                       _calidadNieveItems.add(new ItemKV(k, v));
-                      _session.calidadNieveItems.add(new ItemKV(k, v));
                       if(_calidadNieveItems.length == 1) _calidadNieve = k.toString();
                   });
               }
@@ -498,11 +491,9 @@ class ReportsListTabState extends State<ReportsListTab> {
               //cargar combo clima
               if(data.containsKey('clima')){
                   _climaItems = new List<ItemKV>();
-                  _session.climaItems = new List<ItemKV>();
                   _climaItems.add(ItemKV('', 'Todos'));
                   data['clima'].forEach((k,v) {
                       _climaItems.add(new ItemKV(k, v));
-                      _session.climaItems.add(new ItemKV(k, v));
                       if(_climaItems.length == 1) _clima = k.toString();
                   });
               }
@@ -510,11 +501,9 @@ class ReportsListTabState extends State<ReportsListTab> {
               //cargar combo viento
               if(data.containsKey('viento')){
                   _vientoItems = new List<ItemKV>();
-                  _session.vientoItems = new List<ItemKV>();
                   _vientoItems.add(ItemKV('', 'Todos'));
                   data['viento'].forEach((k,v) {
                       _vientoItems.add(new ItemKV(k, v));
-                      _session.vientoItems.add(new ItemKV(k, v));
                       if(_vientoItems.length == 1) _viento = k.toString();
                   });
               }
@@ -522,11 +511,9 @@ class ReportsListTabState extends State<ReportsListTab> {
               //cargar combo sensacion_general
               if(data.containsKey('sensacion_general')){
                   _sensacionGeneralItems = new List<ItemKV>();
-                  _session.sensacionGeneralItems = new List<ItemKV>();
                   _sensacionGeneralItems.add(ItemKV('', 'Todos'));
                   data['sensacion_general'].forEach((k,v) {
                       _sensacionGeneralItems.add(new ItemKV(k, v));
-                      _session.sensacionGeneralItems.add(new ItemKV(k, v));
                       if(_sensacionGeneralItems.length == 1) _sensacionGeneral = k.toString();
                   });
               }
@@ -534,11 +521,9 @@ class ReportsListTabState extends State<ReportsListTab> {
               //cargar combo espera_medios
               if(data.containsKey('espera_medios')){
                   _esperaMediosItems = new List<ItemKV>();
-                  _session.esperaMediosItems = new List<ItemKV>();
                   _esperaMediosItems.add(ItemKV('', 'Todos'));
                   data['espera_medios'].forEach((k,v) {
                       _esperaMediosItems.add(new ItemKV(k, v));
-                      _session.esperaMediosItems.add(new ItemKV(k, v));
                       if(_esperaMediosItems.length == 1) _esperaMedios = k.toString();
                   });
               }
