@@ -64,8 +64,7 @@ TextStyle textStyleValidate = const TextStyle(
 
 TextTheme _buildTextTheme(TextTheme base) {
   return base.copyWith(
-    title: base.title.copyWith(
-    ),
+    title: base.title.copyWith(),
   );
 }
 
@@ -97,7 +96,12 @@ ThemeData appTheme = new ThemeData(
   textTheme: _buildTextTheme(base.textTheme),
   primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
   accentTextTheme: _buildTextTheme(base.accentTextTheme),
+);
 
+ThemeData snowinTheme = new ThemeData(
+  fontFamily: "RobotoCondensed",
+  primaryColor: Color.fromRGBO(29, 113, 184, 1),
+  backgroundColor: Colors.grey[800],
 );
 
 Color textFieldColor = const Color.fromRGBO(168, 160, 149, 0.6);

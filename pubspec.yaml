@@ -61,6 +61,8 @@ dependencies:
   dio: ^3.0.9
   smooth_star_rating: 1.0.4+2
   polygon_clipper: ^1.0.2
+  provider: 
+  google_maps_flutter:  
 
 dev_dependencies:
   flutter_test:
