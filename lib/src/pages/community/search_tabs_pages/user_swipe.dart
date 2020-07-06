@@ -22,7 +22,7 @@ class UserSwipe extends StatelessWidget {
                 Navigator.pushNamed(context, '/userProfile');
               },
               child: Image.network(
-                userProvider.userList[index].profile,
+                '',
                 fit: BoxFit.fill,
               ),
             ),

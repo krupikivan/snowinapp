@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 
 class CustomAppbarChat extends StatelessWidget {
@@ -33,7 +33,7 @@ class CustomAppbarChat extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    _getData(),
+                    // _getData(),
                   ],
                 ),
                 IconButton(
@@ -52,21 +52,21 @@ class CustomAppbarChat extends StatelessWidget {
     );
   }
 
-  Widget _getData() {
-    return Consumer<UserProvider>(
-      builder: (context, user, _) => Row(
-        children: <Widget>[
-          CircleAvatar(
-            backgroundImage: NetworkImage(user.userTapped.image),
-            radius: 25,
-          ),
-          Text(
-            user.userTapped.nombre,
-            style: TextStyle(
-                fontWeight: FontWeight.w400, color: Colors.white, fontSize: 25),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _getData() {
+  //   return Consumer<UserProvider>(
+  //     builder: (context, user, _) => Row(
+  //       children: <Widget>[
+  //         CircleAvatar(
+  //           backgroundImage: NetworkImage(user.userTapped.image),
+  //           radius: 25,
+  //         ),
+  //         Text(
+  //           user.userTapped.nombre,
+  //           style: TextStyle(
+  //               fontWeight: FontWeight.w400, color: Colors.white, fontSize: 25),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

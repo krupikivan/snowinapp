@@ -1,6 +1,6 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/drawer/widget/custom_appbar_drawer.dart';
 import 'package:snowin/src/widgets/custom_chat_message.dart';
@@ -96,7 +96,7 @@ class _AskState extends State<Ask> with TickerProviderStateMixin {
                 _isComposing = text.isNotEmpty;
               });
             },
-            onSubmitted: _handleSubmitted,
+            onSubmitted: null,
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -117,7 +117,7 @@ class _AskState extends State<Ask> with TickerProviderStateMixin {
               child: IconButton(
                 icon: Icon(Icons.send, color: Colors.white),
                 onPressed: _isComposing
-                    ? () => _handleSubmitted(_textController.text)
+                    ? () => null
                     : null,
               ),
             )),
@@ -125,26 +125,26 @@ class _AskState extends State<Ask> with TickerProviderStateMixin {
     );
   }
 
-  void _handleSubmitted(String text) {
-    final user = Provider.of<UserProvider>(context, listen: false);
-    _textController.clear();
-    setState(() {
-      _isComposing = false;
-    });
-    final ChatMessage message = ChatMessage(
-      text: text,
-      animationController: AnimationController(
-        duration: Duration(milliseconds: 700),
-        vsync: this,
-      ),
-      name: user.currentUser.nombre, //We need to pass user params
-    );
-    setState(() {
-      _messages.insert(0, message);
-      // final data =
-      //     user.userList.firstWhere((u) => u.nombre == user.currentUser.nombre);
-      // data.message = message.text;
-    });
-    message.animationController.forward();
-  }
+  // void _handleSubmitted(String text) {
+  //   final user = Provider.of<UserProvider>(context, listen: false);
+  //   _textController.clear();
+  //   setState(() {
+  //     _isComposing = false;
+  //   });
+  //   final ChatMessage message = ChatMessage(
+  //     text: text,
+  //     animationController: AnimationController(
+  //       duration: Duration(milliseconds: 700),
+  //       vsync: this,
+  //     ),
+  //     name: user.currentUser.nombre, //We need to pass user params
+  //   );
+  //   setState(() {
+  //     _messages.insert(0, message);
+  //     // final data =
+  //     //     user.userList.firstWhere((u) => u.nombre == user.currentUser.nombre);
+  //     // data.message = message.text;
+  //   });
+  //   message.animationController.forward();
+  // }
 }

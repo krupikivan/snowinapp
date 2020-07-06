@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 
 class CustomAppbarProfile extends StatelessWidget {
@@ -31,7 +31,7 @@ class CustomAppbarProfile extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    _getData(),
+                    // _getData(),
                   ],
                 ),
                 IconButton(
@@ -50,13 +50,13 @@ class CustomAppbarProfile extends StatelessWidget {
     );
   }
 
-  Widget _getData() {
-    return Consumer<UserProvider>(
-      builder: (context, user, _) => Text(
-        '${user.userTapped.nombre}',
-        style: TextStyle(
-            fontWeight: FontWeight.w400, color: Colors.white, fontSize: 25),
-      ),
-    );
-  }
+  // Widget _getData() {
+  //   return Consumer<UserProvider>(
+  //     builder: (context, user, _) => Text(
+  //       '${user.userTapped.nombre}',
+  //       style: TextStyle(
+  //           fontWeight: FontWeight.w400, color: Colors.white, fontSize: 25),
+  //     ),
+  //   );
+  // }
 }

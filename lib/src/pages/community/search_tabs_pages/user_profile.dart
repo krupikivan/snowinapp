@@ -47,7 +47,7 @@ class _UserProfileState extends State<UserProfile> {
               Container(
                 padding: EdgeInsets.zero,
                 child: Image.network(
-                  user.userTapped.profile,
+                  '',
                   fit: BoxFit.fitWidth,
                 ),
               ),

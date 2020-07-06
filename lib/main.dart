@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:snowin/src/blocs/app_instance.dart';
-import 'package:snowin/src/pages/community/provider/export.dart';
-import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
-import 'package:snowin/src/pages/drawer/provider/award_provider.dart';
 import 'package:snowin/src/pages/splashscreen_page.dart';
 import 'package:snowin/src/routes/routes.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-//import 'package:snowin/src/providers/push_notifications_provider.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:snowin/src/utils/app_localization.dart';
 
@@ -38,8 +33,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-        child: MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Snowin',
       onGenerateRoute: (RouteSettings settings) => getRoute(settings),
@@ -61,6 +55,6 @@ class _MyAppState extends State<MyApp> {
         primaryColor: Color.fromRGBO(29, 113, 184, 1),
         canvasColor: Colors.white
       ),
-    ));
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/drawer/provider/award_provider.dart';
 import 'package:snowin/src/pages/drawer/widget/award_card.dart';
 import 'package:snowin/src/pages/drawer/widget/custom_appbar_drawer.dart';
@@ -29,28 +29,28 @@ class MyAwards extends StatelessWidget {
         ),
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          child: Consumer<AwardsProvider>(
-            builder: (context, award, _) => award.listAward.isEmpty
-                ? _noAwards()
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        _getText(award.listAward.length),
-                        style: TextStyle(fontSize: 22),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Consumer<AwardsProvider>(
-                          builder: (context, award, _) => ListView.builder(
-                              itemCount: award.listAward.length,
-                              itemBuilder: (BuildContext context, int index) =>
-                                  AwardCard(award: award.listAward[index])),
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
+          // child: Consumer<AwardsProvider>(
+          //   builder: (context, award, _) => award.listAward.isEmpty
+          //       ? _noAwards()
+          //       : Column(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: <Widget>[
+          //             Text(
+          //               _getText(award.listAward.length),
+          //               style: TextStyle(fontSize: 22),
+          //             ),
+          //             Expanded(
+          //               flex: 3,
+          //               child: Consumer<AwardsProvider>(
+          //                 builder: (context, award, _) => ListView.builder(
+          //                     itemCount: award.listAward.length,
+          //                     itemBuilder: (BuildContext context, int index) =>
+          //                         AwardCard(award: award.listAward[index])),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          // ),
         ));
   }
 
