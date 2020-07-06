@@ -4,7 +4,7 @@ class Config {
   static const String region = 'VN';
 
   static const String authToken =
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTkzNzg2MzkzLCJleHAiOjE1OTM5NTkxOTMsInVpZCI6Mjd9.x7qFuJvTGEYHGJFee8xGQ3AgJv9Lgj_z6_qVGZ2DMDI';
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTk0MDQ2NTU0LCJleHAiOjE1OTQyMTkzNTQsInVpZCI6MzF9.KkMoWKvhU3jVVhWi9m5ZmJ86Mcm9yxlr8QthqTmwuTA';
 
   static const String tokenMapBox =
       'pk.eyJ1IjoiYWxmb25zb21jIiwiYSI6ImNrNDJ4ZWF5ZjAxNmIzbW54cTdnbW44ZWMifQ.-ulQpVqM0w36mJc_djcSgg';

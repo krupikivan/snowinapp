@@ -19,22 +19,6 @@ class BenefitProvider with ChangeNotifier {
     getBenefits();
   }
 
-  Future<List<Benefit>> _fetchBeneficios() async {
-    SnowinProvider().getBenefits().then((response) {
-      print(response);
-      if (response['ok']) {
-        _listBenefit =
-            compute(beneficioFromJson, response['data']['data']) as List;
-        print(_listBenefit);
-        notifyListeners();
-      } else {
-        throw new Exception('Error');
-      }
-    }).catchError((error) {
-      print(error.toString());
-    });
-  }
-
   void getBenefits() async {
     SnowinProvider().getBenefits().then((response) {
       print(response);
