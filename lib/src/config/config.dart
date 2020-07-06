@@ -17,6 +17,7 @@ class Config {
 
 
   //services URLs
+  static const String apiImageBaseUrl     = "https://serversnowin.alternativasinteligentes.com/backend/web/";
   static const String apiUrl              = "https://serversnowin.alternativasinteligentes.com/backend/web/site/";
   static const String apiUsersAuthUrl     = "https://serversnowin.alternativasinteligentes.com/backend/web/users/auth/";
   static const String apiCentroSkiUrl     = "https://serversnowin.alternativasinteligentes.com/backend/web/centro-ski/";

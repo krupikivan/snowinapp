@@ -6,6 +6,9 @@ import 'package:snowin/src/share/preference.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 //import 'package:snowin/src/providers/push_notifications_provider.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
+import 'package:snowin/src/utils/app_localization.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,17 +40,23 @@ class _MyAppState extends State<MyApp> {
       title: 'Snowin',
       onGenerateRoute: (RouteSettings settings) => getRoute(settings),
       home: SplashScreen(),
+      locale: Locale('es', 'ES'),
+      supportedLocales: [
+        Locale('es', 'ES'),
+        Locale('en', 'US'),
+      ],
       localizationsDelegates: [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', 'US'), //English
-        const Locale('es', 'ES'),
       ],
       navigatorObservers: <NavigatorObserver>[
         firebaseAnalyticsProvider.getAnalyticsObserver()
       ],
+      theme: ThemeData(
+        primaryColor: Color.fromRGBO(29, 113, 184, 1),
+        canvasColor: Colors.white
+      ),
     ));
   }
 }

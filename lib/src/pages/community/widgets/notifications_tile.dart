@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:snowin/src/config/config.dart';
+
 import 'package:snowin/src/models/notifications.dart';
 
 import 'package:snowin/src/pages/reports/widgets/time.dart';
@@ -97,9 +99,10 @@ class NotificationsTileState extends State<NotificationsTile> {
       width: 0.15*size.width,
       height: 0.15*size.width,
       decoration: BoxDecoration(
+        color: Colors.grey,
         shape: BoxShape.circle,
         image: DecorationImage(
-          image: NetworkImage(image),
+          image: image.isNotEmpty? NetworkImage(Config.apiImageBaseUrl + image) : Image.asset('assets/images/male.png').image,
           fit: BoxFit.cover
         ),
       ),

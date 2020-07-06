@@ -56,7 +56,6 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
                       image: "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
                       height: 70.0,
                       title: 'COMUNIDAD',
-                      back: true,
                     ),
 
                     Positioned(

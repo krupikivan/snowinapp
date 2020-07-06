@@ -59,7 +59,7 @@ class CustomSortState extends State<CustomSort> {
             child: ListTile(
                 title: Text(text, style: TextStyle(color: Colors.black, fontSize: 18),),
                 trailing: IconButton(
-                    icon: Icon(value? Icons.arrow_drop_up : Icons.arrow_drop_down, color: Theme.of(context).primaryColor),
+                    icon: Icon(value? Icons.arrow_upward : Icons.arrow_downward, color: Theme.of(context).primaryColor),
                     onPressed: () {
                         value = !value;
                         widget.onChanged(value);

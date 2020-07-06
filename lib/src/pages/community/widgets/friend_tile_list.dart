@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 
+import 'package:snowin/src/config/config.dart';
+
 import 'package:snowin/src/models/user.dart';
 
 
@@ -100,9 +102,10 @@ class FriendTileListState extends State<FriendTileList> {
       width: 0.15*size.width,
       height: 0.15*size.width,
       decoration: BoxDecoration(
+        color: Colors.grey,
         shape: BoxShape.circle,
         image: DecorationImage(
-          image: image.isNotEmpty? NetworkImage(image) : Image.asset('assets/images/male.png').image,
+          image: image.isNotEmpty? NetworkImage(Config.apiImageBaseUrl + image) : Image.asset('assets/images/male.png').image,
           fit: BoxFit.cover
         ),
       ),

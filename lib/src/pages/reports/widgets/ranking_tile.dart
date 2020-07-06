@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:snowin/src/config/config.dart';
+
 import 'package:snowin/src/models/user.dart';
 
 import 'package:snowin/src/pages/reports/widgets/ranking_vote.dart';
@@ -68,10 +70,10 @@ class RankingTileState extends State<RankingTile> {
                 SizedBox(width: 10,),
                 _description(
                   user: ranking.username.toString(),
-                  //reports: ranking.reports.toString(),
-                  //points: ranking.points.toString(),
+                  reports: ranking.reportes.toString(),
+                  points: ranking.puntos.toString(),
                   level: ranking.nivel.toString(),
-                  //awards: ranking.awards.toString(),
+                  awards: ranking.premios.toString(),
                   size: size,
                   context: context,
                   //position: ranking.position.toString()
@@ -94,8 +96,8 @@ class RankingTileState extends State<RankingTile> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RankingVote(reportId: ranking.id.toString(), ranking: ranking.ranking.toString(), votes: ranking.coposUsuarios.toString()),
-                      TotalComments(total: ranking.coposUsuarios.toString(),),
+                      RankingVote(reportId: ranking.id.toString(), ranking: ranking.copos.toString(), votes: ranking.coposUsuarios.toString()),
+                      TotalComments(total: ranking.comentarios.toString(),),
                     ],
                   ),
                 ),
@@ -112,9 +114,10 @@ class RankingTileState extends State<RankingTile> {
       width: 0.15*size.width,
       height: 0.15*size.width,
       decoration: BoxDecoration(
+        color: Colors.grey,
         shape: BoxShape.circle,
         image: DecorationImage(
-          image: NetworkImage(image),
+          image: image.isNotEmpty? NetworkImage(Config.apiImageBaseUrl + image) : Image.asset('assets/images/male.png').image,
           fit: BoxFit.cover
         ),
       ),
@@ -123,7 +126,7 @@ class RankingTileState extends State<RankingTile> {
 
   Widget _description({BuildContext context, String position, String user, String level, String reports, String points, String awards, Size size}) {
     return Container(
-      width: 0.69*size.width,
+      width: 0.68*size.width,
       child: Column(
         children: <Widget>[
           Row(

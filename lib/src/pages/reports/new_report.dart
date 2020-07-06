@@ -12,6 +12,7 @@ import 'package:snowin/src/models/item_kv.dart';
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/main_menu.dart';
 import 'package:snowin/src/widgets/custom_dropdown.dart';
+import 'package:snowin/src/widgets/custom_mood_dropdown.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
 import 'package:snowin/src/widgets/custom_button.dart';
 import 'package:snowin/src/widgets/thumbnail.dart';
@@ -39,6 +40,11 @@ class NewReport extends StatefulWidget {
 class _NewReportState extends State<NewReport> {
 
   TextEditingController _controllerYouAre;
+  List<ItemKV> reportFromtems = [
+      ItemKV('0', 'Centro de Ski'),
+      ItemKV('1', 'Pista'),
+  ];
+  String _reportFrom = '0';
   String _track = '';
   String _calidadNieve = '';
   String _clima = '';
@@ -69,7 +75,6 @@ class _NewReportState extends State<NewReport> {
     _controllerComment.text = ' ';
 
     _medias = List<ItemKV>();
-
   }
 
   @override
@@ -122,37 +127,48 @@ class _NewReportState extends State<NewReport> {
 
                           CustomTextField(width: size.width*0.9, prefix: "Estas en ", controller: _controllerYouAre, readOnly: true,),
                           SizedBox(height: size.height*0.03,),
-                          CustomTextField(width: size.width*0.9, prefix: "Reporte de: ", controller: _controllerYouAre, readOnly: true),
-                          SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Pista:", items: widget.trackItems, value: _track, onChanged: (value) {
+                          // CustomTextField(width: size.width*0.9, prefix: "Reporte de: ", controller: _controllerYouAre, readOnly: true),
+                          // SizedBox(height: size.height*0.03,),
+                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Reporte de:", items: reportFromtems, value: _reportFrom, onChanged: (value) {
                               print(value);
-                              setState(() { _track = value; });
-                          }, error: true),
+                              setState(() { _reportFrom = value; });
+                          }),
+                          SizedBox(height: size.height*0.03,),
+                          _reportFrom == '1'?
+                                  CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Pista:", items: widget.trackItems, value: _track, onChanged: (value) {
+                                      print(value);
+                                      setState(() { _track = value; });
+                                  }, error: true, replaceFirst: 'Seleccione')
+                                  :
+                                  CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Pista:", items: widget.trackItems, value: _track, onChanged: (value) {
+                                      print(value);
+                                      setState(() { _track = value; });
+                                  }, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
                           CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Calidad nieve:", items: widget.calidadNieveItems, value: _calidadNieve, onChanged: (value) {
                               print(value);
                               setState(() { _calidadNieve = value; });
-                          }, error: true),
+                          }, error: true, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
                           CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Clima:", items: widget.climaItems, value: _clima, onChanged: (value) {
                               print(value);
                               setState(() { _clima = value; });
-                          }, error: true),
+                          }, error: true, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
                           CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Viento:", items: widget.vientoItems, value: _viento, onChanged: (value) {
                               print(value);
                               setState(() { _viento = value; });
-                          }, error: true),
+                          }, error: true, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
                           CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Espera en medios:", items: widget.esperaMediosItems, value: _esperaMedios, onChanged: (value) {
                               print(value);
                               setState(() { _esperaMedios = value; });
-                          }, error: true),
+                          }, error: true, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
-                          CustomDropdownd(width: size.width*0.9, height: 50, prefix: "Sensacion general:", items: widget.sensacionGeneralItems, value: _sensacionGeneral, onChanged: (value) {
+                          CustomMoodDropdownd(width: size.width*0.9, height: 50, prefix: "Sensacion general:", items: widget.sensacionGeneralItems, value: _sensacionGeneral, onChanged: (value) {
                               print(value);
                               setState(() { _sensacionGeneral = value; });
-                          }, error: true),
+                          }, error: true, replaceFirst: 'Seleccione'),
                           SizedBox(height: size.height*0.03,),
                           CustomTextField(width: size.width*0.9, prefix: "Titulo: ", controller: _controllerTitle, onChanged: (value) {
                               _title = value;

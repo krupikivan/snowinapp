@@ -54,10 +54,14 @@ class RankingVoteState extends State<RankingVote> {
   void valorar(double copos) {
     SnowinProvider().valorar(reportId, copos.round().toString()).then((response) { print('valorar: '); print(response);
           if(response['ok'] && response['data'] == true) {
-              widget.onValorate(copos, '');
-              setState(() {});
+              setState(() {
+                  ranking = copos.toString();
+                  int vote = int.parse(votes) + 1;
+                  votes = vote.toString();
+                  widget.onValorate(copos, vote, '');
+              });
           } else {
-              widget.onValorate(0, response['data']['message']);
+              widget.onValorate(0, 0, response['data']['message']);
               throw new Exception(response['data']['message']);
           }
       }).catchError((error) {
@@ -68,4 +72,4 @@ class RankingVoteState extends State<RankingVote> {
 }
 
 
-typedef OnValorateCallback = void Function(double value, String message);
+typedef OnValorateCallback = void Function(double ranking, int votes, String message);

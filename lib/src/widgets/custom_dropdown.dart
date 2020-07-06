@@ -12,11 +12,12 @@ class CustomDropdownd extends StatefulWidget {
   final value;
   final OnChangedCallback onChanged;
   final bool error;
+  final String replaceFirst;
 
-  CustomDropdownd({ Key key, this.width, this.height, this.prefix, this.items, this.value, this.onChanged, this.error = false}) : super(key: key);
+  CustomDropdownd({ Key key, this.width, this.height, this.prefix, this.items, this.value, this.onChanged, this.error = false, this.replaceFirst = ''}) : super(key: key);
 
   @override
-  CustomDropdowndState createState() => new CustomDropdowndState(width, height, prefix, items, value, error);
+  CustomDropdowndState createState() => new CustomDropdowndState(width, height, prefix, items, value, error, replaceFirst);
 }
 
 class CustomDropdowndState extends State<CustomDropdownd> {
@@ -26,8 +27,9 @@ class CustomDropdowndState extends State<CustomDropdownd> {
   List<ItemKV> items;
   var value;
   bool error;
+  String replaceFirst;
 
-  CustomDropdowndState(this.width, this.height, this.prefix, this.items, this.value, this.error);
+  CustomDropdowndState(this.width, this.height, this.prefix, this.items, this.value, this.error, this.replaceFirst);
 
 
   @override
@@ -68,11 +70,12 @@ class CustomDropdowndState extends State<CustomDropdownd> {
               icon: Icon(Icons.keyboard_arrow_down, color: (error && value.toString().isEmpty)? Colors.red : Color.fromRGBO(74, 74, 73, 1), size: 35,),
               value: value,
               items: items.map((ItemKV item) {
+                  String value = (item.key.toString().isEmpty && replaceFirst.isNotEmpty)? replaceFirst : item.value.toString();
                   return DropdownMenuItem<String>(
-                      value: item.key,
+                      value: item.key.toString(),
                       child: RichText(
                           text: TextSpan(
-                              text: item.value,
+                              text: value,
                               style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 18)
                           )
                       ),
@@ -80,6 +83,7 @@ class CustomDropdowndState extends State<CustomDropdownd> {
               }).toList(),
               selectedItemBuilder: (BuildContext context) {
                   return items.map<Widget>((ItemKV item) {
+                      String value = (item.key.toString().isEmpty && replaceFirst.isNotEmpty)? replaceFirst : item.value.toString();
                       return RichText(
                                 text: TextSpan(
                                   children: [
@@ -90,7 +94,7 @@ class CustomDropdowndState extends State<CustomDropdownd> {
                                     ),
                                     TextSpan(text: "  "),
                                     TextSpan(
-                                      text: item.value.toString(),
+                                      text: value,
                                       style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 18),
                                     ),
                                   ]

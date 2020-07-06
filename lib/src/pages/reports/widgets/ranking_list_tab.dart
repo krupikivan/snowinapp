@@ -103,20 +103,6 @@ class RankingListTabState extends State<RankingListTab> {
                                                       ))),
                         ) : new SizedBox(width: 0.0, height: 0.0),
                   SizedBox(width: 10,),
-                  FloatingActionButton(
-                    heroTag: "btn1",
-                    backgroundColor: Color.fromRGBO(29, 29, 27, 1.0),
-                    child: Icon(Icons.filter_list),
-                    onPressed: (){}
-                  ),
-                  // SizedBox(width: 10,),
-                  // FloatingActionButton(
-                  //   heroTag: "btn2",
-                  //   backgroundColor: Theme.of(context).primaryColor,
-                  //   child: Icon(Icons.add),
-                  //   onPressed: (){}
-                  // ),
-                  SizedBox(width: 10,),
                   _showTopButon?
                         FloatingActionButton(
                           heroTag: "btn3",

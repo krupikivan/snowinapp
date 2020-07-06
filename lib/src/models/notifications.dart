@@ -19,7 +19,7 @@ class Notifications {
     this.id = data.containsKey('id')? data['id'] : 0;
     this.user = data.containsKey('user')? data['user'].toString() : "";
     this.level = data.containsKey('level')? data['level'].toString() : "";
-    this.image= data.containsKey('image')? data['image'].toString() : "";
+    this.image= data.containsKey('img')? data['img'].toString() : "";
     this.time= data.containsKey('time')? data['time'].toString() : "";
     this.reports = data.containsKey('reports')? data['reports'].toString() : "";
     this.points = data.containsKey('points')? data['points'].toString() : "";

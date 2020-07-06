@@ -22,6 +22,7 @@ class Report {
   var compartir;
   var cantComentarios;
   var copos;
+  var coposUsuarios;
 
   User user;
   Pist pista;
@@ -31,8 +32,8 @@ class Report {
 
   Report(this.id, this.comentario, this.calificacion, this.fecha, this.userId, this.pistaId, this.reporteDe,
          this.titulo, this.borrador, this.ubicacion, this.calidadNieve, this.esperaMedios, this.viento, this.clima,
-         this.sensacionGeneral, this.compartir, this.cantComentarios, this.copos,
-         this.user, this.multimedias);
+         this.sensacionGeneral, this.compartir, this.cantComentarios, this.copos, this.coposUsuarios,
+         this.user, this.pista, this.centro, this.multimedias);
 
   Report.map(dynamic data) {
     this.id = data.containsKey('idreporte')? data['idreporte'] : 0;
@@ -53,7 +54,8 @@ class Report {
     this.sensacionGeneral = data.containsKey('sensacion_general')? data['sensacion_general'].toString() : "";
     this.compartir = data.containsKey('compartir')? data['compartir'].toString() : "";
     this.cantComentarios = data.containsKey('cant_comentarios')? data['cant_comentarios'] : 0;
-    this.copos = data.containsKey('copos')? data['copos'] : 0;
+    this.copos = data.containsKey('copos')? data['copos'] != null? data['copos'] : 0 : 0;
+    this.coposUsuarios = data.containsKey('copos_usuarios')? data['copos_usuarios'] != null? data['copos_usuarios'] : 0 : 0;
 
     this.user = data.containsKey('user')? User.map(data['user']) : null;
 
@@ -62,7 +64,7 @@ class Report {
     this.centro = data.containsKey('centroSki')? SkiCenter.map(data['centroSki']) : null;
 
     multimedias = new List<Multimedia>();
-    if(data.containsKey('multimedia')) {
+    if(data.containsKey('multimedia') && (data['multimedia'] != null)) {
         data['multimedia'].forEach((multimedia) {
             multimedias.add(Multimedia.map(multimedia));
         });

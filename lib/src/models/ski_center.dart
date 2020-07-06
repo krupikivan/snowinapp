@@ -17,7 +17,7 @@ class SkiCenter {
     this.longitud = data.containsKey('longitud')? data['longitud'].toString() : "";
 
     pistas = new List<Pist>();
-    if(data.containsKey('pistas')) {
+    if(data.containsKey('pistas') && (data['pistas'] != null)) {
         data['pistas'].forEach((pista) {
             pistas.add(Pist.map(pista));
         });

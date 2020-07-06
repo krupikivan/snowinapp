@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 
+import 'package:snowin/src/utils/dialogs.dart';
+
 import 'package:snowin/src/models/report.dart';
 
 import 'package:snowin/src/pages/reports/widgets/ranking_vote.dart';
 import 'package:snowin/src/pages/reports/widgets/time.dart';
 import 'package:snowin/src/pages/reports/widgets/total_comments.dart';
+import 'package:snowin/src/pages/reports/report_detail.dart';
 import 'package:snowin/src/widgets/marquee.dart';
+import 'package:snowin/src/widgets/comment_w.dart';
+
+import 'package:snowin/src/providers/snowin_provider.dart';
 
 
 
@@ -40,7 +46,6 @@ class ReportsTileState extends State<ReportsTile> {
 
   @override
   Widget build(BuildContext context) {
-    print('repaint');
     final size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical:8),
@@ -56,103 +61,175 @@ class ReportsTileState extends State<ReportsTile> {
           ),
         ]
       ),
-      child: Row(
-        children: [
-          Container(
-            width: size.width*0.35,
-            child: Stack(
+      child: InkWell(
+          child: Row(
               children: [
                 Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Image(
-                    width: size.width*0.35,
-                    height: 150,
-                    fit: BoxFit.cover,
-                    image: report.multimedias.isNotEmpty?
-                              NetworkImage(report.multimedias.first.ruta.toString())
-                              :
-                              Image.asset('assets/images/no_image.png',fit: BoxFit.fill).image,
-                  ),
-                ),
-                ListTile(
-                  contentPadding: EdgeInsets.all(5),
-                  title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Marquee(
-                              child: Wrap(
-                                  children: <Widget>[
-                                    Icon(Icons.person_pin, color: Colors.white, size: 22,),
-                                    Text(report.user.username.toString(), style: TextStyle(fontSize: 16, color: Colors.white),),
-                                  ]
-                              ),
-                              textDirection : TextDirection.ltr,
-                              animationDuration: Duration(seconds: 3),
-                              backDuration: Duration(milliseconds: 5000),
-                              pauseDuration: Duration(milliseconds: 2500),
-                          ),
-                    ],
-                  ),
-                  subtitle: AutoSizeText(report.user.nivel.toString(), style: TextStyle(fontSize: 14, color: Colors.white),),
-                )
-              ],
-            ),
-          ),
-          Container(
-            width: size.width*0.55,
-            height: 150,
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  width: size.width*0.35,
+                  child: Stack(
                     children: [
-                      Time(time: report.fecha.toString()),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Image(
+                          width: size.width*0.35,
+                          height: 150,
+                          fit: BoxFit.cover,
+                          image: report.multimedias.isNotEmpty?
+                                    NetworkImage(report.multimedias.first.ruta.toString())
+                                    :
+                                    Image.asset('assets/images/no_image.png',fit: BoxFit.fill).image,
+                        ),
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.all(5),
+                        title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AutoSizeText(report.centro.name.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
-                              ],
-                          ),
-                      AutoSizeText(report.comentario.toString().trim().length > 100? (report.comentario.toString().trim().substring(0, 96) + ' ...') : report.comentario.toString().trim(), style: TextStyle(fontSize: 17),)
+                                Marquee(
+                                    child: Wrap(
+                                        children: <Widget>[
+                                          Icon(Icons.person_pin, color: Colors.white, size: 22,),
+                                          Text(report.user.username.toString(), style: TextStyle(fontSize: 16, color: Colors.white),),
+                                        ]
+                                    ),
+                                    textDirection : TextDirection.ltr,
+                                    animationDuration: Duration(seconds: 3),
+                                    backDuration: Duration(milliseconds: 5000),
+                                    pauseDuration: Duration(milliseconds: 2500),
+                                ),
+                          ],
+                        ),
+                        subtitle: AutoSizeText(report.user.nivel.toString(), style: TextStyle(fontSize: 14, color: Colors.white),),
+                      )
                     ],
                   ),
                 ),
                 Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  width: size.width*0.55,
+                  height: 150,
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      RankingVote(
-                        reportId: report.id.toString(),
-                        ranking: report.copos.toString(),
-                        votes: report.user.ranking.toString(),
-                        onValorate: (value, message) {
-                            widget.afterValorate(value, message);
-                        },),
-                      TotalComments(total: report.cantComentarios.toString()),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Time(time: report.fecha.toString()),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      AutoSizeText(report.centro.name.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                                    ],
+                                ),
+                            AutoSizeText(report.comentario.toString().trim().length > 100? (report.comentario.toString().trim().substring(0, 96) + ' ...') : report.comentario.toString().trim(), style: TextStyle(fontSize: 17),)
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RankingVote(
+                              reportId: report.id.toString(),
+                              ranking: report.copos.toString(),
+                              votes: report.coposUsuarios.toString(),
+                              onValorate: (ranking, votes, message) {
+                                  widget.afterValorate(ranking, votes, message);
+                              },),
+                            InkWell(
+                              child: TotalComments(total: report.cantComentarios.toString()),
+                              onTap: () {
+                                showCommentDialog();
+                              }
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+          onTap: () {
+              print('go to report detail');
+              Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => ReportDetail(report: report,),
+                              )
+                          );
+          },
       ),
     );
   }
 
+
+
+  void showCommentDialog(){
+    print('show comment dialog');
+    final size = MediaQuery.of(context).size;
+
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) {
+          return new AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: SingleChildScrollView(
+              child: Container(
+                width: size.width * 0.8,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15)
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical:10, horizontal: size.width*0.05),
+                      child: Column(
+                          children: [
+                            CommentW(afterComment: (value) {
+                                  comenta(value);
+                              },
+                            )
+                          ],
+                        ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+    });
+  }
+
+  void comenta(String comment) { print(comment);
+    SnowinProvider().comentario(report.id.toString(), comment).then((response) { print('commenta: '); print(response);
+          if(response['ok']) {
+              setState(() {
+                  report.cantComentarios = int.parse(report.cantComentarios.toString()) + 1;
+              });
+              DialogHelper.showSimpleDialog(context, 'Reporte comentado');
+          } else {
+              DialogHelper.showErrorDialog(context, 'Error al comentar');
+              throw new Exception('Error al comentar');
+          }
+      }).catchError((error) {
+          print(error.toString());
+      });
+  }
+
 }
 
-typedef AfterValorateCallback = void Function(double value, String message);
+typedef AfterValorateCallback = void Function(double ranking, int votes, String message);
 

@@ -1,5 +1,6 @@
 import 'package:snowin/src/share/preference.dart';
 
+import 'package:snowin/src/models/item_kv.dart';
 import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/models/ski_center.dart';
 import 'package:snowin/src/models/pist.dart';
@@ -16,6 +17,14 @@ class Session {
   List<User> _closestFriends = List<User>();
 
   bool _showReportWarnning = true;
+  bool _showLocationWarnning = true;
+  bool _showReportDetailTutorial = true;
+
+  List<ItemKV> _calidadNieveItems;
+  List<ItemKV> _climaItems;
+  List<ItemKV> _vientoItems;
+  List<ItemKV> _sensacionGeneralItems;
+  List<ItemKV> _esperaMediosItems;
 
 
 
@@ -53,5 +62,26 @@ class Session {
 
   bool get showReportWarnning => _showReportWarnning;
   set showReportWarnning(newVal) => _showReportWarnning = newVal;
+
+  bool get showLocationWarnning => _showLocationWarnning;
+  set showLocationWarnning(newVal) => _showLocationWarnning = newVal;
+
+  bool get showReportDetailTutorial => _showReportDetailTutorial;
+  set showReportDetailTutorial(newVal) => _showReportDetailTutorial = newVal;
+
+  List<ItemKV> get calidadNieveItems => _calidadNieveItems;
+  set calidadNieveItems(newVal) => _calidadNieveItems = newVal;
+
+  List<ItemKV> get climaItems => _climaItems;
+  set climaItems(newVal) => _climaItems = newVal;
+
+  List<ItemKV> get vientoItems => _vientoItems;
+  set vientoItems(newVal) => _vientoItems = newVal;
+
+  List<ItemKV> get sensacionGeneralItems => _sensacionGeneralItems;
+  set sensacionGeneralItems(newVal) => _sensacionGeneralItems = newVal;
+
+  List<ItemKV> get esperaMediosItems => _esperaMediosItems;
+  set esperaMediosItems(newVal) => _esperaMediosItems = newVal;
 
 }

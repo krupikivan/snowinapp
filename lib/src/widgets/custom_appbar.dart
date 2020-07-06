@@ -12,7 +12,7 @@ class CustomAppbar extends StatelessWidget {
     @required this.context,
     @required this.image,
     @required this.height,
-    @required this.back,
+    this.back = false,
     this.title="",
   });
 

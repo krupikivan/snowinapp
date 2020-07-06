@@ -222,6 +222,42 @@ class SnowinProvider {
     }
   }
 
+  Future<Map> comentario(String reportId, String comment) async {
+    print('call end point: comentario');
+
+    //configurar servicio
+    String service = Config.apiReportsUrl + "comentario";
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.post(Uri.encodeFull(service),
+                                    body: {
+                                      'reporte_id': reportId,
+                                      'comentario': comment
+                                    },
+                                    headers: securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
   Future<Map> recomendedTraks() async {
     print('call end point: advertencias');
 

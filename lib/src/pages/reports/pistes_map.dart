@@ -144,16 +144,16 @@ class _PistesMapState extends State<PistesMap> {
     _recomendedTraks.forEach((element) {
         elements.add(Row(
                         children: [
-                            Container(
-                                height: 15,
-                                width: 15,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
-                                ),
-                            ),
+                            // Container(
+                            //     height: 15,
+                            //     width: 15,
+                            //     decoration: BoxDecoration(
+                            //         shape: BoxShape.circle,
+                            //         color: Colors.green,
+                            //     ),
+                            // ),
                             SizedBox(width: 10,),
-                            AutoSizeText(element.descripcion, style: TextStyle(fontSize: 15), maxLines: 2,),
+                            AutoSizeText(element.descripcion.toString().trim(), style: TextStyle(fontSize: 15), maxLines: 2,),
                         ]));
         elements.add(SizedBox(height: 5,));
     });

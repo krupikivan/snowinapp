@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return AnimatedBuilder(
         animation: animationController,
         builder: (BuildContext context, Widget child) {
@@ -102,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen>
       } else {
           print('no token found, go to registration page');
 
-          Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil('/wellcome', (Route<dynamic> route) => false);
       }
   }
 
