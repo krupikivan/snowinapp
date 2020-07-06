@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:snowin/src/pages/benefits/benefit_detail.dart';
 import 'package:snowin/src/pages/benefits/benefits.dart';
+import 'package:snowin/src/pages/community/community.dart';
+import 'package:snowin/src/pages/community/user_chat.dart';
+import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
+import 'package:snowin/src/pages/drawer/export.dart';
 import 'package:snowin/src/pages/home/home.dart';
 import 'package:snowin/src/pages/sos/sos.dart';
-
 import 'package:snowin/src/pages/wellcome/wellcome_carousel.dart';
 import 'package:snowin/src/pages/wellcome/conditions.dart';
 import 'package:snowin/src/pages/wellcome/location.dart';
@@ -12,11 +15,6 @@ import 'package:snowin/src/pages/wellcome/level.dart';
 import 'package:snowin/src/pages/wellcome/get_started.dart';
 
 import 'package:snowin/src/pages/reports/reports.dart';
-import 'package:snowin/src/pages/reports/pistes_map.dart';
-
-import 'package:snowin/src/pages/community/community.dart';
-
-
 
 class MyCustomRoute<T> extends MaterialPageRoute<T> {
   MyCustomRoute({WidgetBuilder builder, RouteSettings settings})
@@ -72,27 +70,75 @@ MaterialPageRoute getRoute(RouteSettings settings) {
         settings: settings,
       );
 
+    case '/home':
+      return new MyCustomRoute(
+        builder: (_) => new Home(),
+        settings: settings,
+      );
+
     case '/reports':
       return new MyCustomRoute(
         builder: (_) => new Reports(),
         settings: settings,
       );
 
-    case '/pistes-map':
+    case '/sos':
       return new MyCustomRoute(
-        builder: (_) => new PistesMap(),
+        builder: (_) => new Sos(),
         settings: settings,
       );
-
+/**
+ * *---------------------Navigator managing community pages
+ */
     case '/community':
       return new MyCustomRoute(
         builder: (_) => new Community(),
         settings: settings,
       );
 
-    case '/home':
+    case '/userProfile':
       return new MyCustomRoute(
-        builder: (_) => new Home(),
+        builder: (_) => new UserProfile(),
+        settings: settings,
+      );
+    case '/userChat':
+      return new MyCustomRoute(
+        builder: (_) => new UserChat(),
+        settings: settings,
+      );
+/**
+ * *---------------------Navigator managing drawer pages
+ */
+    case '/myBenefits':
+      return new MyCustomRoute(
+        builder: (_) => new MyBenefits(),
+        settings: settings,
+      );
+
+    case '/myAwards':
+      return new MyCustomRoute(
+        builder: (_) => new MyAwards(),
+        settings: settings,
+      );
+
+    case '/ask':
+      return new MyCustomRoute(
+        builder: (_) => new Ask(),
+        settings: settings,
+      );
+
+/**
+ * *---------------------Navigator managing benefits pages
+ */
+    case '/benefits':
+      return new MyCustomRoute(
+        builder: (_) => new Benefits(),
+        settings: settings,
+      );
+
+    case '/benefitDetail':
+      return new MyCustomRoute(
+        builder: (_) => new BenefitDetail(),
         settings: settings,
       );
 

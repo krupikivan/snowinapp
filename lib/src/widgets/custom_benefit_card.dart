@@ -37,7 +37,7 @@ class BenefitCard extends StatelessWidget {
                     bottomLeft: Radius.circular(15),
                     topLeft: Radius.circular(15)),
                 image: DecorationImage(
-                    fit: BoxFit.cover, image: NetworkImage(benefit.image)),
+                    fit: BoxFit.cover, image: NetworkImage(benefit.imagen)),
               ),
             ),
             Container(
@@ -49,16 +49,7 @@ class BenefitCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '${benefit.discount} Dto.',
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16),
-                  ),
-                  Text(
-                    benefit.title,
+                    benefit.nombre,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
@@ -68,7 +59,7 @@ class BenefitCard extends StatelessWidget {
                         fontSize: 16),
                   ),
                   SizedBox(height: 10),
-                  Text(benefit.description,
+                  Text(benefit.descripcion,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,

@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/widgets/custom_appbar_pages.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_list_info.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
-class BenefitDetail extends StatelessWidget {
+class BenefitDetail extends StatefulWidget {
   BenefitDetail({Key key}) : super(key: key);
+
+  @override
+  _BenefitDetailState createState() => _BenefitDetailState();
+}
+
+class _BenefitDetailState extends State<BenefitDetail> {
   final GlobalKey<ScaffoldState> scaffoldDrawer =
       new GlobalKey<ScaffoldState>();
+  String barcode = '';
   @override
   Widget build(BuildContext context) {
     final benefit = Provider.of<BenefitProvider>(context, listen: false);
@@ -24,7 +34,7 @@ class BenefitDetail extends StatelessWidget {
           ),
           preferredSize: Size(double.infinity, 70)),
       endDrawer: CustomDrawer(),
-      bottomNavigationBar: MainMenu(
+      bottomNavigationBar: CustomBottomMenu(
         item: 3,
       ),
       body: ListView(
@@ -38,16 +48,7 @@ class BenefitDetail extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  '${benefit.benefitTapped.discount} Dto.',
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  benefit.benefitTapped.title,
+                  benefit.benefitTapped.nombre,
                   maxLines: 2,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
@@ -60,7 +61,7 @@ class BenefitDetail extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  benefit.benefitTapped.description,
+                  benefit.benefitTapped.descripcion,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Colors.white,
@@ -79,7 +80,7 @@ class BenefitDetail extends StatelessWidget {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(benefit.benefitTapped.image))),
+                        image: NetworkImage(benefit.benefitTapped.imagen))),
               ),
               Positioned(
                 right: 20,
@@ -88,7 +89,7 @@ class BenefitDetail extends StatelessWidget {
                   heroTag: 'btnScan',
                   backgroundColor: Theme.of(context).primaryColor,
                   child: Icon(Icons.camera_enhance, size: 30),
-                  onPressed: () => null,
+                  onPressed: scan,
                 ),
               ),
             ],
@@ -96,7 +97,7 @@ class BenefitDetail extends StatelessWidget {
           CustomListInfo(
               title: 'Detalle',
               info:
-                  '20% de Descuento en productos de RENTAL ski y snowboard en tiendas fisicas.'),
+                  '${benefit.benefitTapped.nombre} ${benefit.benefitTapped.descripcion}'),
           CustomListInfo(
             title: 'Modalidad',
             info:
@@ -118,5 +119,27 @@ class BenefitDetail extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future scan() async {
+    try {
+      ScanResult result = await BarcodeScanner.scan();
+      setState(() {
+        barcode = result.rawContent;
+      });
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          barcode = 'Necesitamos acceso a la camara para continuar.';
+        });
+      } else {
+        setState(() => barcode = 'Error desconocido: $e');
+      }
+    } on FormatException {
+      setState(() => barcode =
+          'null (User returned using the "back"-button before scanning anything. Result)');
+    } catch (e) {
+      setState(() => barcode = 'Error desconocido: $e');
+    }
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/pages/drawer/widget/custom_appbar_drawer.dart';
 import 'package:snowin/src/widgets/custom_benefit_card.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_fab_icon.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 
 class MyBenefits extends StatelessWidget {
   MyBenefits({Key key}) : super(key: key);
@@ -25,7 +25,7 @@ class MyBenefits extends StatelessWidget {
             preferredSize: Size(double.infinity, 70)),
         drawerScrimColor: Colors.black54,
         endDrawer: CustomDrawer(),
-        bottomNavigationBar: MainMenu(
+        bottomNavigationBar: CustomBottomMenu(
           item: 3,
         ),
         body: Container(
@@ -37,32 +37,31 @@ class MyBenefits extends StatelessWidget {
                 'Historial de beneficios utilizados',
                 style: TextStyle(fontSize: 22),
               ),
-              // Expanded(
-              //   flex: 3,
-              //   child: Consumer<BenefitProvider>(
-              //     builder: (context, benefit, _) => ListView.builder(
-              //         scrollDirection: Axis.vertical,
-              //         itemCount: benefit.listBenefit.length,
-              //         itemBuilder: (BuildContext context, int index) =>
-              //             benefit.listBenefit.isEmpty
-              //                 ? SizedBox()
-              //                 : BenefitCard(
-              //                     benefit: benefit.listBenefit[index],
-              //                     action: () => null)),
-              //   ),
-              // ),
+              Expanded(
+                flex: 3,
+                child: Consumer<BenefitProvider>(
+                  builder: (context, benefit, _) => ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: benefit.listMyBenefit.length,
+                      itemBuilder: (BuildContext context, int index) => benefit
+                              .listMyBenefit.isEmpty
+                          ? SizedBox()
+                          : BenefitCard(
+                              benefit: benefit.listMyBenefit[index].beneficio,
+                              action: () => null)),
+                ),
+              ),
             ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 30),
+          padding: const EdgeInsets.only(bottom: 80),
           child: CustomFabIcon(
-            heroTag: "btnFilterBenefits",
-            icon: Icons.filter_list,
-            action: () => null,
-            isPrimary: false,
-          ),
+              heroTag: "btnFilter",
+              isPrimary: false,
+              icon: Icons.filter_list,
+              action: () => null),
         ));
   }
 }

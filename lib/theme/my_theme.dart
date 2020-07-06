@@ -3,52 +3,54 @@ import 'package:flutter/material.dart';
 ThemeData themeData() {
   TextTheme _basicTextTheme(TextTheme basic) {
     return basic.copyWith(
-        headline1: basic.headline1.copyWith(
+      headline1: basic.headline1.copyWith(
           fontFamily: 'RobotoCondensed',
-          fontSize: 22,
-          color: Color.fromRGBO(29, 113, 184, 1),
-        ),
-        caption: basic.bodyText1.copyWith(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 25,
+          fontSize: 24,
           color: Colors.grey[600],
-        ),
-        bodyText1: basic.bodyText1.copyWith(
+          fontWeight: FontWeight.w600),
+      headline2: basic.headline1.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 20,
+        color: Color.fromRGBO(29, 113, 184, 1),
+      ),
+      headline3: basic.bodyText1.copyWith(
           fontFamily: 'RobotoCondensed',
           fontSize: 18,
-          color: Colors.black,
-        ),
-        bodyText2: basic.bodyText1.copyWith(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 16,
-          color: Colors.black,
-        ),
-        //Profile info
-        headline3: basic.bodyText1.copyWith(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 14,
           color: Colors.grey[600],
-        ),
-        //Profile info
-        headline4: basic.bodyText1.copyWith(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 16,
-          color: Colors.grey[800],
-        ),
-        //To display title chat message
-        headline5: basic.bodyText1.copyWith(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Color(0xff72bfff),
-        ),
-        //To display subtitle chat message
-        headline6: basic.bodyText2.copyWith(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ));
+          fontWeight: FontWeight.w600),
+      headline4: basic.bodyText1.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 16,
+        color: Colors.grey[800],
+      ),
+      headline5: basic.bodyText1.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Color(0xff72bfff),
+      ),
+      headline6: basic.bodyText2.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 17,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      caption: basic.bodyText1.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 25,
+        color: Colors.grey[600],
+      ),
+      bodyText1: basic.bodyText1.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 18,
+        color: Colors.black,
+      ),
+      bodyText2: basic.bodyText1.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 16,
+        color: Colors.black,
+      ),
+    );
   }
 
   final ThemeData base = ThemeData.light();

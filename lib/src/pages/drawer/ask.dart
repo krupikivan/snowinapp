@@ -5,7 +5,7 @@ import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/drawer/widget/custom_appbar_drawer.dart';
 import 'package:snowin/src/widgets/custom_chat_message.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 
 class Ask extends StatefulWidget {
   Ask({Key key}) : super(key: key);
@@ -46,7 +46,7 @@ class _AskState extends State<Ask> with TickerProviderStateMixin {
           preferredSize: Size(double.infinity, 70)),
       drawerScrimColor: Colors.black54,
       endDrawer: CustomDrawer(),
-      bottomNavigationBar: MainMenu(),
+      bottomNavigationBar: CustomBottomMenu(),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         color: Colors.white,
@@ -116,9 +116,7 @@ class _AskState extends State<Ask> with TickerProviderStateMixin {
               backgroundColor: Theme.of(context).primaryColor,
               child: IconButton(
                 icon: Icon(Icons.send, color: Colors.white),
-                onPressed: _isComposing
-                    ? () => null
-                    : null,
+                onPressed: _isComposing ? () => null : null,
               ),
             )),
       ]),

@@ -1,9 +1,13 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:snowin/src/models/benefit.dart';
+import 'package:snowin/src/models/my_benefit.dart';
+import 'package:snowin/src/providers/snowin_provider.dart';
 
 class BenefitProvider with ChangeNotifier {
   List<Benefit> _listBenefit = [];
+  List<MyBenefit> _listMyBenefit = [];
 
   UnmodifiableListView<Benefit> get listBenefit =>
       UnmodifiableListView(_listBenefit);
@@ -13,26 +17,49 @@ class BenefitProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  BenefitProvider.init() {
-    getBenefits();
+  UnmodifiableListView<MyBenefit> get listMyBenefit =>
+      UnmodifiableListView(_listMyBenefit);
+
+  set listMyBenefit(List<MyBenefit> list) {
+    _listMyBenefit = list;
+    notifyListeners();
   }
 
-  void getBenefits() {
-    final List<Benefit> _list = [];
-    final Benefit benefit1 = Benefit.fromMap(
-        'https://www.chapelcogolf.com/wp-content/uploads/2016/08/Nuevo-Edificio-Club-House-Chapelco-Golf-Resort-2014-DAC_1888-copia-copia-copia.jpg',
-        'Cerro Chapelco',
-        '10%',
-        'Pases, equipos y clases grupales');
-    final Benefit benefit2 = Benefit.fromMap(
-        'https://q-cf.bstatic.com/images/hotel/max1280x900/880/88071318.jpg',
-        'Las leñas',
-        '10%',
-        'Pases, equipos y clases grupales');
-    _list.add(benefit1);
-    _list.add(benefit2);
-    _listBenefit = _list;
-    notifyListeners();
+  BenefitProvider.init() {
+    fetchBenefits();
+    fetchMyBenefits();
+  }
+
+  void fetchBenefits() {
+    SnowinProvider().getBenefits().then((response) {
+      print(response);
+      if (response['ok']) {
+        compute(beneficioFromJson, response['data']['data']).then((value) {
+          _listBenefit = value;
+          notifyListeners();
+        });
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
+  }
+
+  void fetchMyBenefits() {
+    SnowinProvider().getMyBenefits().then((response) {
+      print(response);
+      if (response['ok']) {
+        compute(misBeneficiosFromJson, response['data']['data']).then((value) {
+          _listMyBenefit = value;
+          notifyListeners();
+        });
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 
   Benefit _benefitTapped;

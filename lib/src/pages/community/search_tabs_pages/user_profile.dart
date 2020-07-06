@@ -5,7 +5,7 @@ import 'package:snowin/src/widgets/custom_appbar_profile.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_fab_icon.dart';
 import 'package:snowin/src/widgets/custom_list_info.dart';
-import 'package:snowin/src/widgets/main_menu.dart';
+import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 
 class UserProfile extends StatefulWidget {
   UserProfile({Key key}) : super(key: key);
@@ -35,7 +35,7 @@ class _UserProfileState extends State<UserProfile> {
           ),
           preferredSize: Size(double.infinity, 70)),
       endDrawer: CustomDrawer(),
-      bottomNavigationBar: MainMenu(
+      bottomNavigationBar: CustomBottomMenu(
         item: 2,
       ),
       body: ListView(

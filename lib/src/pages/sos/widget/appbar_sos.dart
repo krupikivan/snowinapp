@@ -20,8 +20,8 @@ class AppBarSos extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: () =>
-                          Navigator.pushReplacementNamed(context, 'reports'),
+                      onPressed: () => Navigator.popUntil(
+                          context, ModalRoute.withName('/reports')),
                       icon: Icon(
                         Icons.arrow_back,
                         size: 30,
