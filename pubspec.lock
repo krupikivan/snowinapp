@@ -504,6 +504,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  polygon_clipper:
+    dependency: "direct main"
+    description:
+      name: polygon_clipper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   positioned_tap_detector:
     dependency: transitive
     description:
@@ -572,6 +579,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smooth_star_rating:
+    dependency: "direct main"
+    description:
+      name: smooth_star_rating
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4+2"
   socket_io_client:
     dependency: "direct main"
     description:
