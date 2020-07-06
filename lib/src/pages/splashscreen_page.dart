@@ -26,7 +26,6 @@ class _SplashScreenState extends State<SplashScreen>
   final _preferences = new Preferences();
   final firebaseAnalyticsProvider = FirebaseAnalyticsProvider();
   static final FacebookLogin facebookSignIn = new FacebookLogin();
-
   @override
   void initState() {
     super.initState();
@@ -44,14 +43,15 @@ class _SplashScreenState extends State<SplashScreen>
     fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(animationController);
     animationController.forward();
     new Timer(new Duration(seconds: 3), () {
+      _checkRegistrationStatus();
       // if (_preferences.token != '') {
       //   _comprobarPermisos();
       // } else {
       //   Navigator.of(context)
       //       .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
       // }
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+      // Navigator.of(context)
+      //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     });
 
     firebaseAnalyticsProvider.logLogin();
@@ -90,6 +90,26 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           );
         });
+  }
+
+  _checkRegistrationStatus() async {
+    print('check registration status ...');
+    var token =
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTkzODA0MzUyLCJleHAiOjE1OTM5NzcxNTIsInVpZCI6MzF9.hxypd2qR1hL3GIjqW_Ed33cVYTPoWkzy_npyTey62Rg';
+
+//TODO: TOKEN HARCODEADO
+    // if (_preferences.token.toString().isNotEmpty) {
+    if (token != null) {
+      print('token found: ' + _preferences.token.toString());
+      print('go to reports page');
+
+      Navigator.pushNamed(context, '/reports');
+    } else {
+      print('no token found, go to registration page');
+
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    }
   }
 
   _comprobarPermisos() async {
