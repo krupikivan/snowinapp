@@ -11,7 +11,7 @@ class SearchTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       child: ListView(
-        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           Container(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),

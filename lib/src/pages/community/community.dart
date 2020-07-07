@@ -98,6 +98,7 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
                                 75 +
                                 10), //El alto de la pantalla menos el AppBar, Tabs y MainMenu
                         child: TabBarView(
+                            physics: NeverScrollableScrollPhysics(),
                             controller: _tabControllerCommunity,
                             children: <Widget>[
                               NotificationsListTab(),
