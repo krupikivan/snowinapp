@@ -31,7 +31,7 @@ class CustomAppbarProfile extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    // _getData(),
+                    _getData(),
                   ],
                 ),
                 IconButton(

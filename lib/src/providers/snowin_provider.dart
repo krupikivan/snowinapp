@@ -585,6 +585,33 @@ class SnowinProvider {
     }
   }
 
+  Future getAllUsers() async {
+    //configurar servicio
+    String service = Config.apiTodosLosUsuarios;
+    //Respuesta
+    http.Response response;
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: authToken);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
 /////////////////////////////////////////////////////////////////////////////////TRATAMIENTO DE ERRORES
   Future<Map<String, dynamic>> manejadorErroresResp(http.Response resp) async {
     if (resp.statusCode == 422) {

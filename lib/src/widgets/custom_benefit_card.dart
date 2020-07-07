@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/models/benefit.dart';
 
 class BenefitCard extends StatelessWidget {
@@ -37,7 +38,9 @@ class BenefitCard extends StatelessWidget {
                     bottomLeft: Radius.circular(15),
                     topLeft: Radius.circular(15)),
                 image: DecorationImage(
-                    fit: BoxFit.cover, image: NetworkImage(benefit.imagen)),
+                    fit: BoxFit.cover,
+                    image:
+                        NetworkImage(Config.apiImageBaseUrl + benefit.imagen)),
               ),
             ),
             Container(

@@ -1,6 +1,9 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:snowin/src/models/user.dart';
+import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/models/users_near.dart';
 
 class UserProvider with ChangeNotifier {
   //Get all users----------------
@@ -10,6 +13,15 @@ class UserProvider with ChangeNotifier {
 
   set userList(List<User> userList) {
     _userList = userList;
+    notifyListeners();
+  }
+
+//Get all users near
+  UsersNear _users;
+  UsersNear get users => _users;
+
+  set users(UsersNear user) {
+    _users = user;
     notifyListeners();
   }
 
@@ -29,24 +41,19 @@ class UserProvider with ChangeNotifier {
   }
 
   void getUsers() {
-    final List<User> _list = [];
-    final userData = {
-      'id': 0,
-      'username': "Carlos98",
-      "email": "carlitos@gmail.com",
-      "status": "Conectado",
-      "nombre": "Carlos",
-      "profile":
-          "https://www.shareicon.net/data/2016/05/24/770114_people_512x512.png",
-      "image": "https://www.w3schools.com/w3css/img_avatar2.png",
-    };
-
-    User user1 = User.map(userData);
-
-    _list.add(user1);
-    _userList = _list;
-    _currentUser = user1;
-    notifyListeners();
+    SnowinProvider().getAllUsers().then((response) {
+      print(response);
+      if (response['ok']) {
+        compute(usersFromJson, response['data']['usuarios']).then((value) {
+          _users = UsersNear.fromJson(response['data'], value);
+          notifyListeners();
+        });
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
 
   //Get all users----------------

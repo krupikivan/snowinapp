@@ -43,6 +43,10 @@ class SearchTab extends StatelessWidget {
               ],
             ),
           ),
+          Divider(
+            color: Colors.black,
+            height: 1,
+          ),
           Consumer<CommunityTabsProvider>(builder: (context, tab, _) {
             tab.inSecondTab = true;
             switch (tab.currentIndex) {

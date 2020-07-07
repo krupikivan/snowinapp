@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
+import 'package:snowin/src/pages/community/widgets/user_avatar.dart';
 
 class CustomAppbarChat extends StatelessWidget {
   CustomAppbarChat({
@@ -12,6 +13,7 @@ class CustomAppbarChat extends StatelessWidget {
 
   @override
   Widget build(context) {
+    final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -33,7 +35,7 @@ class CustomAppbarChat extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    // _getData(),
+                    _getData(size),
                   ],
                 ),
                 IconButton(
@@ -52,14 +54,15 @@ class CustomAppbarChat extends StatelessWidget {
     );
   }
 
-  Widget _getData() {
+  Widget _getData(Size size) {
     return Consumer<UserProvider>(
       builder: (context, user, _) => Row(
         children: <Widget>[
-          CircleAvatar(
-            backgroundImage: NetworkImage(user.userTapped.image),
-            radius: 25,
+          UserAvatar(
+            image: user.userTapped.image,
+            size: size,
           ),
+          SizedBox(width: 10),
           Text(
             user.userTapped.nombre,
             style: TextStyle(

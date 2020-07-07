@@ -23,8 +23,7 @@ class Benefit {
         id: json["comercio_id"] as int,
         nombre: json["nombre"],
         descripcion: json["descripcion"],
-        imagen: 'https://apisnowin.alternativasinteligentes.com' +
-            json["urlImagen"],
+        imagen: json["urlImagen"],
         latitud: json["latitud"] as double,
         longitud: json["longitud"] as double,
       );
