@@ -13,13 +13,22 @@ import 'package:snowin/src/providers/connectivity_provider.dart';
 class SnowinProvider with ChangeNotifier {
   static final _prefs = new Preferences();
 
-  Position _userPosition;
-  Position get userPosition => _userPosition;
-  set userPosition(Position userPos) {
-    _userPosition = userPos;
-    posicion(userPos);
-    notifyListeners();
-  }
+  // Position _userPosition;
+  // Position get userPosition => _userPosition;
+  // set userPosition(Position userPos) {
+  //   _userPosition = userPos;
+  //   posicion(userPos);
+  //   notifyListeners();
+  // }
+
+  // SnowinProvider.init() {
+  //   Geolocator()
+  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+  //       .then((position) {
+  //     _userPosition = position;
+  //     notifyListeners();
+  //   });
+  // }
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8'
