@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'package:snowin/src/utils/session.dart';
 import 'package:snowin/src/utils/dialogs.dart';
@@ -704,6 +704,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   }
 
   void updateGeoPosition() {
+    final userSnowin = Provider.of<SnowinProvider>(context, listen: false);
     //get device position
     Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -725,24 +726,26 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
 
       // SnowinProvider().posicion(position.latitude.toString(),
       //                           position.longitude.toString(),
-      //                           position.altitude.toString())
-      SnowinProvider()
-          .posicion('-34.4833333', '-58.5166667', '1000')
-          .then((response) {
-        print(response);
-        if (response['ok']) {
-          setState(() {});
-        } else {
-          throw new Exception('Error');
-        }
-      }).catchError((error) {
-        print(error.toString());
-      });
+      //                           position.altitude.toString()
+      userSnowin.userPosition = position;
+      // SnowinProvider()
+      //     .posicion(position)
+      //     .then((response) {
+      //   print(response);
+      //   if (response['ok']) {
+      //     setState(() {});
+      //   } else {
+      //     throw new Exception('Error');
+      //   }
+      // }).catchError((error) {
+      //   print(error.toString());
+      // });
     });
   }
 
   void updateLocation() {
     //get device position
+    final userSnowin = Provider.of<SnowinProvider>(context, listen: false);
     Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((position) {
@@ -756,21 +759,20 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
       _preferences.longitude = position.longitude.toString();
       _preferences.altitude = position.altitude.toString();
       _preferences.speed = position.speed.toString();
-
-      SnowinProvider()
-          .posicion(position.latitude.toString(), position.longitude.toString(),
-              position.altitude.toString())
-          .then((response) {
-        print(response);
-        if (response['ok']) {
-          //set location state
-          setLocationState();
-        } else {
-          throw new Exception('Error');
-        }
-      }).catchError((error) {
-        print(error.toString());
-      });
+      userSnowin.userPosition = position;
+      // SnowinProvider()
+      //     .posicion(position)
+      //     .then((response) {
+      //   print(response);
+      //   if (response['ok']) {
+      //     //set location state
+      //     setLocationState();
+      //   } else {
+      //     throw new Exception('Error');
+      //   }
+      // }).catchError((error) {
+      //   print(error.toString());
+      // });
     });
   }
 

@@ -5,6 +5,7 @@ import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
 import 'package:snowin/src/pages/drawer/provider/award_provider.dart';
 import 'package:snowin/src/pages/splashscreen_page.dart';
+import 'package:snowin/src/providers/snowin_provider.dart';
 import 'package:snowin/src/routes/routes.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => MarkerProvider.init()),
         ChangeNotifierProvider(create: (context) => BenefitProvider.init()),
         ChangeNotifierProvider(create: (context) => AwardsProvider.init()),
+        ChangeNotifierProvider(create: (context) => SnowinProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
