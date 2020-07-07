@@ -52,8 +52,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     _tabControllerReports = TabController(vsync: this, length: 3);
     _speed = '0.00';
 
-    _locationTimer =
-        Timer.periodic(Duration(seconds: 30), (Timer t) => updateLocation());
+    // _locationTimer =
+    //     Timer.periodic(Duration(seconds: 30), (Timer t) => updateLocation());
 
     //set location state
     //_session.preferences.token = '';
@@ -240,7 +240,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
                   color:
                       _speedOn ? Color.fromRGBO(255, 224, 0, 1) : Colors.white,
                 ),
-                onPressed: speedOnOff,
+                // onPressed: speedOnOff,
+                onPressed: null,
               ),
               SizedBox(
                 width: 3,
@@ -703,103 +704,102 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     });
   }
 
-  void updateGeoPosition() {
-    final userSnowin = Provider.of<SnowinProvider>(context, listen: false);
-    //get device position
-    Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((position) {
-      print('latitud: ' + position.latitude.toString());
-      print('longitud: ' + position.longitude.toString());
-      print('altitud: ' + position.altitude.toString());
-      print('speed: ' + position.speed.toString());
+  // void updateGeoPosition() {
+  //   final userSnowin = Provider.of<SnowinProvider>(context, listen: false);
+  //get device position
+  //   Geolocator()
+  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+  //       .then((position) {
+  //     print('latitud: ' + position.latitude.toString());
+  //     print('longitud: ' + position.longitude.toString());
+  //     print('altitud: ' + position.altitude.toString());
+  //     print('speed: ' + position.speed.toString());
 
-      _preferences.latitude = position.latitude.toString();
-      _preferences.longitude = position.longitude.toString();
-      _preferences.altitude = position.altitude.toString();
-      _preferences.speed = position.speed.toString();
+  //     _preferences.latitude = position.latitude.toString();
+  //     _preferences.longitude = position.longitude.toString();
+  //     _preferences.altitude = position.altitude.toString();
+  //     _preferences.speed = position.speed.toString();
 
-      if (position.speed > 0) {
-        List<String> speedArr = (position.speed * 3.6).toString().split('.');
-        _speed = speedArr.first + '.' + speedArr.elementAt(1).substring(0, 2);
-      }
+  //     if (position.speed > 0) {
+  //       List<String> speedArr = (position.speed * 3.6).toString().split('.');
+  //       _speed = speedArr.first + '.' + speedArr.elementAt(1).substring(0, 2);
+  //     }
 
-      // SnowinProvider().posicion(position.latitude.toString(),
-      //                           position.longitude.toString(),
-      //                           position.altitude.toString()
-      userSnowin.userPosition = position;
-      // SnowinProvider()
-      //     .posicion(position)
-      //     .then((response) {
-      //   print(response);
-      //   if (response['ok']) {
-      //     setState(() {});
-      //   } else {
-      //     throw new Exception('Error');
-      //   }
-      // }).catchError((error) {
-      //   print(error.toString());
-      // });
-    });
-  }
+  // SnowinProvider().posicion(position.latitude.toString(),
+  //                           position.longitude.toString(),
+  //                           position.altitude.toString()
+  // SnowinProvider()
+  //     .posicion(position)
+  //     .then((response) {
+  //   print(response);
+  //   if (response['ok']) {
+  //     setState(() {});
+  //   } else {
+  //     throw new Exception('Error');
+  //   }
+  // }).catchError((error) {
+  //   print(error.toString());
+  // });
+  //   });
+  // }
 
-  void updateLocation() {
-    //get device position
-    final userSnowin = Provider.of<SnowinProvider>(context, listen: false);
-    Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((position) {
-      print('update device location');
-      print('latitud: ' + position.latitude.toString());
-      print('longitud: ' + position.longitude.toString());
-      print('altitud: ' + position.altitude.toString());
-      print('speed: ' + position.speed.toString());
+  // void updateLocation() {
+  //get device position
+  //   final userSnowin = Provider.of<SnowinProvider>(context, listen: false);
+  //   Geolocator()
+  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+  //       .then((position) {
+  //     print('update device location');
+  //     print('latitud: ' + position.latitude.toString());
+  //     print('longitud: ' + position.longitude.toString());
+  //     print('altitud: ' + position.altitude.toString());
+  //     print('speed: ' + position.speed.toString());
 
-      _preferences.latitude = position.latitude.toString();
-      _preferences.longitude = position.longitude.toString();
-      _preferences.altitude = position.altitude.toString();
-      _preferences.speed = position.speed.toString();
-      userSnowin.userPosition = position;
-      // SnowinProvider()
-      //     .posicion(position)
-      //     .then((response) {
-      //   print(response);
-      //   if (response['ok']) {
-      //     //set location state
-      //     setLocationState();
-      //   } else {
-      //     throw new Exception('Error');
-      //   }
-      // }).catchError((error) {
-      //   print(error.toString());
-      // });
-    });
-  }
+  //     _preferences.latitude = position.latitude.toString();
+  //     _preferences.longitude = position.longitude.toString();
+  //     _preferences.altitude = position.altitude.toString();
+  //     _preferences.speed = position.speed.toString();
+  //     userSnowin.userPosition = position;
+  // SnowinProvider()
+  //     .posicion(position)
+  //     .then((response) {
+  //   print(response);
+  //   if (response['ok']) {
+  //set location state
+  //     setLocationState();
+  //   } else {
+  //     throw new Exception('Error');
+  //   }
+  // }).catchError((error) {
+  //   print(error.toString());
+  // });
+  //   });
+  // }
 
-  void speedOnOff() {
-    print('on off speed');
-    Geolocator().isLocationServiceEnabled().then((enabled) {
-      if (enabled) {
-        if (_speedOn) {
-          if (_speedTimer.isActive) _speedTimer.cancel();
-          setState(() {
-            _speed = '0.00';
-          });
-        } else {
-          var interval =
-              _preferences.updatePositionInterval.toString().isNotEmpty
-                  ? _preferences.updatePositionInterval
-                  : '5';
-          _speedTimer = Timer.periodic(
-              Duration(seconds: int.parse(interval.toString())),
-              (Timer t) => updateGeoPosition());
-        }
-        _speedOn = !_speedOn;
-      } else {
-        DialogHelper.showErrorDialog(context, 'Dispositivo GPS desactivado');
-      }
-    });
-  }
+  // void speedOnOff() {
+  //   print('on off speed');
+  //   Geolocator().isLocationServiceEnabled().then((enabled) {
+  //     if (enabled) {
+  //       if (_speedOn) {
+  //         if (_speedTimer.isActive) _speedTimer.cancel();
+  //         setState(() {
+  //           _speed = '0.00';
+  //         });
+  //       } else {
+  //         var interval =
+  //             _preferences.updatePositionInterval.toString().isNotEmpty
+  //                 ? _preferences.updatePositionInterval
+  //                 : '5';
+  //         _speedTimer = Timer.periodic(
+  //             Duration(seconds: int.parse(interval.toString())),
+  //             (Timer t) => updateGeoPosition());
+  //       }
+  //       _speedOn = !_speedOn;
+  //     } else {
+  //       DialogHelper.showErrorDialog(context, 'Dispositivo GPS desactivado');
+  //     }
+  //   });
+  // }
 
   void goToMapPage() {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
