@@ -1,17 +1,25 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:async/async.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:snowin/src/share/preference.dart';
-
 import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/providers/connectivity_provider.dart';
 
-class SnowinProvider {
+class SnowinProvider with ChangeNotifier {
   static final _prefs = new Preferences();
+
+  Position _userPosition;
+  Position get userPosition => _userPosition;
+  set userPosition(Position userPos) {
+    _userPosition = userPos;
+    posicion(userPos);
+    notifyListeners();
+  }
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8'
@@ -318,12 +326,11 @@ class SnowinProvider {
     }
   }
 
-  Future<Map> posicion(
-      String latitude, String longitude, String altitude) async {
+  Future<Map> posicion(Position position) async {
     print('call end point: posicion');
 
     //configurar servicio
-    String service = Config.apiUserUrl + "posicion";
+    String service = Config.apiUserPosicion;
 
     //Respuesta
     http.Response response;
@@ -333,9 +340,9 @@ class SnowinProvider {
       if (conex) {
         response = await http.post(Uri.encodeFull(service),
             body: {
-              'latitud': latitude,
-              'longitud': longitude,
-              'altura': altitude
+              'latitud': position.latitude,
+              'longitud': position.longitude,
+              'altura': position.altitude
             },
             headers: securedHeaders);
 
@@ -561,6 +568,33 @@ class SnowinProvider {
   Future getMyBenefits() async {
     //configurar servicio
     String service = Config.apiMisBeneficiosUrl;
+    //Respuesta
+    http.Response response;
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.get(Uri.encodeFull(service), headers: authToken);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future getAllUsers() async {
+    //configurar servicio
+    String service = Config.apiTodosLosUsuarios;
     //Respuesta
     http.Response response;
     try {

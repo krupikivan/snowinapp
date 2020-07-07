@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/widgets/custom_appbar_profile.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
@@ -46,10 +47,13 @@ class _UserProfileState extends State<UserProfile> {
             children: <Widget>[
               Container(
                 padding: EdgeInsets.zero,
-                child: Image.network(
-                  '',
-                  fit: BoxFit.fitWidth,
-                ),
+                child:
+                    user.userTapped.image != null && user.userTapped.image != ""
+                        ? Image.network(
+                            Config.apiImageBaseUrl + user.userTapped.image,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset('assets/images/user.png'),
               ),
               Container(
                 height: 90,
@@ -63,7 +67,7 @@ class _UserProfileState extends State<UserProfile> {
               Positioned(
                   right: 20,
                   top: 10,
-                  child: Text("a 500 m",
+                  child: Text('${user.userTapped.distancia.truncate()}',
                       style: TextStyle(color: Colors.grey[300]))),
               Positioned(
                 right: 20,
@@ -77,12 +81,10 @@ class _UserProfileState extends State<UserProfile> {
               )
             ],
           ),
+          CustomListInfo(title: 'Bio', info: user.userTapped.biografia ?? ''),
           CustomListInfo(
-              title: 'Bio',
-              info:
-                  'Buscadora incansable de aventura. RRPP en Sky Restor Chapelco'),
-          CustomListInfo(title: 'Practica', info: 'Ski'),
-          CustomListInfo(title: 'Nivel', info: 'Intermedio'),
+              title: 'Practica', info: user.userTapped.actividad ?? ''),
+          CustomListInfo(title: 'Nivel', info: user.userTapped.nivel ?? '')
         ],
       ),
     );

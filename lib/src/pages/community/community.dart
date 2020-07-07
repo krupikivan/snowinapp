@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:snowin/src/pages/community/search_tab.dart';
 
 import 'package:snowin/src/utils/session.dart';
 
@@ -97,10 +98,11 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
                                 75 +
                                 10), //El alto de la pantalla menos el AppBar, Tabs y MainMenu
                         child: TabBarView(
+                            physics: NeverScrollableScrollPhysics(),
                             controller: _tabControllerCommunity,
                             children: <Widget>[
                               NotificationsListTab(),
-                              FriendsListTap(),
+                              SearchTab(),
                             ]),
                       )
                     ],
@@ -113,27 +115,6 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
       ),
       onWillPop: goBack,
     );
-
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     centerTitle: true,
-    //     title: Text("COMUNIDAD"),
-    //     backgroundColor: Color.fromRGBO(30, 112, 183, 1),
-    //     leading: Icon(Icons.arrow_back),
-    //     actions: [
-    //       IconButton(
-    //         onPressed: (){},
-    //         icon: Icon(Icons.menu),
-    //       ),
-    //     ],
-    //   ),
-    //   bottomNavigationBar: MainMenu(item: 2,),
-    //   body: Container(
-    //     child: Center(
-    //       child: Text("Comunidad"),
-    //     ),
-    //   ),
-    // );
   }
 
 //////////////////////////////////////////////////////////////Widgets

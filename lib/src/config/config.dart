@@ -18,8 +18,8 @@ class Config {
   static const String instagramAppSecret = 'uH9hatw8G3lQls7fE3';
 
   //services URLs Rodo
-  static const String apiImageBaseUrl =
-      "https://serversnowin.alternativasinteligentes.com/backend/web/";
+  // static const String apiImageBaseUrl =
+  //     "https://serversnowin.alternativasinteligentes.com/backend/web/";
   static const String apiUrl =
       "https://serversnowin.alternativasinteligentes.com/backend/web/site/";
   static const String apiUsersAuthUrl =
@@ -35,8 +35,14 @@ class Config {
       "https://serversnowin.alternativasinteligentes.com/backend/web/notificaciones/";
 
   //Service Urls AISA
+  static const String apiUserPosicion =
+      "https://serversnowin.alternativasinteligentes.com/user/posicion";
+  static const String apiImageBaseUrl =
+      "https://apisnowin.alternativasinteligentes.com";
   static const String apiBeneficiosUrl =
       "https://apisnowin.alternativasinteligentes.com/beneficio";
   static const String apiMisBeneficiosUrl =
       "https://apisnowin.alternativasinteligentes.com/user-beneficio";
+  static const String apiTodosLosUsuarios =
+      "https://apisnowin.alternativasinteligentes.com/user/usuarios-cercanos";
 }

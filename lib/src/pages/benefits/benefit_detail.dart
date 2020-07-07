@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/widgets/custom_appbar_pages.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
@@ -80,7 +81,8 @@ class _BenefitDetailState extends State<BenefitDetail> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(benefit.benefitTapped.imagen))),
+                        image: NetworkImage(Config.apiImageBaseUrl +
+                            benefit.benefitTapped.imagen))),
               ),
               Positioned(
                 right: 20,
