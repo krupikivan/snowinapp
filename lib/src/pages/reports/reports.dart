@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:snowin/src/utils/session.dart';
 import 'package:snowin/src/utils/dialogs.dart';
 import 'package:snowin/src/utils/app_localization.dart';
@@ -45,7 +47,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
 
     _tabControllerReports = TabController(vsync: this, length: 3);
     _speed = '0.00';
-    
+
     setLocationState();
   }
 
@@ -240,7 +242,10 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
               SizedBox(
                 width: 3,
               ),
-              AutoSizeText(_speedOn ? '${userLocation.speed.toStringAsFixed(2)} Km/h' : '0.00 km/h',
+              AutoSizeText(
+                  _speedOn
+                      ? '${userLocation.speed.toStringAsFixed(2)} Km/h'
+                      : '0.00 km/h',
                   maxLines: 1,
                   style: TextStyle(fontSize: 15, color: Colors.white)),
             ],
@@ -698,7 +703,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     });
   }
 
- void goToMapPage() {
+  void goToMapPage() {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
 
     if (_session.center.id != 0) {
