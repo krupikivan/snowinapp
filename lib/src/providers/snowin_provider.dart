@@ -336,14 +336,10 @@ class SnowinProvider with ChangeNotifier {
   }
 
   Future<Map> posicion(Position position) async {
-    print('call end point: posicion');
-
     //configurar servicio
     String service = Config.apiUserPosicion;
-
     //Respuesta
     http.Response response;
-
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
