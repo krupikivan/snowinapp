@@ -12,9 +12,14 @@ class MarkerProvider with ChangeNotifier {
   BitmapDescriptor _bitPin1;
   BitmapDescriptor _bitPin2;
 
-  // MarkerProvider.init() {
-  //   _getMarkers();
-  // }
+  getMyLocation(Position pos) async {
+    await _setIcons();
+    _markers.add(Marker(
+        markerId: MarkerId('locPin'),
+        position: LatLng(pos.latitude, pos.longitude),
+        icon: _locPin));
+    notifyListeners();
+  }
 
   getMarkers(Position userPos) async {
     await _setIcons();
@@ -22,6 +27,7 @@ class MarkerProvider with ChangeNotifier {
         markerId: MarkerId('locPin'),
         position: LatLng(userPos.latitude, userPos.longitude),
         icon: _locPin));
+    notifyListeners();
   }
 
   Future _setIcons() async {

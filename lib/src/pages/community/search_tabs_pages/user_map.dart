@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
+import 'package:snowin/src/providers/location_service.dart';
 
 class UserMap extends StatefulWidget {
   const UserMap({Key key}) : super(key: key);
@@ -32,17 +33,27 @@ class _UserMapState extends State<UserMap> {
 
   @override
   Widget build(BuildContext context) {
-    final markers = Provider.of<MarkerProvider>(context);
+    // final markers = Provider.of<MarkerProvider>(context);
+    //Con esto consumis la ubicacion del usuario
     final userLocation = Provider.of<Position>(context);
     return SizedBox(
       height: MediaQuery.of(context).size.height / 2.5,
       child: userLocation != null
-          ? GoogleMap(
-              mapType: MapType.normal,
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: getPos(userLocation),
-              markers: markers.getMapMarkers)
-          : Text('Cargando mapa...'),
+          ? Consumer<MarkerProvider>(
+              builder: (context, marker, _) => marker != null
+                  ? _buildMap(marker, userLocation)
+                  : Text('Cargando mapa...'),
+            )
+          : Center(child: Text('Tomando ubicacion...')),
     );
+  }
+
+  _buildMap(marker, userLocation) {
+    marker.getMyLocation(userLocation);
+    return GoogleMap(
+        mapType: MapType.normal,
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: getPos(userLocation),
+        markers: marker.getMapMarkers);
   }
 }
