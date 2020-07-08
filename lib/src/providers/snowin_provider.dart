@@ -346,7 +346,6 @@ class SnowinProvider with ChangeNotifier {
       if (conex) {
         response = await http.post(Uri.encodeFull(service),
             headers: securedHeaders, body: body);
-        print(response.body);
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
           return {
