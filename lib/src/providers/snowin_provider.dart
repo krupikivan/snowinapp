@@ -340,16 +340,16 @@ class SnowinProvider with ChangeNotifier {
     String service = Config.apiUserPosicion;
     //Respuesta
     http.Response response;
+    var body = {
+      'latitud': position.latitude,
+      'longitud': position.longitude,
+      'altura': position.altitude
+    };
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         response = await http.post(Uri.encodeFull(service),
-            body: {
-              'latitud': position.latitude,
-              'longitud': position.longitude,
-              'altura': position.altitude
-            },
-            headers: securedHeaders);
+            body: json.encode(body), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
