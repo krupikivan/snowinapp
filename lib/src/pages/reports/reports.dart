@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'package:snowin/src/utils/session.dart';
 import 'package:snowin/src/utils/dialogs.dart';
@@ -62,6 +63,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final userLocation = Provider.of<Position>(context);
+
     return WillPopScope(
       child: Scaffold(
         bottomNavigationBar: CustomBottomMenu(
@@ -87,7 +90,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
                   right: 0.0,
                   child: Column(
                     children: [
-                      _topInfo(),
+                      _topInfo(userLocation),
                       Container(
                         height: 48,
                         child: TabBar(
@@ -151,7 +154,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   }
 
 //////////////////////////////////////////////////////////////Widgets
-  Widget _topInfo() {
+  Widget _topInfo(userLocation) {
     return Container(
       height: 60,
       color: Color.fromRGBO(74, 74, 73, 1),
@@ -231,12 +234,16 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
                   color:
                       _speedOn ? Color.fromRGBO(255, 224, 0, 1) : Colors.white,
                 ),
-                onPressed: speedOnOff,
+                onPressed: () {
+                  setState(() {
+                    _speedOn = _speedOn ? false : true;
+                  });
+                },
               ),
               SizedBox(
                 width: 3,
               ),
-              AutoSizeText(_speed + ' km/h',
+              AutoSizeText(_speedOn ? '${userLocation.speed.toStringAsFixed(2)} Km/h' : '0.00 km/h',
                   maxLines: 1,
                   style: TextStyle(fontSize: 15, color: Colors.white)),
             ],
@@ -694,48 +701,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     });
   }
 
- void updateGeoPosition() {    
-    // Función para poder ver la velocidad del usuario 
-    Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((position) {  
-          if (position.speed > 0) {
-            List<String> speedArr = (position.speed * 3.6).toString().split('.');
-            _speed = speedArr.first + '.' + speedArr.elementAt(1).substring(0, 2);
-            print(_speed);
-            setState(() {
-              _speed = _speed;
-            });
-          }
-    });
-  }
-
-  void speedOnOff() {
-    print('on off speed');
-    Geolocator().isLocationServiceEnabled().then((enabled) {
-      if (enabled) {
-        if (_speedOn) {
-          if (_speedTimer.isActive) _speedTimer.cancel();
-          setState(() {
-            _speed = '0.00';
-          });
-        } else {
-          var interval =
-              _preferences.updatePositionInterval.toString().isNotEmpty
-                  ? _preferences.updatePositionInterval
-                  : '5';
-          _speedTimer = Timer.periodic(
-              Duration(seconds: int.parse(interval.toString())),
-              (Timer t) => updateGeoPosition());
-        }
-        _speedOn = !_speedOn;
-      } else {
-        DialogHelper.showErrorDialog(context, 'Dispositivo GPS desactivado');
-      }
-    });
-  }
-
-  void goToMapPage() {
+ void goToMapPage() {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
 
     if (_session.center.id != 0) {

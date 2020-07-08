@@ -17,6 +17,7 @@ class LocationService {
         location.onLocationChanged.listen((locationData) {
           if (locationData != null) {
             _currentPosition = Position(
+                speed: locationData.speed,
                 latitude: locationData.latitude,
                 longitude: locationData.longitude,
                 altitude: locationData.altitude);
