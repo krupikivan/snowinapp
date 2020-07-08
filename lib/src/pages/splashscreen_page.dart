@@ -85,10 +85,6 @@ class _SplashScreenState extends State<SplashScreen>
 //////////////////////////////////////////////////////////////Functions
   _checkRegistrationStatus() async {
     print('check registration status ...');
-    _preferences.token =
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTk0MjIwOTkyLCJleHAiOjE1OTQzOTM3OTIsInVpZCI6MzB9.6QaymEKvvCQ8Dpw_KfENJq8I_VdrtDYWe5-PTlYI2Zc';
-    // _preferences.token =
-    //     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTk0MjE5NDg3LCJleHAiOjE1OTQzOTIyODcsInVpZCI6MzF9.fENgrF_xnvPaksyjMZAghI2zLL8Z53n4_eSLA7ZsCL8';
     if (_preferences.token.toString().isNotEmpty) {
       print('token found: ' + _preferences.token.toString());
       print('go to reports page');

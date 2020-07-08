@@ -65,6 +65,7 @@ dependencies:
   smooth_star_rating: 1.0.4
   video_thumbnail: ^0.2.2
   location: ^3.0.2
+  url_launcher: ^5.5.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

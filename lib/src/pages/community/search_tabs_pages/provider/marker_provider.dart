@@ -23,7 +23,7 @@ class MarkerProvider with ChangeNotifier {
   getUsersPosition(List<User> list) async {
     list.forEach((element) {
       _markers.add(Marker(
-          markerId: MarkerId(element.id.toString()),
+          markerId: MarkerId('${element.id}'),
           position: LatLng(element.latitud, element.longitud),
           icon: _bitPin1));
     });

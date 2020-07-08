@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:snowin/src/pages/sos/widget/appbar_sos.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Sos extends StatefulWidget {
   @override
@@ -163,11 +164,11 @@ class _SosState extends State<Sos> {
               ],
             ),
           ),
-          _getButton(
-              Icons.people, Colors.yellow, 'AVISAR A AMIGOS', null, false),
+          _getButton(Icons.people, Colors.yellow, 'AVISAR A AMIGOS',
+              () => _showPopup(), false),
           SizedBox(height: 15),
           _getButton(Icons.call, Theme.of(context).errorColor, 'EMERGENCIAS',
-              null, true),
+              () => _makeCall(), true),
         ],
       ),
     );
@@ -178,7 +179,7 @@ class _SosState extends State<Sos> {
     final Color txtColor = isWhite == true ? Colors.white : Colors.black;
     return Expanded(
       child: InkWell(
-        onTap: () => action,
+        onTap: action,
         child: Container(
           padding: const EdgeInsets.fromLTRB(40, 40, 0, 40),
           decoration: BoxDecoration(
@@ -232,5 +233,49 @@ class _SosState extends State<Sos> {
         ],
       ),
     );
+  }
+
+  _showPopup() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        actions: <Widget>[
+          FlatButton(
+            child: Text('OK',
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18)),
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ],
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        content: Container(
+          padding: const EdgeInsets.only(top: 20),
+          height: 80,
+          width: MediaQuery.of(context).size.width / 1.3,
+          child: ListTile(
+            title: Text(
+              'Se ha avisado a sus amigos',
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 20),
+            ),
+            leading: Icon(
+              Icons.check,
+              size: 30,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _makeCall() async {
+    String url = 'tel:${911}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
