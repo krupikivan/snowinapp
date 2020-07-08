@@ -18,18 +18,18 @@ class Config {
   // static const String apiImageBaseUrl =
   //     "https://serversnowin.alternativasinteligentes.com/backend/web/";
   static const String apiUrl =
-      "https://serversnowin.alternativasinteligentes.com/backend/web/site/";
+      "https://apisnowin.alternativasinteligentes.com/site/";
   static const String apiUsersAuthUrl =
-      "https://serversnowin.alternativasinteligentes.com/backend/web/users/auth/";
+      "https://apisnowin.alternativasinteligentes.com/users/auth/";
   static const String apiCentroSkiUrl =
-      "https://serversnowin.alternativasinteligentes.com/backend/web/centro-ski/";
+      "https://apisnowin.alternativasinteligentes.com/centro-ski/";
 
   static const String apiUserUrl =
-      "https://serversnowin.alternativasinteligentes.com/backend/web/user/";
+      "https://apisnowin.alternativasinteligentes.com/user/";
   static const String apiReportsUrl =
-      "https://serversnowin.alternativasinteligentes.com/backend/web/reporte/";
+      "https://apisnowin.alternativasinteligentes.com/reporte/";
   static const String apiNotificationsUrl =
-      "https://serversnowin.alternativasinteligentes.com/backend/web/notificaciones/";
+      "https://apisnowin.alternativasinteligentes.com/notificaciones/";
 
   //Service Urls AISA
   static const String apiUserPosicion =
