@@ -36,10 +36,6 @@ class SnowinProvider with ChangeNotifier {
   final Map<String, String> securedHeaders = {
     'Authorization': 'Bearer ' + _prefs.token
   };
-  final Map<String, String> authToken = {
-    'Content-Type': 'application/json; charset=UTF-8',
-    'Authorization': 'Bearer ' + Config.authToken
-  };
 
   static SnowinProvider _instance = new SnowinProvider._internal();
   SnowinProvider._internal();
@@ -340,21 +336,21 @@ class SnowinProvider with ChangeNotifier {
     String service = Config.apiUserPosicion;
     //Respuesta
     http.Response response;
-    var body = {
-      'latitud': position.latitude,
-      'longitud': position.longitude,
-      'altura': position.altitude
+    Map body = {
+      'latitud': '${position.latitude}',
+      'longitud': '${position.longitude}',
+      'altura': '${position.altitude}'
     };
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         response = await http.post(Uri.encodeFull(service),
-            body: json.encode(body), headers: securedHeaders);
-
+            headers: securedHeaders, body: body);
+        print(response.body);
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
           return {
-            'ok': true,
+            'success': true,
             'data': (decodeResp == null) ? decodeResp : decodeResp['data']
           };
         } else {
@@ -551,7 +547,8 @@ class SnowinProvider with ChangeNotifier {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: authToken);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -578,7 +575,8 @@ class SnowinProvider with ChangeNotifier {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: authToken);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -605,7 +603,8 @@ class SnowinProvider with ChangeNotifier {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: authToken);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);

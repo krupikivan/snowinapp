@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/user.dart';
+import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
 import 'package:snowin/src/providers/location_service.dart';
 
@@ -33,7 +35,11 @@ class _UserMapState extends State<UserMap> {
 
   @override
   Widget build(BuildContext context) {
-    // final markers = Provider.of<MarkerProvider>(context);
+    List<User> users = Provider.of<UserProvider>(context).users.usuarios;
+    if (users != null) {
+      Provider.of<MarkerProvider>(context, listen: false)
+          .getUsersPosition(users);
+    }
     //Con esto consumis la ubicacion del usuario
     final userLocation = Provider.of<Position>(context);
     return SizedBox(
