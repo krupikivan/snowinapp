@@ -7,25 +7,23 @@ import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/providers/connectivity_provider.dart';
 
-
-
 class RegisterProvider {
   static final _prefs = new Preferences();
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
+  // final Map<String, String> securedHeaders = {
+  //   'Authorization': 'Bearer ' + _prefs.token
+  // };
   final Map<String, String> securedHeaders = {
-    'Authorization' : 'Bearer '+_prefs.token
+    'Authorization':
+        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTk0NjQ4OTMyLCJleHAiOjE1OTQ4MjE3MzIsInVpZCI6MzF9.D4zNRISineQA49rmxhBys4pnQJmglYIFbxKCxfbsnn4'
   };
 
   static RegisterProvider _instance = new RegisterProvider._internal();
   RegisterProvider._internal();
   factory RegisterProvider() => _instance;
-
-
-
-
 
   //terminos y condiciones
   Future<Map> legal() async {
@@ -40,17 +38,17 @@ class RegisterProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-          response = await http.get(Uri.encodeFull(service), headers: headers);
+        response = await http.get(Uri.encodeFull(service), headers: headers);
 
-          if (response.statusCode >= 200 && response.statusCode <= 299) {
-            final decodeResp = json.decode(response.body);
-            return {
-              'ok': true,
-              'data': (decodeResp == null) ? decodeResp : decodeResp['data']
-            };
-          } else {
-            return manejadorErroresResp(response);
-          }
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
       } else {
         return retornarErrorConexion();
       }
@@ -65,7 +63,7 @@ class RegisterProvider {
     print(securedHeaders);
 
     //configurar servicio
-    String service = Config.apiUserUrl + "perfiles";
+    String service = Config.apiUserData + "perfiles";
 
     //Respuesta
     http.Response response;
@@ -73,17 +71,18 @@ class RegisterProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-          response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
-          if (response.statusCode >= 200 && response.statusCode <= 299) {
-            final decodeResp = json.decode(response.body);
-            return {
-              'ok': true,
-              'data': (decodeResp == null) ? decodeResp : decodeResp['data']
-            };
-          } else {
-            return manejadorErroresResp(response);
-          }
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
       } else {
         return retornarErrorConexion();
       }
@@ -107,17 +106,18 @@ class RegisterProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-          response = await http.post(Uri.encodeFull(service), body: {'perfil': perfil}, headers: securedHeaders);
+        response = await http.post(Uri.encodeFull(service),
+            body: {'perfil': perfil}, headers: securedHeaders);
 
-          if (response.statusCode >= 200 && response.statusCode <= 299) {
-            final decodeResp = json.decode(response.body);
-            return {
-              'ok': true,
-              'data': (decodeResp == null) ? decodeResp : decodeResp['data']
-            };
-          } else {
-            return manejadorErroresResp(response);
-          }
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
       } else {
         return retornarErrorConexion();
       }
@@ -139,17 +139,18 @@ class RegisterProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-          response = await http.get(Uri.encodeFull(service), headers: securedHeaders);
+        response =
+            await http.get(Uri.encodeFull(service), headers: securedHeaders);
 
-          if (response.statusCode >= 200 && response.statusCode <= 299) {
-            final decodeResp = json.decode(response.body);
-            return {
-              'ok': true,
-              'data': (decodeResp == null) ? decodeResp : decodeResp['data']
-            };
-          } else {
-            return manejadorErroresResp(response);
-          }
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
       } else {
         return retornarErrorConexion();
       }
@@ -165,7 +166,7 @@ class RegisterProvider {
     print(securedHeaders);
 
     //configurar servicio
-    String service = Config.apiUserUrl + "nivel";
+    String service = Config.apiUserData + "nivel";
 
     //Respuesta
     http.Response response;
@@ -173,17 +174,18 @@ class RegisterProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-          response = await http.post(Uri.encodeFull(service), body: {'nivel': nivel}, headers: securedHeaders);
+        response = await http.post(Uri.encodeFull(service),
+            body: {'nivel': nivel}, headers: securedHeaders);
 
-          if (response.statusCode >= 200 && response.statusCode <= 299) {
-            final decodeResp = json.decode(response.body);
-            return {
-              'ok': true,
-              'data': (decodeResp == null) ? decodeResp : decodeResp['data']
-            };
-          } else {
-            return manejadorErroresResp(response);
-          }
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
       } else {
         return retornarErrorConexion();
       }
@@ -191,10 +193,6 @@ class RegisterProvider {
       return retornarErrorDesconocido();
     }
   }
-
-
-
-
 
   Future<Map<String, dynamic>> manejadorErroresResp(http.Response resp) async {
     if (resp.statusCode == 422) {
@@ -230,5 +228,4 @@ class RegisterProvider {
     });
     return {'ok': false, 'errores': decodeResp};
   }
-
 }

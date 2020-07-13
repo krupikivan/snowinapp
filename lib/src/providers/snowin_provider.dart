@@ -46,7 +46,7 @@ class SnowinProvider with ChangeNotifier {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         final resp =
-            await http.get(Config.apiUrl + 'bienvenida', headers: headers);
+            await http.get(Config.apiWelcome + 'bienvenida', headers: headers);
         if (resp.statusCode >= 200 && resp.statusCode <= 299) {
           final decodeResp = json.decode(resp.body);
           return {
@@ -60,6 +60,7 @@ class SnowinProvider with ChangeNotifier {
         return retornarErrorConexion();
       }
     } catch (e) {
+      print(e.toString());
       return retornarErrorDesconocido();
     }
   }

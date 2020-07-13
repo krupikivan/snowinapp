@@ -32,6 +32,10 @@ class Config {
       "https://serversnowin.alternativasinteligentes.com/backend/web/notificaciones/";
 
   //Service Urls AISA
+  static const String apiUserData =
+      "https://apisnowin.alternativasinteligentes.com/user/";
+  static const String apiWelcome =
+      "https://apisnowin.alternativasinteligentes.com/site/";
   static const String apiUserPosicion =
       "https://apisnowin.alternativasinteligentes.com/user/posicion";
   static const String apiImageBaseUrl =
