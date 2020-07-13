@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/share/preference.dart';
 
 class GetStarted extends StatelessWidget {
@@ -115,7 +116,7 @@ class GetStarted extends StatelessWidget {
                             color: primaryColor,
                             onPressed: () {
                               //TODO:Borrar esto
-                              _prefs.token = '1';
+                              _prefs.token = Config.ivanTKN;
                               Navigator.pushNamed(context, '/reports');
                             },
                             child: Row(

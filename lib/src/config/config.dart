@@ -5,6 +5,8 @@ class Config {
 
   static const String tokenMapBox =
       'pk.eyJ1IjoiYWxmb25zb21jIiwiYSI6ImNrNDJ4ZWF5ZjAxNmIzbW54cTdnbW44ZWMifQ.-ulQpVqM0w36mJc_djcSgg';
+  static const String ivanTKN =
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTk0NjQ4OTMyLCJleHAiOjE1OTQ4MjE3MzIsInVpZCI6MzF9.D4zNRISineQA49rmxhBys4pnQJmglYIFbxKCxfbsnn4';
   static const String urlWebSocket = "https://sockets.muvinapp.com";
   static const String serverToken =
       "AAAAZF2L6K4:APA91bHhp9sUhjm7iIvdX5btIetbXa4TKjAuVs61G0egQlXnewuG_2VQF7Hlz8XBllaVSCzn3lBVog7mpcGoN5vxq1ncib0tq5NsJgSqHCGCu1gvaVhQ7veeP9MfD3VUykmu_YdEEqWJ";

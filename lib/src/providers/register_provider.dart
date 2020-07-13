@@ -13,6 +13,7 @@ class RegisterProvider {
   final Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
+  //TODO: Cambiar
   // final Map<String, String> securedHeaders = {
   //   'Authorization': 'Bearer ' + _prefs.token
   // };
