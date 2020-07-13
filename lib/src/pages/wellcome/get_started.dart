@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:snowin/src/share/preference.dart';
 
 class GetStarted extends StatelessWidget {
-  static final Preferences preferences = Preferences();
+  static final Preferences _prefs = Preferences();
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class GetStarted extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          preferences.nombre + ' ' + preferences.apellidos,
+                          _prefs.nombre + ' ' + _prefs.apellidos,
                           style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.normal,
@@ -114,6 +114,8 @@ class GetStarted extends StatelessWidget {
                           child: RaisedButton(
                             color: primaryColor,
                             onPressed: () {
+                              //TODO:Borrar esto
+                              _prefs.token = '1';
                               Navigator.pushNamed(context, '/reports');
                             },
                             child: Row(

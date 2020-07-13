@@ -88,7 +88,6 @@ class _SplashScreenState extends State<SplashScreen>
     if (_preferences.token.toString().isNotEmpty) {
       print('token found: ' + _preferences.token.toString());
       print('go to reports page');
-
       Navigator.pushNamed(context, '/reports');
     } else {
       print('no token found, go to registration page');
