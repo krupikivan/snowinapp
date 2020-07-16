@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snowin/src/providers/user_repository.dart';
+import 'package:snowin/src/providers/login_provider.dart';
 
 class Conditions extends StatelessWidget {
   @override
@@ -42,7 +42,7 @@ class Conditions extends StatelessWidget {
               child: Scrollbar(
                 child: ListView(
                   children: [
-                    Consumer<UserRepository>(
+                    Consumer<LoginProvider>(
                       builder: (context, user, _) => user.conditions == null
                           ? CircularProgressIndicator()
                           : Text(user.conditions,

@@ -5,15 +5,17 @@ import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
 import 'package:snowin/src/pages/drawer/provider/award_provider.dart';
+import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/pages/splashscreen_page.dart';
-import 'package:snowin/src/providers/user_repository.dart';
+import 'package:snowin/src/pages/reports/provider/report_provider.dart';
+import 'package:snowin/src/providers/login_provider.dart';
 import 'package:snowin/src/providers/welcome_provider.dart';
 import 'package:snowin/src/routes/routes.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:snowin/src/utils/app_localization.dart';
-import './src/providers/location_service.dart';
+import 'src/providers/location_service.dart';
 import 'theme/my_theme.dart';
 
 void main() async {
@@ -43,14 +45,15 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider.init()),
+        ChangeNotifierProvider(create: (context) => ReportProvider.init()),
+        ChangeNotifierProvider(create: (context) => CommunityProvider.init()),
         ChangeNotifierProvider(
             create: (context) => CommunityTabsProvider.init()),
         ChangeNotifierProvider(create: (context) => MarkerProvider.init()),
         ChangeNotifierProvider(create: (context) => BenefitProvider.init()),
         ChangeNotifierProvider(create: (context) => AwardsProvider.init()),
-        ChangeNotifierProvider(create: (context) => UserRepository.init()),
+        ChangeNotifierProvider(create: (context) => LoginProvider.init()),
         ChangeNotifierProvider(create: (context) => WelcomeProvider.init()),
-        // ChangeNotifierProvider(create: (context) => SnowinProvider.init()),
       ],
       child: StreamProvider<Position>(
         create: (context) => LocationService().locationStream,

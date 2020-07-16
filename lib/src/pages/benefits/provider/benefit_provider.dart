@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:snowin/src/models/benefit.dart';
 import 'package:snowin/src/models/my_benefit.dart';
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/benefit_repository.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 
 class BenefitProvider with ChangeNotifier {
   List<Benefit> _listBenefit = [];
@@ -31,7 +32,7 @@ class BenefitProvider with ChangeNotifier {
   }
 
   void fetchBenefits() {
-    SnowinProvider().getBenefits().then((response) {
+    BenefitRepository().getBenefits().then((response) {
       print(response);
       if (response['ok']) {
         compute(beneficioFromJson, response['data']['data']).then((value) {
@@ -47,7 +48,7 @@ class BenefitProvider with ChangeNotifier {
   }
 
   void fetchMyBenefits() {
-    SnowinProvider().getMyBenefits().then((response) {
+    BenefitRepository().getMyBenefits().then((response) {
       print(response);
       if (response['ok']) {
         compute(misBeneficiosFromJson, response['data']['data']).then((value) {

@@ -9,7 +9,7 @@ class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Consumer<UserProvider>(
+    return Consumer<CommunityProvider>(
       builder: (context, user, _) => user.users == null
           ? Center(child: CircularProgressIndicator())
           : ListView.separated(

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:snowin/src/config/config.dart';
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 import 'package:snowin/src/share/preference.dart';
 
 class PushNotificationsProvider {
@@ -16,7 +16,7 @@ class PushNotificationsProvider {
   final Completer<Map<String, dynamic>> completer =
       Completer<Map<String, dynamic>>();
   final _prefs = new Preferences();
-  SnowinProvider snowinprovider = SnowinProvider();
+  SnowinRepository snowinprovider = SnowinRepository();
 
   static final PushNotificationsProvider _instancia =
       new PushNotificationsProvider._internal();

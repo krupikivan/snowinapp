@@ -98,7 +98,7 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
   }
 
   void _handleSubmitted(String text) {
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<CommunityProvider>(context, listen: false);
     _textController.clear();
     setState(() {
       _isComposing = false;

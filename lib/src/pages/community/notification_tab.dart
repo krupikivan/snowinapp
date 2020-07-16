@@ -15,7 +15,7 @@ class NotificationsTab extends StatelessWidget {
         false;
     return Container(
       padding: const EdgeInsets.only(top: 20),
-      child: Consumer<UserProvider>(
+      child: Consumer<CommunityProvider>(
         builder: (context, user, _) => user.userList == null
             ? Center(child: CircularProgressIndicator())
             : ListView.separated(
@@ -34,7 +34,7 @@ class NotificationsTab extends StatelessWidget {
   }
 
   Widget _getUserItem(
-      BuildContext context, User user, UserProvider userProvider) {
+      BuildContext context, User user, CommunityProvider userProvider) {
     return ListTile(
         leading: Row(
           mainAxisSize: MainAxisSize.min,

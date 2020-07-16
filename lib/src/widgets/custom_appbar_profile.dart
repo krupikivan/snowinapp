@@ -51,7 +51,7 @@ class CustomAppbarProfile extends StatelessWidget {
   }
 
   Widget _getData() {
-    return Consumer<UserProvider>(
+    return Consumer<CommunityProvider>(
       builder: (context, user, _) => Text(
         '${user.userTapped.nombre}',
         style: TextStyle(

@@ -6,16 +6,12 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:snowin/src/config/config.dart';
-import 'package:snowin/src/providers/register_provider.dart';
+import 'package:snowin/src/repository/register_repository.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/utils/exceptions.dart';
 
-class UserRepository with ChangeNotifier {
-  // static UserRepository _instance = new UserRepository._internal();
-  // UserRepository._internal();
-  // factory UserRepository() => _instance;
-
-  UserRepository.init() {
+class LoginProvider with ChangeNotifier {
+  LoginProvider.init() {
     _loadConditions();
     _loadProfileTypes();
     _loadLevels();
@@ -111,7 +107,7 @@ class UserRepository with ChangeNotifier {
   }
 
   Future<void> _loadConditions() async {
-    await RegisterProvider().legal().then((response) {
+    await RegisterRepository().legal().then((response) {
       print(response);
       if (response['ok']) {
         _conditions = response['data'];
@@ -126,7 +122,7 @@ class UserRepository with ChangeNotifier {
 
   Future<void> _loadProfileTypes() async {
     List<String> _list = [];
-    await RegisterProvider().perfiles().then((response) {
+    await RegisterRepository().perfiles().then((response) {
       print(response);
       if (response['ok']) {
         response['data'].forEach((element) {
@@ -144,7 +140,7 @@ class UserRepository with ChangeNotifier {
   }
 
   Future<void> saveProfileTypes() async {
-    await RegisterProvider().perfil(_profileValue).then((response) {
+    await RegisterRepository().perfil(_profileValue).then((response) {
       _preferences.profileType = _profileValue;
       print(response);
       if (response['ok']) {
@@ -160,7 +156,7 @@ class UserRepository with ChangeNotifier {
 
   Future<void> _loadLevels() async {
     List<String> _list = [];
-    await RegisterProvider().niveles().then((response) {
+    await RegisterRepository().niveles().then((response) {
       print(response);
       if (response['ok']) {
         response['data'].forEach((element) {
@@ -179,7 +175,7 @@ class UserRepository with ChangeNotifier {
   }
 
   Future<void> saveLevel() async {
-    await RegisterProvider().nivel(_levelValue).then((response) {
+    await RegisterRepository().nivel(_levelValue).then((response) {
       print(response);
       if (response['ok']) {
       } else {

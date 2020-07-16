@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:snowin/src/providers/user_repository.dart';
+import 'package:snowin/src/providers/login_provider.dart';
 
 class Level extends StatelessWidget {
 //   @override
@@ -21,7 +21,7 @@ class Level extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final Color primaryColor = Theme.of(context).primaryColor;
-    final user = Provider.of<UserRepository>(context, listen: false);
+    final user = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -112,7 +112,7 @@ class Level extends StatelessWidget {
                         height: size.height * 0.02,
                       ),
                       FittedBox(
-                        child: Consumer<UserRepository>(
+                        child: Consumer<LoginProvider>(
                           builder: (context, user, _) => user.levelTypeList ==
                                   null
                               ? CircularProgressIndicator()
@@ -192,7 +192,7 @@ class Level extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Consumer<UserRepository>(
+          Consumer<LoginProvider>(
             builder: (context, user, _) => Radio(
               value: value,
               groupValue: user.levelValue,

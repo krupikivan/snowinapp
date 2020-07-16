@@ -55,7 +55,7 @@ class CustomAppbarChat extends StatelessWidget {
   }
 
   Widget _getData(Size size) {
-    return Consumer<UserProvider>(
+    return Consumer<CommunityProvider>(
       builder: (context, user, _) => Row(
         children: <Widget>[
           UserAvatar(

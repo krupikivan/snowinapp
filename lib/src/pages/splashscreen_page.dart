@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:snowin/src/share/preference.dart';
@@ -85,6 +86,8 @@ class _SplashScreenState extends State<SplashScreen>
 //////////////////////////////////////////////////////////////Functions
   _checkRegistrationStatus() async {
     print('check registration status ...');
+    _preferences.userid = '31';
+    _preferences.token = Config.ivanTKN;
     if (_preferences.token.toString().isNotEmpty) {
       print('token found: ' + _preferences.token.toString());
       print('go to reports page');

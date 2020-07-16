@@ -13,7 +13,7 @@ class UserTile extends StatelessWidget {
   }) : super(key: key);
   final Size size;
   final int index;
-  final UserProvider userProvider;
+  final CommunityProvider userProvider;
   final BuildContext context;
 
   @override

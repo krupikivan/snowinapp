@@ -35,7 +35,7 @@ class _UserMapState extends State<UserMap> {
 
   @override
   Widget build(BuildContext context) {
-    List<User> users = Provider.of<UserProvider>(context).users.usuarios;
+    List<User> users = Provider.of<CommunityProvider>(context).users.usuarios;
     if (users != null) {
       Provider.of<MarkerProvider>(context, listen: false)
           .getUsersPosition(users);

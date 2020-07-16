@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/theme/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 import 'package:snowin/src/utils/utils.dart' as utils;
 import 'package:sweetalert/sweetalert.dart';
 
@@ -24,7 +24,7 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   final _prefs = Preferences();
   bool _estadoDisponible = (Preferences().disponible == 1 ? true : false);
-  SnowinProvider muvinProvider = SnowinProvider();
+  SnowinRepository muvinProvider = SnowinRepository();
   navigatorRemoveUntil(BuildContext context, String router) {
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/$router', (Route<dynamic> route) => false);
@@ -247,10 +247,7 @@ class _MenuState extends State<Menu> {
       info['errores'].forEach((m) {
         //utils.mostrarAlerta(context, m['message']);
         utils.mostrarAlerta2(
-            context,
-            "Algo salió mal",
-            m['message'],
-            SweetAlertStyle.error);
+            context, "Algo salió mal", m['message'], SweetAlertStyle.error);
       });
     }
   }

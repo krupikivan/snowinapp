@@ -27,7 +27,7 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<CommunityProvider>(context, listen: false);
     return Scaffold(
       key: scaffoldDrawer,
       appBar: PreferredSize(

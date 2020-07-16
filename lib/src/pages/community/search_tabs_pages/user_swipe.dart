@@ -9,7 +9,7 @@ class UserSwipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userProvider = Provider.of<CommunityProvider>(context, listen: false);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: SizedBox(

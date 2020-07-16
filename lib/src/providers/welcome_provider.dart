@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 import '../models/slider_model.dart';
 
 class WelcomeProvider with ChangeNotifier {
-  SnowinProvider snowinprovider = SnowinProvider();
+  SnowinRepository snowinprovider = SnowinRepository();
 
   List<SliderModel> _listSlider;
   List<SliderModel> get listSlider => _listSlider;

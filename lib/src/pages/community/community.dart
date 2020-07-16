@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:snowin/src/pages/community/search_tab.dart';
 
-import 'package:snowin/src/utils/session.dart';
+import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';

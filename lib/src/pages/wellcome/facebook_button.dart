@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:snowin/src/providers/user_repository.dart';
+import 'package:snowin/src/providers/login_provider.dart';
 
 class FacebookButton extends StatelessWidget {
   const FacebookButton({Key key, this.size}) : super(key: key);
   final Size size;
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserRepository>(context, listen: false);
+    final user = Provider.of<LoginProvider>(context, listen: false);
     return Container(
       width: size.width * 0.87,
       height: 48,

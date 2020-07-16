@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 
 class LocationService {
   Position _currentPosition;
@@ -24,7 +24,7 @@ class LocationService {
             _locationController.add(_currentPosition);
             print(
                 "Posicion del usuario: Lat: ${locationData.latitude}, Lon: ${locationData.longitude}");
-            SnowinProvider().posicion(_currentPosition);
+            SnowinRepository().posicion(_currentPosition);
           }
         });
       }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:snowin/src/providers/user_repository.dart';
+import 'package:snowin/src/providers/login_provider.dart';
 
 class ProfileType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final Color primaryColor = Theme.of(context).primaryColor;
-    final user = Provider.of<UserRepository>(context, listen: false);
+    final user = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
       body: Container(
           height: double.infinity,
@@ -101,7 +101,7 @@ class ProfileType extends StatelessWidget {
                       height: size.height * 0.020,
                     ),
                     FittedBox(
-                      child: Consumer<UserRepository>(
+                      child: Consumer<LoginProvider>(
                         builder: (context, user, _) => user.profileTypeList ==
                                 null
                             ? CircularProgressIndicator()
@@ -171,7 +171,7 @@ class ProfileType extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Consumer<UserRepository>(
+          Consumer<LoginProvider>(
             builder: (context, user, _) => Radio(
               value: value,
               groupValue: user.profileValue,

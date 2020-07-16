@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:snowin/src/pages/reports/provider/report_provider.dart';
+import 'package:snowin/src/repository/report_repository.dart';
 
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 
 import 'package:snowin/src/models/item_kv.dart';
 
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
+import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_dropdown.dart';
 import 'package:snowin/src/widgets/custom_mood_dropdown.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
@@ -19,82 +23,23 @@ import 'package:snowin/src/widgets/thumbnail.dart';
 import 'package:snowin/src/widgets/custom_checkbox.dart';
 import 'package:snowin/src/widgets/custom_icon_button.dart';
 
-class NewReport extends StatefulWidget {
-  final OnSendCallback onSend;
-  final String youAre;
-  final List<ItemKV> trackItems;
-  final List<ItemKV> calidadNieveItems;
-  final List<ItemKV> climaItems;
-  final List<ItemKV> vientoItems;
-  final List<ItemKV> sensacionGeneralItems;
-  final List<ItemKV> esperaMediosItems;
-
-  NewReport(
-      {Key key,
-      this.youAre,
-      this.trackItems,
-      this.calidadNieveItems,
-      this.climaItems,
-      this.vientoItems,
-      this.sensacionGeneralItems,
-      this.esperaMediosItems,
-      this.onSend})
-      : super(key: key);
-
-  @override
-  _NewReportState createState() => _NewReportState();
-}
-
-class _NewReportState extends State<NewReport> {
+class NewReport extends StatelessWidget {
   TextEditingController _controllerYouAre;
   List<ItemKV> reportFromtems = [
     ItemKV('0', 'Centro de Ski'),
     ItemKV('1', 'Pista'),
   ];
-  String _reportFrom = '0';
-  String _track = '';
-  String _calidadNieve = '';
-  String _clima = '';
-  String _viento = '';
-  String _sensacionGeneral = '';
-  String _esperaMedios = '';
-  TextEditingController _controllerTitle;
-  String _title = '';
-  TextEditingController _controllerComment;
-  String _comment = '';
-  List<ItemKV> _medias;
 
-  bool shareFacebook = false;
-  bool shareInstagram = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controllerYouAre = TextEditingController();
-    _controllerYouAre.text = widget.youAre;
-
-    _controllerTitle = TextEditingController();
-    _controllerTitle.text = ' ';
-    _controllerComment = TextEditingController();
-    _controllerComment.text = ' ';
-
-    _medias = List<ItemKV>();
-  }
-
-  @override
-  void dispose() {
-    _controllerYouAre.dispose();
-    _controllerTitle.dispose();
-    _controllerComment.dispose();
-
-    super.dispose();
-  }
+  TextEditingController _controllerTitle = TextEditingController(text: '');
+  TextEditingController _controllerComment = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final report = Provider.of<ReportProvider>(context);
     return Scaffold(
+        drawerScrimColor: Colors.black54,
+        endDrawer: CustomDrawer(),
         bottomNavigationBar: CustomBottomMenu(
           item: 1,
         ),
@@ -109,7 +54,7 @@ class _NewReportState extends State<NewReport> {
                         "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
                     title: "NUEVO REPORTE",
                     height: 70.0,
-                    back: false,
+                    back: true,
                   ),
                   Positioned(
                     top: 70.0,
@@ -142,7 +87,6 @@ class _NewReportState extends State<NewReport> {
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
-
                                 CustomTextField(
                                   width: size.width * 0.9,
                                   prefix: "Estas en ",
@@ -152,51 +96,32 @@ class _NewReportState extends State<NewReport> {
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
-                                // CustomTextField(width: size.width*0.9, prefix: "Reporte de: ", controller: _controllerYouAre, readOnly: true),
-                                // SizedBox(height: size.height*0.03,),
                                 CustomDropdownd(
                                     width: size.width * 0.9,
                                     height: 50,
                                     prefix: "Reporte de:",
                                     items: reportFromtems,
-                                    value: _reportFrom,
+                                    value: report.reportFrom,
                                     onChanged: (value) {
                                       print(value);
-                                      setState(() {
-                                        _reportFrom = value;
-                                      });
+                                      report.reportFrom = value;
                                     }),
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
-                                _reportFrom == '1'
-                                    ? CustomDropdownd(
-                                        width: size.width * 0.9,
-                                        height: 50,
-                                        prefix: "Pista:",
-                                        items: widget.trackItems,
-                                        value: _track,
-                                        onChanged: (value) {
-                                          print(value);
-                                          setState(() {
-                                            _track = value;
-                                          });
-                                        },
-                                        error: true,
-                                        replaceFirst: 'Seleccione')
-                                    : CustomDropdownd(
-                                        width: size.width * 0.9,
-                                        height: 50,
-                                        prefix: "Pista:",
-                                        items: widget.trackItems,
-                                        value: _track,
-                                        onChanged: (value) {
-                                          print(value);
-                                          setState(() {
-                                            _track = value;
-                                          });
-                                        },
-                                        replaceFirst: 'Seleccione'),
+                                CustomDropdownd(
+                                    width: size.width * 0.9,
+                                    height: 50,
+                                    prefix: "Pista:",
+                                    items: report.trackItems,
+                                    value: report.track,
+                                    onChanged: (value) {
+                                      print(value);
+                                      report.track = value;
+                                    },
+                                    error:
+                                        report.reportFrom == '1' ? true : false,
+                                    replaceFirst: 'Seleccione'),
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
@@ -204,13 +129,11 @@ class _NewReportState extends State<NewReport> {
                                     width: size.width * 0.9,
                                     height: 50,
                                     prefix: "Calidad nieve:",
-                                    items: widget.calidadNieveItems,
-                                    value: _calidadNieve,
+                                    items: report.calidadNieveItems,
+                                    value: report.calidadNieve,
                                     onChanged: (value) {
                                       print(value);
-                                      setState(() {
-                                        _calidadNieve = value;
-                                      });
+                                      report.calidadNieve = value;
                                     },
                                     error: true,
                                     replaceFirst: 'Seleccione'),
@@ -221,13 +144,11 @@ class _NewReportState extends State<NewReport> {
                                     width: size.width * 0.9,
                                     height: 50,
                                     prefix: "Clima:",
-                                    items: widget.climaItems,
-                                    value: _clima,
+                                    items: report.climaItems,
+                                    value: report.clima,
                                     onChanged: (value) {
                                       print(value);
-                                      setState(() {
-                                        _clima = value;
-                                      });
+                                      report.clima = value;
                                     },
                                     error: true,
                                     replaceFirst: 'Seleccione'),
@@ -238,13 +159,11 @@ class _NewReportState extends State<NewReport> {
                                     width: size.width * 0.9,
                                     height: 50,
                                     prefix: "Viento:",
-                                    items: widget.vientoItems,
-                                    value: _viento,
+                                    items: report.vientoItems,
+                                    value: report.viento,
                                     onChanged: (value) {
                                       print(value);
-                                      setState(() {
-                                        _viento = value;
-                                      });
+                                      report.viento = value;
                                     },
                                     error: true,
                                     replaceFirst: 'Seleccione'),
@@ -255,13 +174,11 @@ class _NewReportState extends State<NewReport> {
                                     width: size.width * 0.9,
                                     height: 50,
                                     prefix: "Espera en medios:",
-                                    items: widget.esperaMediosItems,
-                                    value: _esperaMedios,
+                                    items: report.esperaMediosItems,
+                                    value: report.esperaMedios,
                                     onChanged: (value) {
                                       print(value);
-                                      setState(() {
-                                        _esperaMedios = value;
-                                      });
+                                      report.esperaMedios = value;
                                     },
                                     error: true,
                                     replaceFirst: 'Seleccione'),
@@ -272,13 +189,11 @@ class _NewReportState extends State<NewReport> {
                                     width: size.width * 0.9,
                                     height: 50,
                                     prefix: "Sensacion general:",
-                                    items: widget.sensacionGeneralItems,
-                                    value: _sensacionGeneral,
+                                    items: report.sensacionGeneralItems,
+                                    value: report.sensacionGeneral,
                                     onChanged: (value) {
                                       print(value);
-                                      setState(() {
-                                        _sensacionGeneral = value;
-                                      });
+                                      report.sensacionGeneral = value;
                                     },
                                     error: true,
                                     replaceFirst: 'Seleccione'),
@@ -290,13 +205,12 @@ class _NewReportState extends State<NewReport> {
                                     prefix: "Titulo: ",
                                     controller: _controllerTitle,
                                     onChanged: (value) {
-                                      _title = value;
+                                      report.title = value;
                                     },
-                                    error: _title.isEmpty),
+                                    error: report.title.isEmpty),
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
-
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
@@ -315,7 +229,8 @@ class _NewReportState extends State<NewReport> {
                                           borderColor:
                                               Color.fromRGBO(74, 74, 73, 1),
                                           onPressed: () {
-                                            getVideo(ImageSource.camera);
+                                            getVideo(
+                                                ImageSource.camera, report);
                                           }),
                                       CustomIconButton(
                                           icon: Icons.camera_alt,
@@ -326,7 +241,8 @@ class _NewReportState extends State<NewReport> {
                                           borderColor:
                                               Color.fromRGBO(74, 74, 73, 1),
                                           onPressed: () {
-                                            getImage(ImageSource.camera);
+                                            getImage(
+                                                ImageSource.camera, report);
                                           }),
                                       CustomIconButton(
                                           icon: Icons.image,
@@ -337,7 +253,8 @@ class _NewReportState extends State<NewReport> {
                                           borderColor:
                                               Color.fromRGBO(74, 74, 73, 1),
                                           onPressed: () {
-                                            getImage(ImageSource.gallery);
+                                            getImage(
+                                                ImageSource.gallery, report);
                                           }),
                                     ],
                                   ),
@@ -353,9 +270,10 @@ class _NewReportState extends State<NewReport> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
-                                      new Wrap(
+                                      Wrap(
                                         alignment: WrapAlignment.spaceBetween,
-                                        children: _buildImageVideoSection(),
+                                        children: _buildImageVideoSection(
+                                            report, size),
                                       )
                                     ],
                                   ),
@@ -363,7 +281,6 @@ class _NewReportState extends State<NewReport> {
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
-
                                 CustomTextField(
                                     width: size.width * 0.9,
                                     prefix: "Comentario: ",
@@ -371,17 +288,15 @@ class _NewReportState extends State<NewReport> {
                                     maxLines: 5,
                                     controller: _controllerComment,
                                     onChanged: (value) {
-                                      _comment = value;
+                                      report.comment = value;
                                     },
-                                    error: _comment.isEmpty),
+                                    error: report.comment.isEmpty),
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
-
                                 Container(
                                   width: size.width * 0.9,
                                   child: Row(
-                                    //crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       new Wrap(
@@ -397,27 +312,26 @@ class _NewReportState extends State<NewReport> {
                                           ),
                                           SizedBox(width: 10.0),
                                           CustomCheckbox(
-                                              value: shareFacebook,
+                                              value: report.shareFacebook,
                                               next: Icon(
                                                 FontAwesomeIcons.facebookSquare,
                                                 color: Colors.blue,
                                               ),
                                               onChanged: (value) {
-                                                setState(() {
-                                                  shareFacebook = value;
-                                                });
+                                                report.shareFacebook = value;
+                                                // setState(() {
+                                                // shareFacebook = value;
+                                                // });
                                               }),
                                           SizedBox(width: 20.0),
                                           CustomCheckbox(
-                                              value: shareInstagram,
+                                              value: report.shareInstagram,
                                               next: Icon(
                                                 FontAwesomeIcons.instagram,
                                                 color: Colors.blue,
                                               ),
                                               onChanged: (value) {
-                                                setState(() {
-                                                  shareInstagram = value;
-                                                });
+                                                report.shareInstagram = value;
                                               }),
                                         ],
                                       )
@@ -430,7 +344,6 @@ class _NewReportState extends State<NewReport> {
                                 SizedBox(
                                   height: size.height * 0.03,
                                 ),
-
                                 Container(
                                   width: size.width * 0.9,
                                   child: Row(
@@ -443,7 +356,7 @@ class _NewReportState extends State<NewReport> {
                                         height: 55,
                                         width: size.width * 0.35,
                                         onPressed: () {
-                                          Navigator.of(context).pop(false);
+                                          // Navigator.of(context).pop(false);
                                         },
                                       ),
                                       CustomButton(
@@ -452,7 +365,10 @@ class _NewReportState extends State<NewReport> {
                                         height: 55,
                                         width: size.width * 0.35,
                                         onPressed: () {
-                                          if (formIsValid()) sendReport();
+                                          if (report.formIsValid())
+                                            report.sendReport().then((value) =>
+                                                Navigator.of(context)
+                                                    .pop(false));
                                         },
                                       ),
                                     ],
@@ -471,11 +387,9 @@ class _NewReportState extends State<NewReport> {
         ));
   }
 
-  List<Widget> _buildImageVideoSection() {
-    final size = MediaQuery.of(context).size;
+  List<Widget> _buildImageVideoSection(ReportProvider report, Size size) {
     List<Widget> elements = new List<Widget>();
-
-    _medias.forEach((media) {
+    report.medias.forEach((media) {
       if (media.key.toString() == '0') {
         //imagen
         elements.add(new Thumbnail(
@@ -483,9 +397,7 @@ class _NewReportState extends State<NewReport> {
           path: media.value,
           showDeleteButton: true,
           onDelete: () {
-            _medias.removeWhere((element) =>
-                element.value.toString() == media.value.toString());
-            setState(() {});
+            report.removeMediaFromList(media.value.toString());
           },
         ));
       } else if (media.key.toString() == '1') {
@@ -496,22 +408,19 @@ class _NewReportState extends State<NewReport> {
           path: media.value,
           showDeleteButton: true,
           onDelete: () {
-            _medias.removeWhere((element) =>
+            report.medias.removeWhere((element) =>
                 element.value.toString() == media.value.toString());
-            setState(() {});
           },
         ));
       }
     });
-
     return elements;
   }
 
-  Future getImage(ImageSource source) async {
+  Future getImage(ImageSource source, ReportProvider report) async {
     ImagePicker.pickImage(source: source).then((image) {
       if (image != null) {
-        _medias.add(ItemKV(0, image.path));
-        setState(() {});
+        report.addMediaToList(ItemKV(0, image.path));
       }
     }).catchError((error) {
       print(error);
@@ -519,18 +428,16 @@ class _NewReportState extends State<NewReport> {
         if (data != null &&
             data.file != null &&
             data.type == RetrieveType.image) {
-          _medias.add(ItemKV(0, data.file.path));
-          setState(() {});
+          report.addMediaToList(ItemKV(0, data.file.path));
         }
       });
     });
   }
 
-  Future getVideo(ImageSource source) async {
+  Future getVideo(ImageSource source, ReportProvider report) async {
     ImagePicker.pickVideo(source: source).then((video) {
       if (video != null) {
-        _medias.add(ItemKV(1, video.path));
-        setState(() {});
+        report.addMediaToList(ItemKV(0, video.path));
       }
     }).catchError((error) {
       print(error);
@@ -538,47 +445,11 @@ class _NewReportState extends State<NewReport> {
         if (data != null &&
             data.file != null &&
             data.type == RetrieveType.image) {
-          _medias.add(ItemKV(1, data.file.path));
-          setState(() {});
+          report.addMediaToList(ItemKV(1, data.file.path));
         }
       });
-    });
-  }
-
-  bool formIsValid() {
-    return (/*_track.isNotEmpty*/ true &&
-        _title.isNotEmpty &&
-        _comment.isNotEmpty &&
-        _calidadNieve.isNotEmpty &&
-        _esperaMedios.isNotEmpty &&
-        _viento.isNotEmpty &&
-        _clima.isNotEmpty &&
-        _sensacionGeneral.isNotEmpty);
-  }
-
-  Future<void> sendReport() async {
-    List<File> multimedias = List<File>();
-    _medias.forEach((media) {
-      multimedias.add(File(media.value));
-    });
-
-    await SnowinProvider()
-        .sendReport(/*_track*/ '1', _title, _comment, _calidadNieve,
-            _esperaMedios, _viento, _clima, _sensacionGeneral, multimedias)
-        .then((response) {
-      print(response);
-      if (response['ok']) {
-        widget.onSend();
-        Navigator.of(context).pop(false);
-      } else {
-        throw new Exception('Error');
-      }
-    }).catchError((error) {
-      print(error.toString());
-      widget.onSend();
-      Navigator.of(context).pop(false);
     });
   }
 }
 
-typedef OnSendCallback = void Function();
+// typedef OnSendCallback = void Function();

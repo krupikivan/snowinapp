@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:snowin/src/providers/user_provider.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key key}) : super(key: key);
@@ -8,7 +10,6 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  String userName = 'Juan Carlos';
   bool isSwitched = true;
 
   @override
@@ -23,31 +24,45 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Align(
-                    alignment: Alignment.topRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Hola',
-                          style: TextStyle(color: Colors.white, fontSize: 22),
-                        ),
-                        Text(
-                          userName,
-                          style: TextStyle(color: Colors.white, fontSize: 22),
-                        ),
-                      ],
-                    )),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Mi perfil',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                Expanded(
+                  child: Align(
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          FittedBox(
+                            child: Text(
+                              'Hola',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 22),
+                            ),
+                          ),
+                          Consumer<UserProvider>(
+                            builder: (context, user, _) => FittedBox(
+                              child: Text(
+                                user.user != null
+                                    ? user.user.nombre
+                                    : 'Cargando...',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 22),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Mi perfil',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
                     ),
                   ),
                 )

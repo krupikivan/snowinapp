@@ -1,425 +1,417 @@
 import 'package:flutter/material.dart';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
-import 'package:snowin/src/utils/session.dart';
+import 'package:provider/provider.dart';
+import 'package:snowin/src/config/config.dart';
+import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
+import 'package:snowin/src/pages/reports/provider/report_provider.dart';
+import 'package:snowin/src/providers/user_provider.dart';
+import 'package:snowin/src/repository/report_repository.dart';
 import 'package:snowin/src/utils/app_localization.dart';
 import 'package:snowin/src/utils/message_border.dart';
 import 'package:snowin/src/utils/dialogs.dart';
-
 import 'package:snowin/src/models/report.dart';
-
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/pages/reports/widgets/time.dart';
+import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/ranking_w.dart';
 import 'package:snowin/src/widgets/comment_w.dart';
 import 'package:snowin/src/widgets/marquee.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 
-import 'package:snowin/src/providers/snowin_provider.dart';
+class ReportDetail extends StatelessWidget {
+  // Report report;
 
-class ReportDetail extends StatefulWidget {
-  final Report report;
-  final OnBackCallback onBack;
-
-  ReportDetail({Key key, this.report, this.onBack}) : super(key: key);
-
-  @override
-  _ReportDetailState createState() => new _ReportDetailState(report);
-}
-
-class _ReportDetailState extends State<ReportDetail> {
-  Report report;
-
-  _ReportDetailState(this.report);
-
-  Session _session = new Session();
+  // _ReportDetailState(this.report);
 
   CarouselController buttonCarouselController = CarouselController();
   int _currentIndex = 0;
   IconData iconData;
   double rate;
+  // final OnBackCallback onBack;
 
-  @override
-  void initState() {
-    super.initState();
+  // ReportDetail({Key key, this.onBack}) : super(key: key);
 
-    switch (report.sensacionGeneral.toString()) {
-      case 'REGULAR':
-        iconData = Icons.sentiment_neutral;
-        break;
-      case 'MALA':
-        iconData = Icons.mood_bad;
-        break;
-      default:
-        iconData = Icons.insert_emoticon;
-        break;
-    }
-    rate = double.parse(report.copos.toString());
-    setState(() {});
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  // switch (report.sensacionGeneral.toString()) {
+  //   case 'REGULAR':
+  //     iconData = Icons.sentiment_neutral;
+  //     break;
+  //   case 'MALA':
+  //     iconData = Icons.mood_bad;
+  //     break;
+  //   default:
+  //     iconData = Icons.insert_emoticon;
+  //     break;
+  // }
+  // rate = double.parse(report.copos.toString());
+  // setState(() {});
+  // }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final report = Provider.of<ReportProvider>(context);
+    // final user = Provider.of<UserProvider>(context);
+
     return Scaffold(
+        drawerScrimColor: Colors.black54,
+        endDrawer: CustomDrawer(),
         bottomNavigationBar: CustomBottomMenu(
           item: 1,
         ),
-        floatingActionButton: _flotingActionButton(context),
+        floatingActionButton: _flotingActionButton(context, report),
         body: SafeArea(
-          child: InkWell(
-            child: Container(
-                height: size.height,
-                child: Stack(children: [
-                  CustomAppbar(
-                    context: context,
-                    image:
-                        "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                    title: _t(context, "reports").toUpperCase(),
-                    height: 70.0,
-                    back: true,
-                  ),
-                  Positioned(
-                      top: 70.0,
-                      left: 0.0,
-                      right: 0.0,
-                      child: Container(
-                          height: size.height - (70 + 75),
-                          child: ListView(children: [
-                            Column(children: [
-                              Stack(
+          child: Container(
+              height: size.height,
+              child: Stack(children: [
+                CustomAppbar(
+                  context: context,
+                  image:
+                      "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                  title: _t(context, "reports").toUpperCase(),
+                  height: 70.0,
+                  back: true,
+                ),
+                Positioned(
+                    top: 70.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
+                        height: size.height - (70 + 75),
+                        child: ListView(children: [
+                          Stack(
+                            children: [
+                              Column(
                                 children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        height: 58,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: size.width * 0.45,
-                                              child: ListTile(
-                                                contentPadding: EdgeInsets.only(
-                                                    left: size.width * 0.2),
-                                                title: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    Marquee(
-                                                      child: Wrap(children: <
-                                                          Widget>[
-                                                        Icon(
-                                                          Icons.person_pin,
-                                                          color: Colors.white,
-                                                          size: 22,
-                                                        ),
-                                                        Text(
-                                                            report.user.username
-                                                                .toString()
-                                                                .trim(),
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 17,
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        159,
-                                                                        159,
-                                                                        159,
-                                                                        1))),
-                                                      ]),
-                                                      textDirection:
-                                                          TextDirection.ltr,
-                                                      animationDuration:
-                                                          Duration(seconds: 3),
-                                                      backDuration: Duration(
-                                                          milliseconds: 5000),
-                                                      pauseDuration: Duration(
-                                                          milliseconds: 2500),
+                                  Container(
+                                    height: 58,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: size.width * 0.45,
+                                          child: ListTile(
+                                            contentPadding: EdgeInsets.only(
+                                                left: size.width * 0.2),
+                                            title: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Marquee(
+                                                  child:
+                                                      Wrap(children: <Widget>[
+                                                    Icon(
+                                                      Icons.person_pin,
+                                                      color: Colors.white,
+                                                      size: 22,
                                                     ),
-                                                    AutoSizeText(
-                                                        report.user.nivel
-                                                            .toString()
-                                                            .trim(),
+                                                    Text(
+                                                        report
+                                                                .reportSelected
+                                                                .user
+                                                                .username ??
+                                                            '',
+                                                        // .toString()
+                                                        // .trim(),
                                                         style: TextStyle(
-                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 17,
                                                             color:
                                                                 Color.fromRGBO(
                                                                     159,
                                                                     159,
                                                                     159,
                                                                     1))),
-                                                  ],
+                                                  ]),
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                  animationDuration:
+                                                      Duration(seconds: 3),
+                                                  backDuration: Duration(
+                                                      milliseconds: 5000),
+                                                  pauseDuration: Duration(
+                                                      milliseconds: 2500),
                                                 ),
-                                              ),
+                                                AutoSizeText(
+                                                    report.reportSelected.user
+                                                        .nivel
+                                                        .toString()
+                                                        .trim(),
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Color.fromRGBO(
+                                                            159, 159, 159, 1))),
+                                              ],
                                             ),
-                                            Container(
-                                              width: size.width * 0.45,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Container(
-                                                      padding: EdgeInsets.only(
-                                                          top: 5),
-                                                      child: Time(
-                                                          time: report.fecha
-                                                              .toString()
-                                                              .trim())),
-                                                  _popUpBottomMenu(context)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                      _carousel(context),
-                                    ],
-                                  ),
-                                  Positioned(
-                                    top: size.width * 0.04,
-                                    left: size.width * 0.03,
-                                    child: _avatar(report.user.image, size),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                width: size.width,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                          text: report.centro.name
-                                                  .toString()
-                                                  .trim() +
-                                              ': ',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text: report.pista.descripcion
-                                              .toString()
-                                              .trim(),
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontSize: 22),
-                                        )
-                                      ]),
-                                    ),
-                                    AutoSizeText(
-                                      report.titulo.toString().trim(),
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
-                                    Divider(
-                                      color: Colors.black,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
                                         Container(
-                                          padding: EdgeInsets.all(8),
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                              color: Colors.yellow,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: Column(
+                                          width: size.width * 0.45,
+                                          child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              AutoSizeText(
-                                                _t(context, "status")
-                                                    .toUpperCase(),
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                              Icon(
-                                                iconData,
-                                                size: 40,
-                                              )
+                                              Container(
+                                                  padding:
+                                                      EdgeInsets.only(top: 5),
+                                                  child: Time(
+                                                      time: report
+                                                          .reportSelected.fecha
+                                                          .toString()
+                                                          .trim())),
+                                              _popUpBottomMenu(context)
                                             ],
                                           ),
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                  text: _t(context, "snow") +
-                                                      ": ",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17),
-                                                ),
-                                                TextSpan(
-                                                  text: _session
-                                                      .calidadNieveItems
-                                                      .firstWhere((element) =>
-                                                          element.key
-                                                              .toString() ==
-                                                          report.calidadNieve
-                                                              .toString())
-                                                      .value
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                      color: Colors.orange,
-                                                      fontSize: 17),
-                                                ),
-                                              ]),
+                                      ],
+                                    ),
+                                  ),
+                                  _carousel(context, report),
+                                ],
+                              ),
+                              Positioned(
+                                top: size.width * 0.04,
+                                left: size.width * 0.03,
+                                child: _avatar(
+                                    report.reportSelected.user.image, size),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            width: size.width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: report.reportSelected.centro.name
+                                              .toString()
+                                              .trim() +
+                                          ': ',
+                                      style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                      text: report
+                                          .reportSelected.pista.descripcion
+                                          .toString()
+                                          .trim(),
+                                      style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 22),
+                                    )
+                                  ]),
+                                ),
+                                AutoSizeText(
+                                  report.reportSelected.titulo
+                                      .toString()
+                                      .trim(),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                Divider(
+                                  color: Colors.black,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                          color: Colors.yellow,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          AutoSizeText(
+                                            _t(context, "status").toUpperCase(),
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                          Icon(
+                                            iconData,
+                                            size: 40,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: _t(context, "snow") + ": ",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 17),
                                             ),
-                                            RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                  text: _t(context, "weather") +
-                                                      ": ",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17),
-                                                ),
-                                                TextSpan(
-                                                  text: _session.climaItems
-                                                      .firstWhere((element) =>
-                                                          element.key
-                                                              .toString() ==
-                                                          report.clima
-                                                              .toString())
-                                                      .value
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                      color: Colors.orange,
-                                                      fontSize: 17),
-                                                ),
-                                              ]),
+                                            TextSpan(
+                                              text: report.calidadNieveItems
+                                                  .firstWhere((element) =>
+                                                      element.key.toString() ==
+                                                      report.calidadNieve
+                                                          .toString())
+                                                  .value
+                                                  .toString()
+                                                  .trim(),
+                                              style: TextStyle(
+                                                  color: Colors.orange,
+                                                  fontSize: 17),
                                             ),
-                                            RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                  text: _t(context, "wind") +
-                                                      ": ",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17),
-                                                ),
-                                                TextSpan(
-                                                  text: _session.vientoItems
-                                                      .firstWhere((element) =>
-                                                          element.key
-                                                              .toString() ==
-                                                          report.viento
-                                                              .toString())
-                                                      .value
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                      color: Colors.orange,
-                                                      fontSize: 17),
-                                                ),
-                                              ]),
+                                          ]),
+                                        ),
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text:
+                                                  _t(context, "weather") + ": ",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 17),
                                             ),
-                                            RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                  text: _t(context,
-                                                          "waitMiddle") +
-                                                      ": ",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17),
-                                                ),
-                                                TextSpan(
-                                                  text: _session
-                                                      .esperaMediosItems
-                                                      .firstWhere((element) =>
-                                                          element.key
-                                                              .toString() ==
-                                                          report.esperaMedios
-                                                              .toString())
-                                                      .value
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                      color: Colors.orange,
-                                                      fontSize: 17),
-                                                ),
-                                              ]),
+                                            TextSpan(
+                                              text: report.climaItems
+                                                  .firstWhere((element) =>
+                                                      element.key.toString() ==
+                                                      report.clima.toString())
+                                                  .value
+                                                  .toString()
+                                                  .trim(),
+                                              style: TextStyle(
+                                                  color: Colors.orange,
+                                                  fontSize: 17),
                                             ),
-                                            RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                  text: _t(context, "traffic") +
-                                                      ": ",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17),
-                                                ),
-                                                TextSpan(
-                                                  text: "Congestionado",
-                                                  style: TextStyle(
-                                                      color: Colors.orange,
-                                                      fontSize: 17),
-                                                ),
-                                              ]),
+                                          ]),
+                                        ),
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: _t(context, "wind") + ": ",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 17),
                                             ),
-                                          ],
+                                            TextSpan(
+                                              text: report.vientoItems
+                                                  .firstWhere((element) =>
+                                                      element.key.toString() ==
+                                                      report.viento.toString())
+                                                  .value
+                                                  .toString()
+                                                  .trim(),
+                                              style: TextStyle(
+                                                  color: Colors.orange,
+                                                  fontSize: 17),
+                                            ),
+                                          ]),
+                                        ),
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: _t(context, "waitMiddle") +
+                                                  ": ",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 17),
+                                            ),
+                                            TextSpan(
+                                              text: report.esperaMediosItems
+                                                  .firstWhere((element) =>
+                                                      element.key.toString() ==
+                                                      report.esperaMedios
+                                                          .toString())
+                                                  .value
+                                                  .toString()
+                                                  .trim(),
+                                              style: TextStyle(
+                                                  color: Colors.orange,
+                                                  fontSize: 17),
+                                            ),
+                                          ]),
+                                        ),
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text:
+                                                  _t(context, "traffic") + ": ",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 17),
+                                            ),
+                                            TextSpan(
+                                              text: "Congestionado",
+                                              style: TextStyle(
+                                                  color: Colors.orange,
+                                                  fontSize: 17),
+                                            ),
+                                          ]),
                                         ),
                                       ],
                                     ),
-                                    Divider(
-                                      color: Colors.black,
-                                    ),
-                                    AutoSizeText(
-                                      report.comentario.toString().trim(),
-                                      style: TextStyle(fontSize: 16),
-                                    ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.15,
-                              ),
-                            ])
-                          ]))),
-                  (_session.showReportDetailTutorial)
-                      ? _tutorial(context)
-                      : Container(),
-                ])),
-            onTap: () {
-              if (_session.showReportDetailTutorial) {
-                print('dismiss help');
-                _session.showReportDetailTutorial = false;
-                setState(() {});
-              }
-            },
-          ),
+                                Divider(
+                                  color: Colors.black,
+                                ),
+                                AutoSizeText(
+                                  report.reportSelected.comentario
+                                      .toString()
+                                      .trim(),
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                report.allComments.isEmpty
+                                    ? Text('No se encontraron comentarios')
+                                    : SizedBox(
+                                        child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                report.allComments.length,
+                                            itemBuilder: (BuildContext context,
+                                                    int index) =>
+                                                ListTile(
+                                                  title: Text(report
+                                                      .allComments[index]
+                                                      .comentario),
+                                                )),
+                                      )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.15,
+                          )
+                        ]))),
+                report.showReportDetailTutorial
+                    ? _tutorial(context, report)
+                    : Container(),
+              ])),
         ));
   }
 
@@ -432,7 +424,7 @@ class _ReportDetailState extends State<ReportDetail> {
         shape: BoxShape.circle,
         image: DecorationImage(
             image: image.isNotEmpty
-                ? NetworkImage(image)
+                ? NetworkImage(Config.apiImageBaseUrl + image)
                 : Image.asset('assets/images/male.png').image,
             fit: BoxFit.cover),
       ),
@@ -484,7 +476,7 @@ class _ReportDetailState extends State<ReportDetail> {
     );
   }
 
-  Widget _carousel(BuildContext context) {
+  Widget _carousel(BuildContext context, ReportProvider report) {
     final size = MediaQuery.of(context).size;
     return Container(
       height: 200,
@@ -497,16 +489,16 @@ class _ReportDetailState extends State<ReportDetail> {
                 carouselController: buttonCarouselController,
                 options: CarouselOptions(
                   onPageChanged: (value, item) {
-                    setState(() {
-                      _currentIndex = value;
-                    });
+                    // setState(() {
+                    _currentIndex = value;
+                    // });
                   },
                   height: double.infinity,
                   enableInfiniteScroll: false,
                   viewportFraction: 1.1,
                   initialPage: 0,
                 ),
-                items: _buildCarruselItems(context),
+                items: _buildCarruselItems(context, report),
               )),
           Positioned(
             top: 5,
@@ -550,7 +542,7 @@ class _ReportDetailState extends State<ReportDetail> {
                         )),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: _buildCarruselButtons(),
+                      children: _buildCarruselButtons(report),
                     ),
                     GestureDetector(
                         onTap: () {
@@ -568,11 +560,11 @@ class _ReportDetailState extends State<ReportDetail> {
     );
   }
 
-  List<Widget> _buildCarruselButtons() {
+  List<Widget> _buildCarruselButtons(ReportProvider report) {
     List<Widget> elements = new List<Widget>();
 
     int i = 0;
-    report.multimedias.forEach((element) {
+    report.reportSelected.multimedias.forEach((element) {
       elements.add(_carouselButton(i++));
     });
 
@@ -600,10 +592,11 @@ class _ReportDetailState extends State<ReportDetail> {
     );
   }
 
-  List<Widget> _buildCarruselItems(BuildContext context) {
+  List<Widget> _buildCarruselItems(
+      BuildContext context, ReportProvider report) {
     List<Widget> elements = new List<Widget>();
 
-    report.multimedias.forEach((element) {
+    report.reportSelected.multimedias.forEach((element) {
       elements.add(_carouselItem(context, element.ruta));
     });
 
@@ -621,14 +614,14 @@ class _ReportDetailState extends State<ReportDetail> {
         child: Image(
           fit: BoxFit.cover,
           image: image.isNotEmpty
-              ? NetworkImage(image)
+              ? NetworkImage(Config.apiImageBaseUrl + image)
               : Image.asset('assets/images/no_image.png').image,
         ),
       ),
     );
   }
 
-  Widget _flotingActionButton(BuildContext context) {
+  Widget _flotingActionButton(BuildContext context, ReportProvider report) {
     final size = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -645,7 +638,7 @@ class _ReportDetailState extends State<ReportDetail> {
             children: [
               IconButton(
                 onPressed: () {
-                  showRateDialog();
+                  showRateDialog(report, context);
                 },
                 icon: Icon(
                   Icons.ac_unit,
@@ -655,7 +648,7 @@ class _ReportDetailState extends State<ReportDetail> {
               ),
               IconButton(
                 onPressed: () {
-                  showCommentDialog();
+                  showCommentDialog(report, context);
                 },
                 icon: Icon(
                   Icons.message,
@@ -670,7 +663,7 @@ class _ReportDetailState extends State<ReportDetail> {
     );
   }
 
-  Widget _tutorial(BuildContext context) {
+  Widget _tutorial(BuildContext context, ReportProvider reports) {
     final size = MediaQuery.of(context).size;
     return Positioned(
         bottom: 5,
@@ -737,7 +730,7 @@ class _ReportDetailState extends State<ReportDetail> {
             ),
           ),
           onTap: () {
-            print('do nothing');
+            reports.hideTutorial();
           },
         ));
   }
@@ -746,10 +739,9 @@ class _ReportDetailState extends State<ReportDetail> {
     return AppLocalizations.of(context).translate(label);
   }
 
-  void showRateDialog() {
+  void showRateDialog(ReportProvider report, context) {
     print('show rate dialog');
     final size = MediaQuery.of(context).size;
-
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -771,7 +763,14 @@ class _ReportDetailState extends State<ReportDetail> {
                         children: [
                           RankingW(
                             afterRate: (value) {
-                              valorar(value);
+                              report
+                                  .valorar(value)
+                                  .then((value) =>
+                                      DialogHelper.showSimpleDialog(
+                                          context, 'Reporte evaluado'))
+                                  .catchError((e) =>
+                                      DialogHelper.showErrorDialog(
+                                          context, e.toString()));
                             },
                           )
                         ],
@@ -785,7 +784,7 @@ class _ReportDetailState extends State<ReportDetail> {
         });
   }
 
-  void showCommentDialog() {
+  void showCommentDialog(ReportProvider report, context) {
     print('show comment dialog');
     final size = MediaQuery.of(context).size;
 
@@ -810,7 +809,14 @@ class _ReportDetailState extends State<ReportDetail> {
                         children: [
                           CommentW(
                             afterComment: (value) {
-                              comenta(value);
+                              report
+                                  .comenta(value)
+                                  .then((value) =>
+                                      DialogHelper.showSimpleDialog(
+                                          context, 'Reporte comentado'))
+                                  .catchError((onError) =>
+                                      DialogHelper.showErrorDialog(
+                                          context, 'Error al comentar'));
                             },
                           )
                         ],
@@ -823,49 +829,5 @@ class _ReportDetailState extends State<ReportDetail> {
           );
         });
   }
-
-  void valorar(double copos) {
-    SnowinProvider()
-        .valorar(report.id.toString(), copos.round().toString())
-        .then((response) {
-      print('valorar: ');
-      print(response);
-      if (response['ok'] && response['data'] == true) {
-        setState(() {
-          _session.showReportDetailTutorial = false;
-          report.copos = copos.toString();
-          report.coposUsuarios = int.parse(report.coposUsuarios.toString()) + 1;
-        });
-        DialogHelper.showSimpleDialog(context, 'Reporte evaluado');
-      } else {
-        DialogHelper.showErrorDialog(context, response['data']['message']);
-        throw new Exception(response['data']['message']);
-      }
-    }).catchError((error) {
-      print(error.toString());
-    });
-  }
-
-  void comenta(String comment) {
-    print(comment);
-    SnowinProvider().comentario(report.id.toString(), comment).then((response) {
-      print('commenta: ');
-      print(response);
-      if (response['ok']) {
-        setState(() {
-          _session.showReportDetailTutorial = false;
-          report.cantComentarios =
-              int.parse(report.cantComentarios.toString()) + 1;
-        });
-        DialogHelper.showSimpleDialog(context, 'Reporte comentado');
-      } else {
-        DialogHelper.showErrorDialog(context, 'Error al comentar');
-        throw new Exception('Error al comentar');
-      }
-    }).catchError((error) {
-      print(error.toString());
-    });
-  }
 }
-
-typedef OnBackCallback = void Function();
+// typedef OnBackCallback = void Function();

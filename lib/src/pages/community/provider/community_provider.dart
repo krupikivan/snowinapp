@@ -2,10 +2,11 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:snowin/src/models/user.dart';
-import 'package:snowin/src/providers/snowin_provider.dart';
+import 'package:snowin/src/repository/community_repository.dart';
+import 'package:snowin/src/repository/snowin_repository.dart';
 import 'package:snowin/src/models/users_near.dart';
 
-class UserProvider with ChangeNotifier {
+class CommunityProvider with ChangeNotifier {
   //Get all users----------------
   List<User> _userList = [];
 
@@ -36,12 +37,12 @@ class UserProvider with ChangeNotifier {
   }
 
 //Initialize user provider-------------------
-  UserProvider.init() {
+  CommunityProvider.init() {
     getUsers();
   }
 
   void getUsers() {
-    SnowinProvider().getAllUsers().then((response) {
+    CommunityRepository().getAllUsers().then((response) {
       print(response);
       if (response['ok']) {
         compute(usersFromJson, response['data']['usuarios']).then((value) {

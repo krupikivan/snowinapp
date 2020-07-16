@@ -1,50 +1,71 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:snowin/src/share/preference.dart';
-
 import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/providers/connectivity_provider.dart';
 
-class RegisterProvider {
-  static final _prefs = new Preferences();
+class SnowinRepository {
+  static SnowinRepository _instance = new SnowinRepository._internal();
+  SnowinRepository._internal();
+  factory SnowinRepository() => _instance;
 
-  final Map<String, String> headers = {
+  static final _prefs = Preferences();
+
+  static const Map<String, String> _headers = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
-  //TODO: Cambiar
-  // final Map<String, String> securedHeaders = {
-  //   'Authorization': 'Bearer ' + _prefs.token
-  // };
-  final Map<String, String> securedHeaders = {
-    'Authorization':
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJzbm93aW4uY29tIiwiYXVkIjoic25vd2luLmNvbSIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNTk0NjQ4OTMyLCJleHAiOjE1OTQ4MjE3MzIsInVpZCI6MzF9.D4zNRISineQA49rmxhBys4pnQJmglYIFbxKCxfbsnn4'
+  static Map<String, String> _securedHeaders = {
+    'Authorization': 'Bearer ${_prefs.token}',
   };
 
-  static RegisterProvider _instance = new RegisterProvider._internal();
-  RegisterProvider._internal();
-  factory RegisterProvider() => _instance;
+  Map<String, String> get securedHeaders => _securedHeaders;
+  Map<String, String> get headers => _headers;
 
-  //terminos y condiciones
-  Future<Map> legal() async {
-    print('call end point: legal');
-
-    //configurar servicio
-    String service = Config.apiUrl + "legal";
-
-    //Respuesta
-    http.Response response;
-
+  Future<Map<String, dynamic>> obtenerwellcome() async {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.get(Uri.encodeFull(service), headers: headers);
+        final resp =
+            await http.get(Config.apiUrl + 'bienvenida', headers: headers);
+        if (resp.statusCode >= 200 && resp.statusCode <= 299) {
+          final decodeResp = json.decode(resp.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(resp);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      print(e.toString());
+      return retornarErrorDesconocido();
+    }
+  }
 
+  Future<Map> posicion(Position position) async {
+    //configurar servicio
+    String service = Config.apiUserPosicion;
+    //Respuesta
+    http.Response response;
+    Map body = {
+      'latitud': '${position.latitude}',
+      'longitud': '${position.longitude}',
+      'altura': '${position.altitude}'
+    };
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.post(Uri.encodeFull(service),
+            headers: _securedHeaders, body: body);
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
           return {
-            'ok': true,
+            'success': true,
             'data': (decodeResp == null) ? decodeResp : decodeResp['data']
           };
         } else {
@@ -58,13 +79,11 @@ class RegisterProvider {
     }
   }
 
-  //profile types
-  Future<Map> perfiles() async {
-    print('call end point: perfiles');
-    print(securedHeaders);
+  Future<Map> loadEmuns() async {
+    print('call end point: enums');
 
     //configurar servicio
-    String service = Config.apiUserData + "perfiles";
+    String service = Config.apiReportsUrl + "enums";
 
     //Respuesta
     http.Response response;
@@ -73,7 +92,7 @@ class RegisterProvider {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         response =
-            await http.get(Uri.encodeFull(service), headers: securedHeaders);
+            await http.get(Uri.encodeFull(service), headers: _securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -92,47 +111,11 @@ class RegisterProvider {
     }
   }
 
-  //save profile types
-  Future<Map> perfil(String perfil) async {
-    print('call end point: perfil');
-    print(perfil);
-    print(securedHeaders);
+  Future<Map> getUserLoginData() async {
+    print('call end point: Get user Login');
 
     //configurar servicio
-    String service = Config.apiUserUrl + "perfil";
-
-    //Respuesta
-    http.Response response;
-
-    try {
-      final conex = await ConnectivityProvider().check();
-      if (conex) {
-        response = await http.post(Uri.encodeFull(service),
-            body: {'perfil': perfil}, headers: securedHeaders);
-
-        if (response.statusCode >= 200 && response.statusCode <= 299) {
-          final decodeResp = json.decode(response.body);
-          return {
-            'ok': true,
-            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
-          };
-        } else {
-          return manejadorErroresResp(response);
-        }
-      } else {
-        return retornarErrorConexion();
-      }
-    } catch (e) {
-      return retornarErrorDesconocido();
-    }
-  }
-
-  //levels
-  Future<Map> niveles() async {
-    print('call end point: niveles');
-
-    //configurar servicio
-    String service = Config.apiUserUrl + "niveles";
+    String service = Config.apiUserUrl + _prefs.userid;
 
     //Respuesta
     http.Response response;
@@ -141,7 +124,7 @@ class RegisterProvider {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         response =
-            await http.get(Uri.encodeFull(service), headers: securedHeaders);
+            await http.get(Uri.encodeFull(service), headers: _securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
@@ -160,14 +143,15 @@ class RegisterProvider {
     }
   }
 
-  //save level
-  Future<Map> nivel(String nivel) async {
-    print('call end point: nivel');
-    print(nivel);
-    print(securedHeaders);
+  Future<Map> nearestUsers(String limit, String offset,
+      [String filters = '']) async {
+    print('call end point: usuarios-cercanos');
+    print(filters);
 
     //configurar servicio
-    String service = Config.apiUserData + "nivel";
+    String service = Config.apiUserUrl + "usuarios-cercanos";
+    service += '?limit=' + limit + '&offset=' + offset;
+    service += filters.isNotEmpty ? ('&' + filters) : '';
 
     //Respuesta
     http.Response response;
@@ -175,8 +159,8 @@ class RegisterProvider {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        response = await http.post(Uri.encodeFull(service),
-            body: {'nivel': nivel}, headers: securedHeaders);
+        response =
+            await http.get(Uri.encodeFull(service), headers: _securedHeaders);
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
