@@ -15,13 +15,13 @@ ThemeData themeData() {
       ),
       headline3: basic.bodyText1.copyWith(
           fontFamily: 'RobotoCondensed',
-          fontSize: 18,
+          fontSize: 16,
           color: Colors.grey[600],
-          fontWeight: FontWeight.w600),
+          fontWeight: FontWeight.w400),
       headline4: basic.bodyText1.copyWith(
         fontFamily: 'RobotoCondensed',
-        fontSize: 16,
-        color: Colors.grey[800],
+        fontSize: 14,
+        color: Colors.grey[500],
       ),
       headline5: basic.bodyText1.copyWith(
         fontFamily: 'RobotoCondensed',
@@ -49,6 +49,13 @@ ThemeData themeData() {
         fontFamily: 'RobotoCondensed',
         fontSize: 16,
         color: Colors.black,
+      ),
+      //Titulos del perfil
+      subtitle1: basic.bodyText1.copyWith(
+        fontFamily: 'RobotoCondensed',
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Color(0xff1d72b7),
       ),
     );
   }

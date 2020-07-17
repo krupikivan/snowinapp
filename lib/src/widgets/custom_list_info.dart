@@ -35,7 +35,7 @@ class CustomListInfo extends StatelessWidget {
                       )),
                     ]))
               : Text(
-                  info,
+                  info ?? '',
                   maxLines: 3,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,

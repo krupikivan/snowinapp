@@ -55,6 +55,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/profile');
+                      },
                       leading: Icon(
                         Icons.person,
                         color: Colors.white,

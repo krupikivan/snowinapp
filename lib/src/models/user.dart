@@ -103,6 +103,8 @@ class User {
         : "";
     this.actividad =
         data.containsKey('actividad') ? data['actividad'].toString() : "";
+    this.biografia =
+        data.containsKey('biografia') ? data['biografia'].toString() : "";
 
     this.visible =
         data.containsKey('visible') ? data['visible'].toString() : "";

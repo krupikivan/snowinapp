@@ -5,6 +5,7 @@ import 'package:snowin/src/pages/community/community.dart';
 import 'package:snowin/src/pages/community/user_chat.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
 import 'package:snowin/src/pages/drawer/export.dart';
+import 'package:snowin/src/pages/drawer/profile_page.dart';
 import 'package:snowin/src/pages/home/home.dart';
 import 'package:snowin/src/pages/sos/sos.dart';
 import 'package:snowin/src/pages/wellcome/wellcome_carousel.dart';
@@ -35,101 +36,107 @@ MaterialPageRoute getRoute(RouteSettings settings) {
   print(settings.name);
   switch (settings.name) {
     case '/wellcome':
-      return new MyCustomRoute(
-        builder: (_) => new WellcomeCarousel(),
+      return MyCustomRoute(
+        builder: (_) => WellcomeCarousel(),
         settings: settings,
       );
 
     case '/wellcome-conditions':
-      return new MyCustomRoute(
-        builder: (_) => new Conditions(),
+      return MyCustomRoute(
+        builder: (_) => Conditions(),
         settings: settings,
       );
 
     case '/wellcome-location':
-      return new MyCustomRoute(
-        builder: (_) => new Location(),
+      return MyCustomRoute(
+        builder: (_) => Location(),
         settings: settings,
       );
 
     case '/wellcome-profile-type':
-      return new MyCustomRoute(
-        builder: (_) => new ProfileType(),
+      return MyCustomRoute(
+        builder: (_) => ProfileType(),
         settings: settings,
       );
 
     case '/wellcome-level':
-      return new MyCustomRoute(
-        builder: (_) => new Level(),
+      return MyCustomRoute(
+        builder: (_) => Level(),
         settings: settings,
       );
 
     case '/wellcome-get-started':
-      return new MyCustomRoute(
-        builder: (_) => new GetStarted(),
+      return MyCustomRoute(
+        builder: (_) => GetStarted(),
         settings: settings,
       );
 
     case '/home':
-      return new MyCustomRoute(
-        builder: (_) => new Home(),
+      return MyCustomRoute(
+        builder: (_) => Home(),
         settings: settings,
       );
 
     case '/reports':
-      return new MyCustomRoute(
-        builder: (_) => new Reports(),
+      return MyCustomRoute(
+        builder: (_) => Reports(),
         settings: settings,
       );
 
     case '/pistes-map':
-      return new MyCustomRoute(
-        builder: (_) => new PistesMap(),
+      return MyCustomRoute(
+        builder: (_) => PistesMap(),
         settings: settings,
       );
-      
+
     case '/sos':
-      return new MyCustomRoute(
-        builder: (_) => new Sos(),
+      return MyCustomRoute(
+        builder: (_) => Sos(),
         settings: settings,
       );
 /**
  * *---------------------Navigator managing community pages
  */
     case '/community':
-      return new MyCustomRoute(
-        builder: (_) => new Community(),
+      return MyCustomRoute(
+        builder: (_) => Community(),
         settings: settings,
       );
 
     case '/userProfile':
-      return new MyCustomRoute(
-        builder: (_) => new UserProfile(),
+      return MyCustomRoute(
+        builder: (_) => UserProfile(),
         settings: settings,
       );
     case '/userChat':
-      return new MyCustomRoute(
-        builder: (_) => new UserChat(),
+      return MyCustomRoute(
+        builder: (_) => UserChat(),
         settings: settings,
       );
 /**
  * *---------------------Navigator managing drawer pages
  */
     case '/myBenefits':
-      return new MyCustomRoute(
-        builder: (_) => new MyBenefits(),
+      return MyCustomRoute(
+        builder: (_) => MyBenefits(),
+        settings: settings,
+      );
+
+    case '/profile':
+      return MyCustomRoute(
+        builder: (_) => ProfilePage(),
         settings: settings,
       );
 
     case '/myAwards':
-      return new MyCustomRoute(
-        builder: (_) => new MyAwards(),
+      return MyCustomRoute(
+        builder: (_) => MyAwards(),
         settings: settings,
       );
 
     case '/ask':
-      return new MyCustomRoute(
-        builder: (_) => new Ask(),
+      return MyCustomRoute(
+        builder: (_) => Ask(),
         settings: settings,
       );
 
@@ -137,20 +144,20 @@ MaterialPageRoute getRoute(RouteSettings settings) {
  * *---------------------Navigator managing benefits pages
  */
     case '/benefits':
-      return new MyCustomRoute(
-        builder: (_) => new Benefits(),
+      return MyCustomRoute(
+        builder: (_) => Benefits(),
         settings: settings,
       );
 
     case '/benefitDetail':
-      return new MyCustomRoute(
-        builder: (_) => new BenefitDetail(),
+      return MyCustomRoute(
+        builder: (_) => BenefitDetail(),
         settings: settings,
       );
 
     default:
-      return new MyCustomRoute(
-        builder: (_) => new WellcomeCarousel(),
+      return MyCustomRoute(
+        builder: (_) => WellcomeCarousel(),
         settings: settings,
       );
   }

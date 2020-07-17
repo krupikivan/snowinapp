@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:snowin/src/models/item_kv.dart';
 import 'package:snowin/src/models/report.dart';
@@ -323,8 +322,10 @@ class ReportProvider with ChangeNotifier {
       if (response['ok']) {
         final _castDataType = response['data'].cast<Map<String, dynamic>>();
         _list = _castDataType.map<Report>((json) => Report.map(json)).toList();
-        _allReports = _list;
-        notifyListeners();
+        if (response['data'].isNotEmpty) {
+          _allReports = _list;
+          notifyListeners();
+        }
       } else {
         throw new Exception('Error');
       }
@@ -370,8 +371,10 @@ class ReportProvider with ChangeNotifier {
       if (response['ok']) {
         final _castDataType = response['data'].cast<Map<String, dynamic>>();
         _list = _castDataType.map<Report>((json) => Report.map(json)).toList();
-        _allMyReports = _list;
-        notifyListeners();
+        if (response['data'].isNotEmpty) {
+          _allMyReports = _list;
+          notifyListeners();
+        }
       } else {
         throw new Exception('Error');
       }
