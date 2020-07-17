@@ -27,6 +27,8 @@ class Config {
       "https://apisnowin.alternativasinteligentes.com/user-beneficio";
   static const String apiTodosLosUsuarios =
       "https://apisnowin.alternativasinteligentes.com/user/usuarios-cercanos";
+  static const String apiUserProfileImage =
+      "https://apisnowin.alternativasinteligentes.com/user/multimedia";
 }
 // static const String apiKey = 'api_key';
 // static const String language = 'vi';

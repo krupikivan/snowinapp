@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
-
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
-
 import 'package:snowin/src/models/ski_center.dart';
 import 'package:snowin/src/models/pist.dart';
 import 'package:snowin/src/repository/report_repository.dart';
-
-import 'package:snowin/src/repository/snowin_repository.dart';
-
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
+
+import '../../widgets/custom_appbar_pages.dart';
+import '../../widgets/custom_drawer.dart';
 
 class PistesMap extends StatefulWidget {
   @override
@@ -24,17 +21,16 @@ class _PistesMapState extends State<PistesMap> {
   // UserProvider _session = new UserProvider();
 
   TextEditingController _controllerYouAre;
-  SkiCenter _center;
   List<Pist> _recomendedTraks = List<Pist>();
 
   @override
   void initState() {
     super.initState();
-
     _controllerYouAre = TextEditingController();
-    // detalleCentroSki();
   }
 
+  final GlobalKey<ScaffoldState> scaffoldDrawer =
+      new GlobalKey<ScaffoldState>();
   @override
   void dispose() {
     _controllerYouAre.dispose();
@@ -47,106 +43,62 @@ class _PistesMapState extends State<PistesMap> {
     final size = MediaQuery.of(context).size;
     final report = Provider.of<ReportProvider>(context, listen: false);
     return Scaffold(
-      body: SafeArea(
-          child: Container(
-        height: size.height,
-        child: Stack(
-          children: [
-            CustomAppbar(
-              context: context,
-              image:
-                  "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-              height: 70.0,
-              back: true,
-            ),
-            Positioned(
-              top: 70.0,
-              left: 0.0,
-              right: 0.0,
+      appBar: PreferredSize(
+          child: CustomAppbarPages(
+            scaffoldDrawer: scaffoldDrawer,
+            back: true,
+            context: context,
+            title: "MAPA DE PISTAS",
+          ),
+          preferredSize: Size(double.infinity, 70)),
+      drawerScrimColor: Colors.black54,
+      endDrawer: CustomDrawer(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    height: (size.height * 0.4) - 70,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          child: CustomTextField(
-                            width: size.width * 0.9,
-                            prefix: "Estas en ",
-                            controller: _controllerYouAre,
-                            readOnly: true,
-                          ),
-                        ),
-                        Container(
-                            padding: EdgeInsets.symmetric(horizontal: 30),
-                            child: AutoSizeText(
-                              "Las pistas que recomendamos según tu experiencia son",
-                              style: TextStyle(fontSize: 15),
-                              maxLines: 2,
-                            )),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Wrap(
-                            children: buildRecomendedTraks(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ),
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  CustomTextField(
+                    width: size.width * 0.9,
+                    prefix: "Estas en ",
+                    controller: _controllerYouAre,
+                    readOnly: true,
+                  ),
+                  AutoSizeText(
+                    "Las pistas que recomendamos según tu experiencia son",
+                    style: TextStyle(fontSize: 15),
+                    maxLines: 2,
                   ),
                   Container(
-                      color: Colors.blue,
-                      height: (size.height * 0.6) - 70,
-                      child: PhotoView(
-                        imageProvider: NetworkImage(
-                            "https://www.willflyforfood.net/wp-content/uploads/2017/12/oak-valley-snow-park-trail-map.jpg"),
-                        //imageProvider: NetworkImage("https://www.willflyforfood.net/wp-content/uploads/2017/12/oak-valley-snow-park-trail-map.jpg"),
-                      ))
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Wrap(
+                      children: buildRecomendedTraks(),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      )),
+          ),
+          Expanded(
+            flex: 2,
+            child: PhotoView(
+              minScale: PhotoViewComputedScale.contained * 0.8,
+              maxScale: PhotoViewComputedScale.covered * 2,
+              enableRotation: true,
+              backgroundDecoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+              ),
+              imageProvider: NetworkImage(
+                  "https://www.willflyforfood.net/wp-content/uploads/2017/12/oak-valley-snow-park-trail-map.jpg"),
+            ),
+          ),
+        ],
+      ),
     );
-  }
-
-//////////////////////////////////////////////////////////////Functions
-  Future<void> detalleCentroSki(ReportProvider report) async {
-    ReportRepository()
-        .detalleCentroSki(report.center.id.toString())
-        .then((response) {
-      print('detalle-centro-ski response: ');
-      print(response);
-      if (response['ok']) {
-        var data = response['data'];
-
-        setState(() {
-          _center = data['centro_ski'] != null
-              ? SkiCenter.map(data['centro_ski'])
-              : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
-          _recomendedTraks = List<Pist>();
-          if (data['pistas_recomendadas'] != null) {
-            final _castDataType =
-                data['pistas_recomendadas'].cast<Map<String, dynamic>>();
-            _recomendedTraks =
-                _castDataType.map<Pist>((json) => Pist.map(json)).toList();
-          }
-          _controllerYouAre.text = _center.name;
-        });
-      } else {
-        throw new Exception('Error');
-      }
-    }).catchError((error) {
-      print(error.toString());
-    });
   }
 
   List<Widget> buildRecomendedTraks() {
@@ -179,7 +131,6 @@ class _PistesMapState extends State<PistesMap> {
         height: 5,
       ));
     });
-
     return elements;
   }
 }

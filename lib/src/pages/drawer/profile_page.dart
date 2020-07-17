@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
 
+import '../../config/config.dart';
 import '../../widgets/custom_bottom_menu.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/custom_list_info.dart';
@@ -19,7 +20,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<UserProvider>(context);
     final reports = Provider.of<ReportProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,7 +75,7 @@ class ProfilePage extends StatelessWidget {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                  'https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/avat-01-512.png'))),
+                                  Config.apiImageBaseUrl + user.user.image))),
                     ),
                   ),
                   Text(

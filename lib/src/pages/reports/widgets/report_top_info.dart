@@ -13,13 +13,6 @@ class ReportTopInfo extends StatefulWidget {
 
 class _ReportTopInfoState extends State<ReportTopInfo> {
   bool _speedOn = false;
-  String _speed;
-
-  @override
-  void initState() {
-    super.initState();
-    _speed = '0.00';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +107,7 @@ class _ReportTopInfoState extends State<ReportTopInfo> {
               AutoSizeText(
                   _speedOn
                       ? '${userLocation.speed.toStringAsFixed(2)} Km/h'
-                      : '0.00 km/h',
+                      : '0.00 Km/h',
                   maxLines: 1,
                   style: TextStyle(fontSize: 15, color: Colors.white)),
             ],
