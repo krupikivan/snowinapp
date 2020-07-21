@@ -1,9 +1,9 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:snowin/src/models/solicitud.dart';
 import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/repository/community_repository.dart';
-import 'package:snowin/src/repository/snowin_repository.dart';
 import 'package:snowin/src/models/users_near.dart';
 
 class CommunityProvider with ChangeNotifier {
@@ -36,13 +36,49 @@ class CommunityProvider with ChangeNotifier {
     notifyListeners();
   }
 
-//Initialize user provider-------------------
-  CommunityProvider.init() {
-    getUsers();
+  //Manage Limit fetching------------------------------
+  int _limit;
+  int get limit => _limit;
+  set limit(int value) {
+    _limit = value;
+    notifyListeners();
   }
 
-  void getUsers() {
-    CommunityRepository().getAllUsers().then((response) {
+  int _page;
+  int get page => _page;
+  set page(int value) {
+    _page = value;
+    notifyListeners();
+  }
+
+  List<Solicitud> _solicitudesEnviadas;
+  List<Solicitud> get solicitudesEnviadas => _solicitudesEnviadas;
+  set solicitudesEnviadas(List<Solicitud> value) {
+    _solicitudesEnviadas = value;
+    notifyListeners();
+  }
+
+//Initialize user provider-------------------
+  CommunityProvider.init() {
+    initiateData();
+    getUsers();
+    getSolicitudesEnviadas();
+  }
+
+  initiateData() {
+    _page = 0;
+    _limit = 10;
+  }
+
+  void getUsers({int limit, int page}) {
+    int offset = (page ?? _page) * (limit ?? _limit);
+    int lim = (limit ?? _limit);
+    CommunityRepository()
+        .nearestUsers(
+      lim.toString(),
+      offset.toString(),
+    )
+        .then((response) {
       print(response);
       if (response['ok']) {
         compute(usersFromJson, response['data']['usuarios']).then((value) {
@@ -55,6 +91,47 @@ class CommunityProvider with ChangeNotifier {
     }).catchError((error) {
       print(error.toString());
     });
+  }
+
+  void getSolicitudesEnviadas() {
+    List<Solicitud> _list = [];
+    CommunityRepository().getSolicitudesEnviadas().then((response) {
+      print(response);
+      if (response['ok']) {
+        response['data']['data']
+            .forEach((element) => _list.add(Solicitud.fromJson(element)));
+        _solicitudesEnviadas = _list;
+        notifyListeners();
+      } else {
+        throw new Exception('Error');
+      }
+    }).catchError((error) {
+      print(error.toString());
+    });
+  }
+
+  Future<bool> enviarSolicitud() async {
+    var response = await CommunityRepository().enviarSolicitud(_userTapped.id);
+    if (response['ok']) {
+      _solicitudesEnviadas.add(Solicitud.fromJson(response['data']));
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> eliminarSolicitud() async {
+    var solicitud = _solicitudesEnviadas
+        .firstWhere((element) => element.destinoId == _userTapped.id);
+    var response = await CommunityRepository().eliminarSolicitud(solicitud.id);
+    if (response['ok']) {
+      _solicitudesEnviadas.remove(solicitud);
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   //Get all users----------------

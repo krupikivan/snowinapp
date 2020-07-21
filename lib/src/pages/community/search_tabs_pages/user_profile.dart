@@ -8,26 +8,12 @@ import 'package:snowin/src/widgets/custom_fab_icon.dart';
 import 'package:snowin/src/widgets/custom_list_info.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 
-class UserProfile extends StatefulWidget {
-  UserProfile({Key key}) : super(key: key);
-
-  @override
-  _UserProfileState createState() => _UserProfileState();
-}
-
-class _UserProfileState extends State<UserProfile> {
-  bool _inviteSent;
+class UserProfile extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldDrawer =
       new GlobalKey<ScaffoldState>();
   @override
-  void initState() {
-    super.initState();
-    _inviteSent = false;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final user = Provider.of<CommunityProvider>(context, listen: false);
+    final user = Provider.of<CommunityProvider>(context);
     return Scaffold(
       key: scaffoldDrawer,
       appBar: PreferredSize(
@@ -73,11 +59,28 @@ class _UserProfileState extends State<UserProfile> {
                 right: 20,
                 bottom: -20,
                 child: CustomFabIcon(
-                  heroTag: 'btnProfileFriend',
-                  isPrimary: !_inviteSent,
-                  icon: Icons.person_add,
-                  action: () => _inviteSent ? null : _showPopup(context),
-                ),
+                    heroTag: 'btnProfileFriend',
+                    isPrimary: user.solicitudesEnviadas
+                            .where((value) =>
+                                value.destinoId == user.userTapped.id)
+                            .isNotEmpty
+                        ? false
+                        : true,
+                    icon: Icons.person_add,
+                    action: () async {
+                      if (user.solicitudesEnviadas
+                          .where(
+                              (value) => value.destinoId == user.userTapped.id)
+                          .isEmpty) {
+                        if (await user.enviarSolicitud()) {
+                          _showPopup(context, 'Solicitud de amistad enviada');
+                        }
+                      } else {
+                        if (await user.eliminarSolicitud()) {
+                          _showPopup(context, 'Solicitud de amistad eliminada');
+                        }
+                      }
+                    }),
               )
             ],
           ),
@@ -90,10 +93,7 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  _showPopup(context) {
-    setState(() {
-      _inviteSent = true;
-    });
+  _showPopup(context, text) {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -114,7 +114,7 @@ class _UserProfileState extends State<UserProfile> {
           width: MediaQuery.of(context).size.width / 1.3,
           child: ListTile(
             title: Text(
-              'Solicitud de amistad enviada',
+              text,
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
