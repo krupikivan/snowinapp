@@ -10,8 +10,6 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  bool isSwitched = true;
-
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -73,23 +71,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ],
             ),
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: _drawerListTextStyle(
-                    'Visible', Icons.lock_open, null, isSwitched),
-              ),
-              Switch(
-                value: isSwitched,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                  });
-                },
-                activeColor: Theme.of(context).primaryColor,
-                activeTrackColor: Theme.of(context).primaryColorLight,
-              ),
-            ],
+          Consumer<UserProvider>(
+            builder: (context, user, _) => user.user == null
+                ? SizedBox()
+                : Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: _drawerListTextStyle('Visible', Icons.lock_open,
+                            null, user.user.visible == "1" ? true : false),
+                      ),
+                      Switch(
+                        value: user.user.visible == "1" ? true : false,
+                        onChanged: (value) {
+                          user.changeVisible(value);
+                        },
+                        activeColor: Theme.of(context).primaryColor,
+                        activeTrackColor: Theme.of(context).primaryColorLight,
+                      ),
+                    ],
+                  ),
           ),
           _drawerListTextStyle('Mis beneficios', Icons.label, 4, false),
           _drawerListTextStyle('Mis premios', Icons.mood, 5, false),

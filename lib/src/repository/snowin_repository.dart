@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:snowin/src/share/preference.dart';
@@ -10,6 +11,7 @@ class SnowinRepository {
   static SnowinRepository _instance = new SnowinRepository._internal();
   SnowinRepository._internal();
   factory SnowinRepository() => _instance;
+  Dio dio = Dio();
 
   static final _prefs = Preferences();
 
@@ -125,7 +127,6 @@ class SnowinRepository {
       if (conex) {
         response =
             await http.get(Uri.encodeFull(service), headers: _securedHeaders);
-
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
           return {
@@ -224,6 +225,216 @@ class SnowinRepository {
             'Ha ocurrido un error! Inténtelo más tarde.'
       });
       return {'ok': false, 'errores': result};
+    }
+  }
+
+  Future<Map> actualizarBio(String text) async {
+    //configurar servicio
+    String service = Config.apiUserUrl + 'actualizar-biografia';
+    //Respuesta
+    http.Response response;
+    Map body = {
+      'texto': '$text',
+    };
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.post(Uri.encodeFull(service),
+            headers: _securedHeaders, body: body);
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'success': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> actualizarUserImage(String url) async {
+    //configurar servicio
+    String service = Config.apiUserUrl + 'actualizar-foto';
+    //Respuesta
+    var response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        var request = http.MultipartRequest('POST', Uri.parse(service));
+        request.files.add(await http.MultipartFile.fromPath('foto', url));
+        request.headers['Authorization'] = securedHeaders['Authorization'];
+        response = await request.send();
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          return {
+            'ok': true,
+            // 'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> actualizarNivel(String text) async {
+    //configurar servicio
+    String service = Config.apiUserUrl + 'nivel';
+    //Respuesta
+    http.Response response;
+    Map body = {
+      'nivel': '$text',
+    };
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.post(Uri.encodeFull(service),
+            headers: _securedHeaders, body: body);
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'success': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> actualizarActividad(String text) async {
+    //configurar servicio
+    String service = Config.apiUserUrl + 'perfil';
+    //Respuesta
+    http.Response response;
+    Map body = {
+      'perfil': '$text',
+    };
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.post(Uri.encodeFull(service),
+            headers: _securedHeaders, body: body);
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'success': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> cambiarVisibilidad(String visible) async {
+    //configurar servicio
+    String service = Config.apiUserUrl + 'cambiar-visibilidad?visible=$visible';
+    //Respuesta
+    http.Response response;
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response =
+            await http.post(Uri.encodeFull(service), headers: _securedHeaders);
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'success': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> getNiveles() async {
+    print('call end point: niveles');
+
+    //configurar servicio
+    String service = Config.apiUserUrl + "niveles";
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response =
+            await http.get(Uri.encodeFull(service), headers: _securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> getPerfiles() async {
+    print('call end point: actividad');
+
+    //configurar servicio
+    String service = Config.apiUserUrl + "perfiles";
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response =
+            await http.get(Uri.encodeFull(service), headers: _securedHeaders);
+
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
     }
   }
 
