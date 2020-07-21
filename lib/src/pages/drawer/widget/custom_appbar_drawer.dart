@@ -27,7 +27,8 @@ class CustomAppbarDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/reports'),
                   icon: Icon(
                     Icons.arrow_back,
                     size: 30,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:snowin/src/config/config.dart';
+import 'package:snowin/src/pages/reports/reports.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:snowin/src/share/preference.dart';
@@ -91,6 +92,10 @@ class _SplashScreenState extends State<SplashScreen>
     if (_preferences.token.toString().isNotEmpty) {
       print('token found: ' + _preferences.token.toString());
       print('go to reports page');
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => Reports()),
+      // );
       Navigator.pushNamed(context, '/reports');
     } else {
       print('no token found, go to registration page');

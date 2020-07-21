@@ -445,7 +445,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
 
       //cargar amigos cerca
       var show = await reports.fetchClosestFriends();
-      if (show != null && show) {
+      if (show != null && show && !reports.showed) {
+        reports.showed = true;
         showWarningsDialog();
       }
       //.then((value) {

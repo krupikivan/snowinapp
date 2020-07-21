@@ -34,6 +34,7 @@ class ReportProvider with ChangeNotifier {
     _dialogTopVisible = false;
     _shareFacebook = false;
     _shareInstagram = false;
+    _showed = false;
     _title = '';
     _comment = '';
     _calidadNieve = '';
@@ -78,6 +79,14 @@ class ReportProvider with ChangeNotifier {
   bool get mounted => _mounted;
   set mounted(bool report) {
     _mounted = report;
+    notifyListeners();
+  }
+
+//Scroll mounted------------------------------
+  bool _showed;
+  bool get showed => _showed;
+  set showed(bool value) {
+    _showed = value;
     notifyListeners();
   }
 
