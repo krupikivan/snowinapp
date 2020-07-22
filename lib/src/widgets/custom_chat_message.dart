@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:snowin/src/models/message.dart';
 import 'package:snowin/src/widgets/bubble_chat.dart';
 
 class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.animationController, this.name});
-  final String text;
+  ChatMessage({this.message, this.animationController, this.fecha});
+  final Message message;
   final AnimationController animationController;
-  final String name;
+  final String fecha;
   BubbleStyle styleSomebody;
   BubbleStyle styleMe;
 
@@ -23,16 +24,22 @@ class ChatMessage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Hoy ${DateFormat('HH:mm').format(DateTime.now())}',
-                style: Theme.of(context).textTheme.headline5),
+            Text(_parseDate(), style: Theme.of(context).textTheme.headline5),
             Text(
-              text,
+              message.mensaje,
               style: Theme.of(context).textTheme.headline6,
             ),
           ],
         ),
       ),
     );
+  }
+
+  _parseDate() {
+    var dt = DateTime.parse(fecha);
+    var hora = DateFormat('hh:mm').format(dt);
+    var date = DateFormat('dd/MM').format(dt);
+    return '$date  $hora';
   }
 
   //-----------------------Styling message-----------------------

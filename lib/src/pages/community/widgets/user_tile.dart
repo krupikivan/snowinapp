@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
+import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provider.dart';
 import 'package:snowin/src/pages/community/widgets/user_avatar.dart';
 
 class UserTile extends StatelessWidget {
@@ -18,6 +20,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(context) {
+    final chat = Provider.of<ChatProvider>(context, listen: false);
     final User user = userProvider.users.usuarios[index];
     return Container(
       width: size.width,
@@ -44,6 +47,7 @@ class UserTile extends StatelessWidget {
           ),
           onTap: () {
             userProvider.userTapped = user;
+            chat.getMensajes(id: user.id);
             Navigator.pushNamed(context, '/userChat');
           }),
     );

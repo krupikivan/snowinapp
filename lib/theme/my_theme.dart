@@ -70,7 +70,7 @@ ThemeData themeData() {
     hoverColor: Color.fromRGBO(0, 0, 0, 0.7),
     disabledColor: Colors.grey[600],
     highlightColor: Color.fromRGBO(200, 205, 208, 1), //Icon from bottom bar nav
-    accentColor: Color.fromRGBO(255, 216, 52, 1), //Color from notification icon
+    accentColor: Color.fromRGBO(15, 83, 137, 1), //Color from notification icon
     errorColor: Color(0xffed1c24),
   );
 }

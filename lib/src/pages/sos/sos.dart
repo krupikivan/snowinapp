@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/sos/widget/appbar_sos.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,6 +24,7 @@ class _SosState extends State<Sos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldDrawer,
       appBar: PreferredSize(
           child: AppBarSos(
             scaffoldDrawer: scaffoldDrawer,
@@ -118,6 +121,7 @@ class _SosState extends State<Sos> {
   }
 
   Widget clickedTrue() {
+    final position = Provider.of<Position>(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 40, 10, 20),
       child: Column(
@@ -152,12 +156,12 @@ class _SosState extends State<Sos> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      _getLatLng('Latitud', "-32° 56' 35.11''"),
+                      _getLatLng('Latitud', position),
                       Divider(
                         color: Colors.black,
                         thickness: 1,
                       ),
-                      _getLatLng('Longitud', "-80° 39' 47.24''")
+                      _getLatLng('Longitud', position)
                     ],
                   ),
                 ),
@@ -212,7 +216,7 @@ class _SosState extends State<Sos> {
     );
   }
 
-  Widget _getLatLng(String title, String ltlng) {
+  Widget _getLatLng(String title, Position position) {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Row(
@@ -227,7 +231,9 @@ class _SosState extends State<Sos> {
                 fontWeight: FontWeight.w600),
           ),
           Text(
-            ltlng,
+            title == 'Latitud'
+                ? position.latitude.toString()
+                : position.longitude.toString(),
             style: TextStyle(fontSize: 23),
           ),
         ],
