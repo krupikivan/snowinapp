@@ -47,16 +47,13 @@ class FabWidget extends StatelessWidget {
                       heroTag: "btn1",
                       isPrimary: false,
                       icon: Icons.filter_list,
-                      action: () => !report.conexion
-                          ? showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) => FilterDialog(
-                                size: size,
-                              ),
-                            )
-                          : DialogHelper.showSimpleDialog(
-                              context, 'Revise su conexion a internet')),
+                      action: () => showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) => FilterDialog(
+                              size: size,
+                            ),
+                          )),
                   SizedBox(
                     width: 10,
                   ),
@@ -64,26 +61,23 @@ class FabWidget extends StatelessWidget {
                     heroTag: "btn2",
                     isPrimary: true,
                     icon: Icons.add,
-                    action: () => !report.conexion
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => NewReport(
-                                  // youAre: report.center.name.toString(),
-                                  // trackItems: report.trackItems,
-                                  // calidadNieveItems: report.calidadNieveItems,
-                                  // climaItems: report.climaItems,
-                                  // vientoItems: report.vientoItems,
-                                  // sensacionGeneralItems:
-                                  //     report.sensacionGeneralItems,
-                                  // esperaMediosItems: report.esperaMediosItems,
-                                  // onSend: () {
-                                  // report.refreshing(mounted);
-                                  // },
-                                  ),
-                            ))
-                        : DialogHelper.showSimpleDialog(
-                            context, 'Revise su conexion a internet'),
+                    action: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => NewReport(
+                              // youAre: report.center.name.toString(),
+                              // trackItems: report.trackItems,
+                              // calidadNieveItems: report.calidadNieveItems,
+                              // climaItems: report.climaItems,
+                              // vientoItems: report.vientoItems,
+                              // sensacionGeneralItems:
+                              //     report.sensacionGeneralItems,
+                              // esperaMediosItems: report.esperaMediosItems,
+                              // onSend: () {
+                              // report.refreshing(mounted);
+                              // },
+                              ),
+                        )),
                   ),
                   SizedBox(
                     width: 10,

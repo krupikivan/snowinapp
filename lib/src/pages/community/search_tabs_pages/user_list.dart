@@ -1,7 +1,12 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
+import 'package:snowin/src/widgets/error_connection.dart';
 import '../widgets/user_tile.dart';
+import 'package:snowin/src/providers/connectivity_provider.dart';
 
 class UserList extends StatefulWidget {
   UserList({Key key}) : super(key: key);
@@ -23,31 +28,31 @@ class _UserListState extends State<UserList> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Consumer<CommunityProvider>(
-      builder: (context, user, _) => user.users != null
-          ? Expanded(
-              child: ListView.separated(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(5.0),
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: user.users.cantidadUsuarios,
-                itemBuilder: (BuildContext context, int index) => UserTile(
-                    context: context,
-                    size: size,
-                    userProvider: user,
-                    index: index),
-                separatorBuilder: (BuildContext context, int index) => Divider(
-                  color: Colors.black,
-                  height: 1,
+        builder: (context, user, _) => user.users != null
+            ? Expanded(
+                child: ListView.separated(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(5.0),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: user.users.cantidadUsuarios,
+                  itemBuilder: (BuildContext context, int index) => UserTile(
+                      context: context,
+                      size: size,
+                      userProvider: user,
+                      index: index),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(
+                    color: Colors.black,
+                    height: 1,
+                  ),
                 ),
-              ),
-            )
-          : user.hasConnection
-              ? CircularProgressIndicator()
-              : ListTile(
-                  title: Text('Verifique su conexion'),
-                ),
-    );
+              )
+            : user.loading
+                ? CircularProgressIndicator()
+                : ListTile(
+                    title: Text('No hay usuarios cercanos'),
+                  ));
   }
 
   void scrollListener() {

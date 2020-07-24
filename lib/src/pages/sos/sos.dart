@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/sos/widget/appbar_sos.dart';
 import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/utils/dialogs.dart';
@@ -124,7 +125,7 @@ class _SosState extends State<Sos> {
 
   Widget clickedTrue() {
     final position = Provider.of<Position>(context);
-    final user = Provider.of<UserProvider>(context);
+    final conex = Provider.of<ConnectionStatus>(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 40, 10, 20),
       child: Column(
@@ -175,7 +176,7 @@ class _SosState extends State<Sos> {
               Icons.people,
               Colors.yellow,
               'AVISAR A AMIGOS',
-              () => user.hasConnection
+              () => conex.status == Status.HasConnection
                   ? _showPopup()
                   : DialogHelper.showSimpleDialog(
                       context, 'Revise su conexion a internet'),

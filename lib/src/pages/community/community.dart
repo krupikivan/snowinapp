@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/community/search_tab.dart';
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/pages/community/notification_tab_pages/notifications_list_tab.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
+import 'package:snowin/src/widgets/error_connection.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -31,6 +34,7 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final conex = Provider.of<ConnectionStatus>(context);
     return WillPopScope(
       child: Scaffold(
         bottomNavigationBar: CustomBottomMenu(
@@ -90,13 +94,16 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
                                 48 +
                                 75 +
                                 10), //El alto de la pantalla menos el AppBar, Tabs y MainMenu
-                        child: TabBarView(
-                            physics: NeverScrollableScrollPhysics(),
-                            controller: _tabControllerCommunity,
-                            children: <Widget>[
-                              NotificationsListTab(),
-                              SearchTab(),
-                            ]),
+                        child: conex != null &&
+                                conex.status == Status.HasConnection
+                            ? TabBarView(
+                                physics: NeverScrollableScrollPhysics(),
+                                controller: _tabControllerCommunity,
+                                children: <Widget>[
+                                    NotificationsListTab(),
+                                    SearchTab(),
+                                  ])
+                            : ErrorConnection(),
                       )
                     ],
                   ),

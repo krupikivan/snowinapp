@@ -48,7 +48,6 @@ class ReportProvider with ChangeNotifier {
     _page = 0;
     _medias = [];
     _mounted = false;
-    _conexion = false;
   }
 
 //Manage Ski center------------------------------
@@ -80,14 +79,6 @@ class ReportProvider with ChangeNotifier {
   bool get mounted => _mounted;
   set mounted(bool value) {
     _mounted = value;
-    notifyListeners();
-  }
-
-//Handle conection error------------------------------
-  bool _conexion;
-  bool get conexion => _conexion;
-  set conexion(bool value) {
-    _conexion = value;
     notifyListeners();
   }
 
@@ -339,7 +330,6 @@ class ReportProvider with ChangeNotifier {
       print('reporte/listar response: ');
       print(response);
       if (response['ok']) {
-        _conexion = false;
         final _castDataType = response['data'].cast<Map<String, dynamic>>();
         _list = _castDataType.map<Report>((json) => Report.map(json)).toList();
         if (response['data'].isNotEmpty) {
@@ -347,10 +337,6 @@ class ReportProvider with ChangeNotifier {
           notifyListeners();
         }
       } else {
-        if (response['errores'][0]['field'] == 'error_conexion') {
-          _conexion = true;
-          notifyListeners();
-        }
         throw new Exception('Error');
       }
     }).catchError((error) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/reports/widgets/report_top_info.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/utils/dialogs.dart';
@@ -13,6 +14,7 @@ import 'package:snowin/src/pages/reports/my_report_tab/my_reports_list_tab.dart'
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/pages/reports/widgets/dialog_bottom_content.dart';
 import 'package:snowin/src/pages/reports/widgets/dialog_top_content.dart';
+import 'package:snowin/src/widgets/error_connection.dart';
 
 class Reports extends StatefulWidget {
   @override
@@ -45,6 +47,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     // if (reports.showReportWarnning) {
     //   showWarningsDialog();
     // }
+    final conex = Provider.of<ConnectionStatus>(context);
     return WillPopScope(
       child: Scaffold(
         bottomNavigationBar: CustomBottomMenu(
@@ -113,13 +116,16 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
                                 48 +
                                 75 +
                                 70), //El alto de la pantalla menos el AppBar, topInfo, Tabs y MainMenu
-                        child: TabBarView(
-                            controller: _tabControllerReports,
-                            children: <Widget>[
-                              ReportsListTab(),
-                              RankingListTab(),
-                              MyReportsListTab(),
-                            ]),
+                        child: conex != null &&
+                                conex.status == Status.HasConnection
+                            ? TabBarView(
+                                controller: _tabControllerReports,
+                                children: <Widget>[
+                                    ReportsListTab(),
+                                    RankingListTab(),
+                                    MyReportsListTab(),
+                                  ])
+                            : ErrorConnection(),
                       )
                     ],
                   ),

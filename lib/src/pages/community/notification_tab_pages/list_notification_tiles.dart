@@ -26,9 +26,7 @@ class ListNotificationTiles extends StatelessWidget {
                   title: Text('Buscando ...'),
                 )
               : ListTile(
-                  title: Text(!notif.hasConnection
-                      ? 'Verifique su conexion'
-                      : 'No hay registros'),
+                  title: Text('No hay registros'),
                 ),
     );
   }

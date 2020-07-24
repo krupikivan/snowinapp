@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_image.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_loading_image.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/widgets/custom_icon_button.dart';
+import 'package:snowin/src/widgets/error_connection.dart';
 import 'package:snowin/src/widgets/thumbnail.dart';
 
 import '../../config/config.dart';
@@ -33,6 +35,7 @@ class ProfilePage extends StatelessWidget {
     final user = Provider.of<UserProvider>(context);
     final reports = Provider.of<ReportProvider>(context, listen: false);
     final _prefs = Preferences();
+    final conex = Provider.of<ConnectionStatus>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       key: scaffoldDrawer,
@@ -44,138 +47,131 @@ class ProfilePage extends StatelessWidget {
             title: "MI PERFIL",
           ),
           preferredSize: Size(double.infinity, 70)),
-      body: SingleChildScrollView(
-        child: user.hasConnection
-            ? Stack(
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.zero,
-                    decoration: BoxDecoration(color: Colors.black),
-                    height: size.height * 0.18,
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 20, bottom: 10),
-                      child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: IconButton(
-                            icon: Icon(Icons.edit, color: Colors.white),
-                            onPressed: () {
-                              _controller.text = user.user.username;
-                              _showPopupProfile(context, user);
-                            },
-                          )),
-                    ),
+      body: conex != null && conex.status == Status.HasConnection
+          ? Stack(
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.zero,
+                  decoration: BoxDecoration(color: Colors.black),
+                  height: size.height * 0.18,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 20, bottom: 10),
+                    child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                          icon: Icon(Icons.edit, color: Colors.white),
+                          onPressed: () {
+                            _controller.text = user.user.username;
+                            _showPopupProfile(context, user);
+                          },
+                        )),
                   ),
-                  SafeArea(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: size.height * 0.05,
+                ),
+                SafeArea(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: size.height * 0.05,
+                      ),
+                      Text(
+                        'Nombre de Usuario',
+                        style: TextStyle(color: Colors.grey[400], fontSize: 15),
+                      ),
+                      Text(
+                        user.user.username,
+                        style: TextStyle(color: Colors.grey[400], fontSize: 30),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Center(
+                        child: user.loading ? UserLoadingImage() : UserImage(),
+                      ),
+                      Text(
+                        'PERFIL PUBLICO EN SNOWIN',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                      ..._buildUserInfoData(user, context, _controller),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'MIS REPORTES',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      CustomRowData(
+                        title1: 'Publicados',
+                        num1: reports.allMyReports.length,
+                        title2: 'Puntos',
+                        num2: user.user.puntos,
+                        title3: 'Ranking',
+                        num3: user.user.ranking,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'COMUNIDAD',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      CustomRowData(
+                        title1: 'Amigos',
+                        num1: 10,
+                        title2: 'Mensajes',
+                        num2: 5,
+                        title3: 'Solicitudes',
+                        num3: user.user.ranking,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'MI CUENTA',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Column(
+                          children: <Widget>[
+                            AccountDetailTile(
+                              title: 'Notificaciones',
+                              action: () => null,
+                            ),
+                            AccountDetailTile(
+                              title: 'Privacidad',
+                              action: () => null,
+                            ),
+                            AccountDetailTile(
+                              title: 'Reportar un problema',
+                              action: () => null,
+                            ),
+                            AccountDetailTile(
+                              title: 'Salir de mi cuenta',
+                              action: () => null,
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Nombre de Usuario',
-                          style:
-                              TextStyle(color: Colors.grey[400], fontSize: 15),
-                        ),
-                        Text(
-                          user.user.username,
-                          style:
-                              TextStyle(color: Colors.grey[400], fontSize: 30),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Center(
-                          child:
-                              user.loading ? UserLoadingImage() : UserImage(),
-                        ),
-                        Text(
-                          'PERFIL PUBLICO EN SNOWIN',
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        ..._buildUserInfoData(user, context, _controller),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'MIS REPORTES',
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        CustomRowData(
-                          title1: 'Publicados',
-                          num1: reports.allMyReports.length,
-                          title2: 'Puntos',
-                          num2: user.user.puntos,
-                          title3: 'Ranking',
-                          num3: user.user.ranking,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'COMUNIDAD',
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        CustomRowData(
-                          title1: 'Amigos',
-                          num1: 10,
-                          title2: 'Mensajes',
-                          num2: 5,
-                          title3: 'Solicitudes',
-                          num3: user.user.ranking,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'MI CUENTA',
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Column(
-                            children: <Widget>[
-                              AccountDetailTile(
-                                title: 'Notificaciones',
-                                action: () => null,
-                              ),
-                              AccountDetailTile(
-                                title: 'Privacidad',
-                                action: () => null,
-                              ),
-                              AccountDetailTile(
-                                title: 'Reportar un problema',
-                                action: () => null,
-                              ),
-                              AccountDetailTile(
-                                title: 'Salir de mi cuenta',
-                                action: () => null,
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              )
-            : ListTile(
-                title: Text('Verifique su conexion'),
-              ),
-      ),
+                ),
+              ],
+            )
+          : ErrorConnection(),
       drawerScrimColor: Colors.black54,
       endDrawer: CustomDrawer(),
       bottomNavigationBar: CustomBottomMenu(

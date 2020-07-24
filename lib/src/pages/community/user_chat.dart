@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/models/message.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
+import 'package:snowin/src/utils/dialogs.dart';
 import 'package:snowin/src/widgets/custom_appbar_chat.dart';
 import 'package:snowin/src/widgets/custom_chat_message.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
@@ -105,6 +107,7 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
 
 // Input text message
   Widget _buildTextComposer(ChatProvider chat, int userId) {
+    final conex = Provider.of<ConnectionStatus>(context).status;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
       child: Row(children: <Widget>[
@@ -130,7 +133,9 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
           ),
         ),
         InkWell(
-          onTap: () => _send(chat, userId),
+          onTap: () => conex == Status.HasConnection
+              ? _send(chat, userId)
+              : DialogHelper.showSimpleDialog(context, 'Verifique su conexion'),
           child: Container(
               margin: EdgeInsets.all(10.0),
               child: CircleAvatar(
@@ -147,8 +152,7 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
     if (_textController.text.isNotEmpty) {
       chat
           .sendMessage(_textController.text, userId)
-          .then((value) => value ? _textController.clear() : print(''))
-          .catchError((onError) => ShowToast().show('No hay conexion', 5));
+          .then((value) => value ? _textController.clear() : print(''));
     } else {
       print('Text:' + _textController.text.isNotEmpty.toString());
     }

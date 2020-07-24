@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 
 class CustomAppbar extends StatelessWidget {
   final BuildContext context;
@@ -19,6 +22,7 @@ class CustomAppbar extends StatelessWidget {
   @override
   Widget build(context) {
     final size = MediaQuery.of(context).size;
+    final conex = Provider.of<ConnectionStatus>(context);
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[800],
@@ -35,12 +39,14 @@ class CustomAppbar extends StatelessWidget {
       height: height,
       child: Stack(
         children: [
-          Image(
+          // conex.status == Status.HasConnection ?
+          CachedNetworkImage(
             width: double.infinity,
             height: 70,
-            image: NetworkImage(image),
+            imageUrl: image,
             fit: BoxFit.cover,
           ),
+          // : SizedBox(),
           Container(
             height: 70,
             color: Color.fromRGBO(74, 74, 73, 0.8),

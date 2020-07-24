@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:snowin/src/models/solicitud.dart';
 import 'package:snowin/src/models/user.dart';
@@ -52,6 +51,14 @@ class CommunityProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //Manage Loading data------------------------------
+  bool _loading;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
+
   List<Solicitud> _solicitudesEnviadas;
   List<Solicitud> get solicitudesEnviadas => _solicitudesEnviadas;
   set solicitudesEnviadas(List<Solicitud> value) {
@@ -69,6 +76,7 @@ class CommunityProvider with ChangeNotifier {
   initiateData() {
     _limit = 10;
     _hasConnection = true;
+    _loading = true;
   }
 
   loadMore() {
@@ -78,6 +86,8 @@ class CommunityProvider with ChangeNotifier {
   void getUsers({int sum}) {
     int offset = 0;
     _limit = sum != null ? _limit + sum : _limit;
+    _loading = true;
+    notifyListeners();
     print('Limite: $_limit');
     CommunityRepository()
         .nearestUsers(
@@ -87,17 +97,24 @@ class CommunityProvider with ChangeNotifier {
         .then((response) {
       print(response);
       if (response['ok']) {
-        _hasConnection = true;
-        compute(usersFromJson, response['data']['usuarios']).then((value) {
-          _users = UsersNear.fromJson(response['data'], value);
+        if (response['data']['name'] == 'Unauthorized') {
+          _hasConnection = true;
+          _loading = false;
           notifyListeners();
-        });
-      } else {
-        if (response['errores'][0]['field'] == 'error_conexion') {
-          _hasConnection = false;
-          notifyListeners();
+          throw Exception('No esta autorizado');
+        } else {
+          _hasConnection = true;
+          _loading = false;
+          compute(usersFromJson, response['data']['usuarios']).then((value) {
+            _users = UsersNear.fromJson(response['data'], value);
+            notifyListeners();
+          });
         }
-        throw new Exception('Error');
+      } else if (response['errores'][0]['field'] == 'error_conexion') {
+        _hasConnection = false;
+        _loading = false;
+        notifyListeners();
+        throw Exception('Error conexion');
       }
     }).catchError((error) {
       print(error.toString());

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/share/preference.dart';
+import 'package:snowin/src/utils/dialogs.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key key}) : super(key: key);
@@ -14,6 +16,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final _prefs = new Preferences();
   @override
   Widget build(BuildContext context) {
+    final conex = Provider.of<ConnectionStatus>(context);
     return Builder(
       builder: (context) => Drawer(
         child: ListView(padding: EdgeInsets.zero, shrinkWrap: true, children: <
@@ -83,7 +86,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Switch(
                         value: user.user.visible == "1" ? true : false,
                         onChanged: (value) {
-                          user.changeVisible(value);
+                          if (conex.status == Status.HasConnection) {
+                            user.changeVisible(value);
+                          } else {
+                            DialogHelper.showSimpleDialog(
+                                context, 'Verifique conexion');
+                          }
                         },
                         activeColor: Theme.of(context).primaryColor,
                         activeTrackColor: Theme.of(context).primaryColorLight,

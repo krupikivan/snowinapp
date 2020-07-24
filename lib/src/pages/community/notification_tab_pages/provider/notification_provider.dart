@@ -160,14 +160,6 @@ class NotificationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-//Handle conection error------------------------------
-  bool _hasConnection;
-  bool get hasConnection => _hasConnection;
-  set hasConnection(bool value) {
-    _hasConnection = value;
-    notifyListeners();
-  }
-
   bool _showTopButon;
   bool get showTopButon => _showTopButon;
   set showTopButon(bool value) {
@@ -186,7 +178,6 @@ class NotificationProvider with ChangeNotifier {
     _limit = 10;
     _page = 0;
     _loading = false;
-    _hasConnection = false;
     _showTopButon = false;
     getNotifications();
   }
@@ -221,7 +212,6 @@ class NotificationProvider with ChangeNotifier {
       print('notificaciones');
       print(response);
       if (response['ok']) {
-        _hasConnection = true;
         final _castDataType =
             response['data']['data'].cast<Map<String, dynamic>>();
         _list = _castDataType
@@ -232,10 +222,7 @@ class NotificationProvider with ChangeNotifier {
           notifyListeners();
         }
       } else {
-        if (response['errores'][0]['field'] == 'error_conexion') {
-          _hasConnection = false;
-          notifyListeners();
-        }
+        if (response['errores'][0]['field'] == 'error_conexion') {}
         throw new Exception('Error');
       }
     }).catchError((error) {

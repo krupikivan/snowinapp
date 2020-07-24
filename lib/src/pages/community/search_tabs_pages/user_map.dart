@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
 import 'package:snowin/src/providers/location_service.dart';
+import 'package:snowin/src/widgets/error_connection.dart';
 
 class UserMap extends StatefulWidget {
   const UserMap({Key key}) : super(key: key);

@@ -34,16 +34,7 @@ class BenefitProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  //Handle conection error------------------------------
-  bool _hasConnection;
-  bool get hasConnection => _hasConnection;
-  set hasConnection(bool value) {
-    _hasConnection = value;
-    notifyListeners();
-  }
-
   BenefitProvider.init() {
-    _hasConnection = false;
     _loading = false;
     fetchBenefits();
     fetchMyBenefits();
@@ -62,7 +53,6 @@ class BenefitProvider with ChangeNotifier {
         });
       } else {
         if (response['errores'][0]['field'] == 'error_conexion') {
-          _hasConnection = false;
           _loading = false;
           notifyListeners();
         }
@@ -79,14 +69,12 @@ class BenefitProvider with ChangeNotifier {
     BenefitRepository().getMyBenefits().then((response) {
       print(response);
       if (response['ok']) {
-        _hasConnection = true;
         compute(misBeneficiosFromJson, response['data']['data']).then((value) {
           _listMyBenefit = value;
           notifyListeners();
         });
       } else {
         if (response['errores'][0]['field'] == 'error_conexion') {
-          _hasConnection = false;
           _loading = false;
           notifyListeners();
         }

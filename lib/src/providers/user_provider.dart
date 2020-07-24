@@ -25,13 +25,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _hasConnection;
-  bool get hasConnection => _hasConnection;
-  set hasConnection(bool hasConnection) {
-    _hasConnection = loading;
-    notifyListeners();
-  }
-
   List _niveles;
   List get niveles => _niveles;
   set niveles(List list) {
@@ -65,7 +58,6 @@ class UserProvider with ChangeNotifier {
     getNiveles();
     getPerfiles();
     _loading = false;
-    _hasConnection = false;
   }
 
   changeVisible(bool value) {
@@ -84,17 +76,13 @@ class UserProvider with ChangeNotifier {
       print('User data response');
       print(response);
       if (response['ok']) {
-        _hasConnection = true;
         var data = response['data'];
         _user = User.map(data);
         _nivelesSelected = _user.nivel;
         _perfilSelected = _user.actividad;
         notifyListeners();
       } else {
-        if (response['errores'][0]['field'] == 'error_conexion') {
-          _hasConnection = false;
-          notifyListeners();
-        }
+        if (response['errores'][0]['field'] == 'error_conexion') {}
         throw Exception('Error');
       }
     });

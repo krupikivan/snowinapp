@@ -1,6 +1,8 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
@@ -14,6 +16,7 @@ import 'package:snowin/src/routes/routes.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
+import 'package:snowin/src/providers/connectivity_provider.dart';
 import 'package:snowin/src/utils/app_localization.dart';
 import 'src/pages/community/notification_tab_pages/provider/notification_provider.dart';
 import 'src/pages/community/search_tabs_pages/provider/chat_provider.dart';
@@ -59,29 +62,32 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => ChatProvider.init()),
         ChangeNotifierProvider(
             create: (context) => NotificationProvider.init()),
+        // StreamProvider<ConnectionStatus>(
+        //     create: (context) => ConnectivityProvider().statusController),
+        StreamProvider<ConnectionStatus>(
+            create: (context) => ConnectivityProvider().statusController),
+        StreamProvider<Position>(
+            create: (context) => LocationService().locationStream),
       ],
-      child: StreamProvider<Position>(
-        create: (context) => LocationService().locationStream,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Snowin',
-          onGenerateRoute: (RouteSettings settings) => getRoute(settings),
-          home: SplashScreen(),
-          locale: Locale('es', 'ES'),
-          supportedLocales: [
-            Locale('es', 'ES'),
-            Locale('en', 'US'),
-          ],
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          navigatorObservers: <NavigatorObserver>[
-            firebaseAnalyticsProvider.getAnalyticsObserver()
-          ],
-          theme: themeData(),
-        ),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Snowin',
+        onGenerateRoute: (RouteSettings settings) => getRoute(settings),
+        home: SplashScreen(),
+        locale: Locale('es', 'ES'),
+        supportedLocales: [
+          Locale('es', 'ES'),
+          Locale('en', 'US'),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        navigatorObservers: <NavigatorObserver>[
+          firebaseAnalyticsProvider.getAnalyticsObserver()
+        ],
+        theme: themeData(),
       ),
     );
   }

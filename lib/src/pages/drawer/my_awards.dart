@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-import 'package:snowin/src/pages/drawer/provider/award_provider.dart';
-import 'package:snowin/src/pages/drawer/widget/award_card.dart';
 import 'package:snowin/src/pages/drawer/widget/custom_appbar_drawer.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
