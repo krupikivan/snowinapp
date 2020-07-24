@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:snowin/src/models/item_kv.dart';
 
 class CustomDropdowndString extends StatefulWidget {
   final double width;

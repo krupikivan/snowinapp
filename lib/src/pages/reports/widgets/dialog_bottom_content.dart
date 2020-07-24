@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:polygon_clipper/polygon_clipper.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/utils/app_localization.dart';

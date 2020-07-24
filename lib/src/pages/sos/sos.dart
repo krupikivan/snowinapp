@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/sos/widget/appbar_sos.dart';
-import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/utils/dialogs.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';

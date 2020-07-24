@@ -1,11 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
-import 'package:snowin/src/models/message.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
@@ -14,7 +11,6 @@ import 'package:snowin/src/widgets/custom_appbar_chat.dart';
 import 'package:snowin/src/widgets/custom_chat_message.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
-import 'package:snowin/src/widgets/toast.dart';
 
 class UserChat extends StatefulWidget {
   const UserChat({Key key}) : super(key: key);

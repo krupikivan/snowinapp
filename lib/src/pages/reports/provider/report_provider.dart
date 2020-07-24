@@ -13,8 +13,8 @@ class ReportProvider with ChangeNotifier {
   ReportProvider.init() {
     initiateData();
     fetchClosestFriends();
-    fetchAllReports();
-    fetchAllMyReports();
+    fetchAllReports(false);
+    fetchAllMyReports(false);
     loadTraks();
     loadEmuns();
     detalleCentroSki();
@@ -45,7 +45,7 @@ class ReportProvider with ChangeNotifier {
     _track = '';
     _viento = '';
     _reportFrom = '0';
-    _page = 0;
+    // _page = 0;
     _medias = [];
     _mounted = false;
   }
@@ -279,10 +279,10 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetPage() {
-    _page = 0;
-    notifyListeners();
-  }
+  // void resetPage() {
+  //   _page = 0;
+  //   notifyListeners();
+  // }
 
   void removeMediaFromList(String mediaS) {
     _medias.removeWhere((element) => element.value.toString() == mediaS);
@@ -315,28 +315,33 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void pageSum() {
-    _page++;
-    notifyListeners();
-  }
+  // void pageSum() {
+  //   _page++;
+  //   notifyListeners();
+  // }
 
-  Future<void> fetchAllReports({int limit, int page}) async {
+  Future<void> fetchAllReports(bool sum, {int limit}) async {
     List<Report> _list = new List<Report>();
-    int offset = (page ?? _page) * (limit ?? _limit);
-    int lim = (limit ?? _limit);
+    int offset = sum ? _limit : 0;
+    _limit = sum ? _limit + 10 : _limit;
     await ReportRepository()
-        .reportes(lim.toString(), offset.toString(), prepareFilters())
+        .reportes(_limit.toString(), offset.toString(), prepareFilters())
         .then((response) {
       print('reporte/listar response: ');
       print(response);
       if (response['ok']) {
-        final _castDataType = response['data'].cast<Map<String, dynamic>>();
-        _list = _castDataType.map<Report>((json) => Report.map(json)).toList();
+        _isLoading = false;
         if (response['data'].isNotEmpty) {
+          final _castDataType = response['data'].cast<Map<String, dynamic>>();
+          _list =
+              _castDataType.map<Report>((json) => Report.map(json)).toList();
           _allReports = _list;
-          notifyListeners();
+          _isLoading = false;
         }
+        notifyListeners();
       } else {
+        _isLoading = false;
+        notifyListeners();
         throw new Exception('Error');
       }
     }).catchError((error) {
@@ -346,7 +351,8 @@ class ReportProvider with ChangeNotifier {
 
   Future<void> fetchReportComments() async {
     List<ReportComments> _list = new List<ReportComments>();
-    int offset = _page * _limit;
+    // int offset = _page * _limit;
+    int offset = 0;
     await ReportRepository()
         .comentarios(
             _limit.toString(), offset.toString(), prepareCommentsFilters())
@@ -369,23 +375,27 @@ class ReportProvider with ChangeNotifier {
     });
   }
 
-  Future<void> fetchAllMyReports({int limit, int page}) async {
+  Future<void> fetchAllMyReports(bool sum, {int limit}) async {
     List<Report> _list = new List<Report>();
-    int offset = (page ?? _page) * (limit ?? _limit);
-    int lim = (limit ?? _limit);
+    int offset = sum ? _limit : 0;
+    _limit = sum ? _limit + 10 : _limit;
     await ReportRepository()
-        .reportes(lim.toString(), offset.toString(), prepareMyFilters())
+        .reportes(_limit.toString(), offset.toString(), prepareMyFilters())
         .then((response) {
       print('reporte/listar propios response: ');
       print(response);
       if (response['ok']) {
-        final _castDataType = response['data'].cast<Map<String, dynamic>>();
-        _list = _castDataType.map<Report>((json) => Report.map(json)).toList();
         if (response['data'].isNotEmpty) {
+          final _castDataType = response['data'].cast<Map<String, dynamic>>();
+          _list =
+              _castDataType.map<Report>((json) => Report.map(json)).toList();
           _allMyReports = _list;
-          notifyListeners();
         }
+        _isLoading = false;
+        notifyListeners();
       } else {
+        _isLoading = false;
+        notifyListeners();
         throw new Exception('Error');
       }
     }).catchError((error) {
@@ -435,12 +445,12 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  int _page;
-  int get page => _page;
-  set page(int value) {
-    _page = value;
-    notifyListeners();
-  }
+  // int _page;
+  // int get page => _page;
+  // set page(int value) {
+  //   _page = value;
+  //   notifyListeners();
+  // }
 
   String _esperaMedios;
   String get esperaMedios => _esperaMedios;
@@ -503,20 +513,18 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changeLoading() {
-    if (_isLoading) {
-      _isLoading = false;
-    } else {
-      _isLoading = true;
-    }
+  void fetchData(bool value) {
+    _isLoading = true;
+    value ? fetchAllReports(true) : fetchAllMyReports(true);
+    // pageSum();
     notifyListeners();
   }
 
   void startLoader(bool myReports) {
     if (myReports) {
-      fetchAllMyReports(limit: 10, page: 0);
+      fetchAllMyReports(false);
     } else {
-      fetchAllReports(limit: 10, page: 0);
+      fetchAllReports(false);
     }
   }
 
@@ -538,7 +546,7 @@ class ReportProvider with ChangeNotifier {
       if (response['ok']) {
         initiateData();
         // notifyListeners();
-        fetchAllReports();
+        fetchAllReports(false);
       } else {
         throw new Exception('Error');
       }
@@ -621,14 +629,15 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> refreshing(bool myReports) {
+  Future refreshing(bool myReports) {
     print(" refreshing ... ");
-    _page = 0;
+    // _page = 0;
+    _limit = 10;
     notifyListeners();
     if (myReports) {
-      fetchAllMyReports();
+      fetchAllMyReports(false);
     } else {
-      fetchAllReports();
+      fetchAllReports(false);
     }
     // startLoader(mounted);
   }

@@ -77,21 +77,21 @@ class ReportsListTabState extends State<ReportsListTab> {
 
   void startLoader() {
     if (mounted)
-      Provider.of<ReportProvider>(context, listen: false).changeLoading();
-    fetchData();
+      Provider.of<ReportProvider>(context, listen: false).fetchData(true);
+    // fetchData();
   }
 
-  void fetchData() async {
-    final report = Provider.of<ReportProvider>(context, listen: false);
-    await report.fetchAllReports(); //.then((elements) {
-    if (mounted) {
-      if (report.page == 0) {
-        // report.clearReports();
-      }
-      report.changeLoading();
-      report.pageSum();
-    }
-  }
+  // void fetchData() async {
+  //   final report = Provider.of<ReportProvider>(context, listen: false);
+  //   await report.fetchAllReports(); //.then((elements) {
+  //   if (mounted) {
+  //     if (report.page == 0) {
+  //       // report.clearReports();
+  //     }
+  //     report.changeLoading();
+  //     report.pageSum();
+  //   }
+  // }
 
   void showWarningsDialog(String message) {
     print('show warnings dialog');

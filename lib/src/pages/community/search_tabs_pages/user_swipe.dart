@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/config/config.dart';
-import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
-import 'package:snowin/src/widgets/error_connection.dart';
 
 class UserSwipe extends StatelessWidget {
   const UserSwipe({Key key}) : super(key: key);

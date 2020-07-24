@@ -3,12 +3,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
-import 'package:snowin/src/models/ski_center.dart';
 import 'package:snowin/src/models/pist.dart';
-import 'package:snowin/src/repository/report_repository.dart';
-import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
-
 import '../../widgets/custom_appbar_pages.dart';
 import '../../widgets/custom_drawer.dart';
 

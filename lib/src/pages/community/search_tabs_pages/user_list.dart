@@ -1,12 +1,7 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
-import 'package:snowin/src/widgets/error_connection.dart';
 import '../widgets/user_tile.dart';
-import 'package:snowin/src/providers/connectivity_provider.dart';
 
 class UserList extends StatefulWidget {
   UserList({Key key}) : super(key: key);

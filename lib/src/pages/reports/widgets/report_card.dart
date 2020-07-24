@@ -17,8 +17,6 @@ import 'package:snowin/src/pages/reports/report_detail.dart';
 import 'package:snowin/src/widgets/marquee.dart';
 import 'package:snowin/src/widgets/comment_w.dart';
 
-import 'package:snowin/src/repository/snowin_repository.dart';
-
 class ReportCard extends StatelessWidget {
   final Report actualReport;
   final AfterValorateCallback afterValorate;
@@ -170,7 +168,7 @@ class ReportCard extends StatelessWidget {
         onTap: () {
           print('go to report detail');
           reports.reportSelected = actualReport;
-          reports.resetPage();
+          // reports.resetPage();
           reports.fetchReportComments();
           Navigator.push(
               context,

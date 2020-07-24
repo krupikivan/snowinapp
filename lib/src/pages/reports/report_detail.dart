@@ -3,14 +3,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/config/config.dart';
-import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
-import 'package:snowin/src/providers/user_provider.dart';
-import 'package:snowin/src/repository/report_repository.dart';
 import 'package:snowin/src/utils/app_localization.dart';
 import 'package:snowin/src/utils/message_border.dart';
 import 'package:snowin/src/utils/dialogs.dart';
-import 'package:snowin/src/models/report.dart';
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/pages/reports/widgets/time.dart';
@@ -18,7 +14,6 @@ import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/ranking_w.dart';
 import 'package:snowin/src/widgets/comment_w.dart';
 import 'package:snowin/src/widgets/marquee.dart';
-import 'package:snowin/src/repository/snowin_repository.dart';
 
 class ReportDetail extends StatelessWidget {
   // Report report;

@@ -1,21 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:snowin/src/models/report.dart';
-import 'package:snowin/src/models/item_kv.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
-import 'package:snowin/src/repository/report_repository.dart';
 import 'package:snowin/src/pages/reports/widgets/fab_widget.dart';
 
-import 'package:snowin/src/repository/snowin_repository.dart';
-
-import 'package:snowin/src/pages/reports/widgets/report_card.dart';
-import 'package:snowin/src/pages/reports/new_report.dart';
 import 'package:snowin/src/pages/reports/my_report_tab/my_report_tiles.dart';
-import 'package:snowin/src/widgets/custom_dropdown.dart';
-import 'package:snowin/src/widgets/custom_fab_icon.dart';
-import 'package:snowin/src/widgets/custom_textfield.dart';
-import 'package:snowin/src/widgets/custom_sort.dart';
 
 class MyReportsListTab extends StatefulWidget {
   MyReportsListTab({Key key}) : super(key: key);
@@ -475,24 +463,24 @@ class MyReportsListTabState extends State<MyReportsListTab> {
 
   void startLoader() {
     if (mounted)
-      Provider.of<ReportProvider>(context, listen: false).changeLoading();
-    fetchData();
+      Provider.of<ReportProvider>(context, listen: false).fetchData(false);
+    // fetchData();
   }
 
-  void fetchData() async {
-    final report = Provider.of<ReportProvider>(context, listen: false);
-    await report.fetchAllMyReports(); //.then((elements) {
-    if (mounted) {
-      if (report.page == 0) {
-        // report.clearReports();
-      }
-      report.changeLoading();
-      report.pageSum();
-    }
-    // }).whenComplete(() {
-    //   print('done');
-    // });
-  }
+  // void fetchData() async {
+  //   final report = Provider.of<ReportProvider>(context, listen: false);
+  //   await report.fetchAllMyReports(); //.then((elements) {
+  //   if (mounted) {
+  //     if (report.page == 0) {
+  // report.clearReports();
+  //   }
+  //   report.changeLoading();
+  //   report.pageSum();
+  // }
+  // }).whenComplete(() {
+  //   print('done');
+  // });
+  // }
 
   // void startLoader() {
   //   if (mounted)

@@ -1,8 +1,4 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
@@ -14,8 +10,6 @@ import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/widgets/custom_icon_button.dart';
 import 'package:snowin/src/widgets/error_connection.dart';
 import 'package:snowin/src/widgets/thumbnail.dart';
-
-import '../../config/config.dart';
 import '../../widgets/custom_bottom_menu.dart';
 import '../../widgets/custom_drawer.dart';
 import 'widget/account_detail_tile.dart';

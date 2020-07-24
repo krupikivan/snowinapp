@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
 import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/providers/connectivity_provider.dart';
 import 'package:snowin/src/repository/snowin_repository.dart';

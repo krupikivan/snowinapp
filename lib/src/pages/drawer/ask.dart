@@ -1,7 +1,5 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/drawer/widget/custom_appbar_drawer.dart';
 import 'package:snowin/src/widgets/custom_chat_message.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';

@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snowin/src/models/notifications.dart';
-import 'package:snowin/src/models/item_kv.dart';
 import 'package:snowin/src/pages/community/notification_tab_pages/notif_fab.dart';
 import 'package:snowin/src/pages/community/notification_tab_pages/provider/notification_provider.dart';
-import 'package:snowin/src/pages/community/notification_tab_pages/widget/notifications_tile.dart';
-import 'package:snowin/src/widgets/custom_dropdown.dart';
-import 'package:snowin/src/widgets/custom_fab_icon.dart';
-import 'package:snowin/src/widgets/custom_textfield.dart';
-import 'package:snowin/src/widgets/custom_sort.dart';
-
 import 'list_notification_tiles.dart';
 
 class NotificationsListTab extends StatefulWidget {
@@ -21,47 +13,11 @@ class NotificationsListTab extends StatefulWidget {
 
 class NotificationsListTabState extends State<NotificationsListTab> {
   double deviceHeight = 0;
-  // int page = 0, qtty = 10;
-  // bool _isLoading = false,
   ScrollController _scrollController;
-  // List<Notifications> _allNotifications = new List<Notifications>();
-
-  // TextEditingController _controllerTitle;
-  // String _title = '';
-  // TextEditingController _controllerComment;
-  // String _comment = '';
-  // List<ItemKV> _trackItems;
-  // String _track = '';
-  // List<ItemKV> _calidadNieveItems;
-  // String _calidadNieve = '';
-  // List<ItemKV> _climaItems;
-  // String _clima = '';
-  // List<ItemKV> _vientoItems;
-  // String _viento = '';
-  // List<ItemKV> _sensacionGeneralItems;
-  // String _sensacionGeneral = '';
-  // List<ItemKV> _esperaMediosItems;
-  // String _esperaMedios = '';
-
-  // bool _sortIdNotifications = false;
-  // bool _sortSeed = false;
-  // bool _sortCalificacion = false;
 
   @override
   void initState() {
     super.initState();
-
-    // _controllerTitle = TextEditingController();
-    // _controllerTitle.text = '';
-    // _controllerComment = TextEditingController();
-    // _controllerComment.text = '';
-
-    // _calidadNieveItems = [ItemKV('', '')];
-    // _climaItems = [ItemKV('', '')];
-    // _vientoItems = [ItemKV('', '')];
-    // _sensacionGeneralItems = [ItemKV('', '')];
-    // _esperaMediosItems = [ItemKV('', '')];
-
     _scrollController = new ScrollController()..addListener(scrollListener);
     Provider.of<NotificationProvider>(context, listen: false).startLoader();
   }

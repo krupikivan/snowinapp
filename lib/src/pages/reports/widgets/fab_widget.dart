@@ -3,11 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/reports/new_report.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/pages/reports/widgets/filter_dialog.dart';
-import 'package:snowin/src/utils/dialogs.dart';
-import 'package:snowin/src/widgets/custom_dropdown.dart';
 import 'package:snowin/src/widgets/custom_fab_icon.dart';
-import 'package:snowin/src/widgets/custom_sort.dart';
-import 'package:snowin/src/widgets/custom_textfield.dart';
 
 class FabWidget extends StatelessWidget {
   const FabWidget({
@@ -91,7 +87,8 @@ class FabWidget extends StatelessWidget {
                             scrollController.animateTo(0.0,
                                 duration: new Duration(
                                     seconds:
-                                        (report.page < 3 ? report.page : 3)),
+                                        // (report.page < 3 ? report.page : 3)),
+                                        (3)),
                                 curve: Curves.ease);
                           },
                         )

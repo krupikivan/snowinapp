@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
 import 'package:snowin/src/models/message.dart';
 import 'package:snowin/src/repository/chat_repository.dart';
 
