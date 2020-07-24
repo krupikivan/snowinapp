@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/sos/widget/appbar_sos.dart';
+import 'package:snowin/src/providers/user_provider.dart';
+import 'package:snowin/src/utils/dialogs.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -122,6 +124,7 @@ class _SosState extends State<Sos> {
 
   Widget clickedTrue() {
     final position = Provider.of<Position>(context);
+    final user = Provider.of<UserProvider>(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 40, 10, 20),
       child: Column(
@@ -168,8 +171,15 @@ class _SosState extends State<Sos> {
               ],
             ),
           ),
-          _getButton(Icons.people, Colors.yellow, 'AVISAR A AMIGOS',
-              () => _showPopup(), false),
+          _getButton(
+              Icons.people,
+              Colors.yellow,
+              'AVISAR A AMIGOS',
+              () => user.hasConnection
+                  ? _showPopup()
+                  : DialogHelper.showSimpleDialog(
+                      context, 'Revise su conexion a internet'),
+              false),
           SizedBox(height: 15),
           _getButton(Icons.call, Theme.of(context).errorColor, 'EMERGENCIAS',
               () => _makeCall(), true),

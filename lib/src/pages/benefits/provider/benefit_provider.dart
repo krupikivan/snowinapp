@@ -26,20 +26,46 @@ class BenefitProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //Manage loading data------------------------------
+  bool _loading;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
+
+  //Handle conection error------------------------------
+  bool _hasConnection;
+  bool get hasConnection => _hasConnection;
+  set hasConnection(bool value) {
+    _hasConnection = value;
+    notifyListeners();
+  }
+
   BenefitProvider.init() {
+    _hasConnection = false;
+    _loading = false;
     fetchBenefits();
     fetchMyBenefits();
   }
 
   void fetchBenefits() {
+    _loading = true;
+    notifyListeners();
     BenefitRepository().getBenefits().then((response) {
       print(response);
       if (response['ok']) {
+        _loading = false;
         compute(beneficioFromJson, response['data']['data']).then((value) {
           _listBenefit = value;
           notifyListeners();
         });
       } else {
+        if (response['errores'][0]['field'] == 'error_conexion') {
+          _hasConnection = false;
+          _loading = false;
+          notifyListeners();
+        }
         throw new Exception('Error');
       }
     }).catchError((error) {
@@ -48,14 +74,22 @@ class BenefitProvider with ChangeNotifier {
   }
 
   void fetchMyBenefits() {
+    _loading = true;
+    notifyListeners();
     BenefitRepository().getMyBenefits().then((response) {
       print(response);
       if (response['ok']) {
+        _hasConnection = true;
         compute(misBeneficiosFromJson, response['data']['data']).then((value) {
           _listMyBenefit = value;
           notifyListeners();
         });
       } else {
+        if (response['errores'][0]['field'] == 'error_conexion') {
+          _hasConnection = false;
+          _loading = false;
+          notifyListeners();
+        }
         throw new Exception('Error');
       }
     }).catchError((error) {

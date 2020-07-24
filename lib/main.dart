@@ -15,6 +15,7 @@ import 'package:snowin/src/share/preference.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:snowin/src/utils/app_localization.dart';
+import 'src/pages/community/notification_tab_pages/provider/notification_provider.dart';
 import 'src/pages/community/search_tabs_pages/provider/chat_provider.dart';
 import 'src/providers/location_service.dart';
 import 'theme/my_theme.dart';
@@ -56,6 +57,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => LoginProvider.init()),
         ChangeNotifierProvider(create: (context) => WelcomeProvider.init()),
         ChangeNotifierProvider(create: (context) => ChatProvider.init()),
+        ChangeNotifierProvider(
+            create: (context) => NotificationProvider.init()),
       ],
       child: StreamProvider<Position>(
         create: (context) => LocationService().locationStream,

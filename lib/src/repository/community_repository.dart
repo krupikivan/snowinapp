@@ -15,13 +15,13 @@ class CommunityRepository {
 
   Future<Map> notifications(String limit, String offset,
       [String filters = '']) async {
-    print('call end point: notificaciones/listar');
+    print('call end point: notificaciones');
     print(filters);
 
     //configurar servicio
-    String service = Config.apiNotificationsUrl + "listar";
-    service += '?limit=' + limit + '&offset=' + offset;
-    service += filters.isNotEmpty ? ('&' + filters) : '';
+    String service = Config.apiNotificationsUrl;
+    // service += '?limit=' + limit + '&offset=' + offset;
+    // service += filters.isNotEmpty ? ('&' + filters) : '';
 
     //Respuesta
     http.Response response;
@@ -39,13 +39,9 @@ class CommunityRepository {
             'data': (decodeResp == null) ? decodeResp : decodeResp['data']
           };
         } else {
-          await http.get(Uri.encodeFull(service),
-              headers: snowinProvider.securedHeaders);
           return snowinProvider.manejadorErroresResp(response);
         }
       } else {
-        await http.get(Uri.encodeFull(service),
-            headers: snowinProvider.securedHeaders);
         return snowinProvider.retornarErrorConexion();
       }
     } catch (e) {

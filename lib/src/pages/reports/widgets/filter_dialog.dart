@@ -11,19 +11,6 @@ class FilterDialog extends StatelessWidget {
   final Size size;
 
   FilterDialog({Key key, this.size}) : super(key: key);
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controllerTitle = TextEditingController(text: '');
-  //   controllerComment = TextEditingController(text: '');
-  // }
-
-  // @override
-  // void dispose() {
-  //   controllerTitle.dispose();
-  //   controllerComment.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {

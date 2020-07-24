@@ -72,13 +72,9 @@ class ChatRepository {
             'data': (decodeResp == null) ? decodeResp : decodeResp['data']
           };
         } else {
-          await http.get(Uri.encodeFull(service),
-              headers: snowinProvider.securedHeaders);
           return snowinProvider.manejadorErroresResp(response);
         }
       } else {
-        await http.get(Uri.encodeFull(service),
-            headers: snowinProvider.securedHeaders);
         return snowinProvider.retornarErrorConexion();
       }
     } catch (e) {

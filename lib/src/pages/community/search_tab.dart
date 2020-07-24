@@ -10,8 +10,7 @@ class SearchTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-      child: ListView(
-        physics: NeverScrollableScrollPhysics(),
+      child: Column(
         children: <Widget>[
           Container(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),

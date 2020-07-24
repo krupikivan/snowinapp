@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
 import 'package:snowin/src/models/message.dart';
 import 'package:snowin/src/repository/chat_repository.dart';
 
@@ -13,8 +14,10 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  int _total;
   ChatProvider.init() {
     _loading = false;
+    _total = 0;
   }
 
   var _conversacion;
@@ -32,7 +35,7 @@ class ChatProvider with ChangeNotifier {
   }
 
   int _userId;
-  get userId => _userId;
+  int get userId => _userId;
   set userId(int id) {
     _userId = id;
     notifyListeners();
@@ -40,6 +43,7 @@ class ChatProvider with ChangeNotifier {
 
   Future getMensajes({int id, bool refresh}) async {
     if (refresh == null) {
+      _messageList.clear();
       _loading = true;
       notifyListeners();
     }
@@ -56,32 +60,35 @@ class ChatProvider with ChangeNotifier {
         print(mensajes);
         if (mensajes['ok']) {
           list = mensajes['data']['data'];
-          compute(messageFromJson, list).then((value) {
-            _messageList = value;
-            if (refresh == null) {
-              _loading = false;
-            }
-            notifyListeners();
-          });
+          if (_total != mensajes['data']['total']) {
+            _total = mensajes['data']['total'];
+            compute(messageFromJson, list).then((value) {
+              _messageList = value;
+              if (refresh == null) {
+                _loading = false;
+              }
+              notifyListeners();
+            });
+          }
         } else {
           if (refresh == null) {
             _loading = false;
+            notifyListeners();
           }
-          notifyListeners();
           throw new Exception('Error trayendo los mensajes');
         }
       } else {
         if (refresh == null) {
           _loading = false;
+          notifyListeners();
         }
-        notifyListeners();
         throw new Exception('Error trayendo la conversacion');
       }
     } catch (e) {
       if (refresh == null) {
         _loading = false;
+        notifyListeners();
       }
-      notifyListeners();
     }
   }
 
@@ -93,7 +100,7 @@ class ChatProvider with ChangeNotifier {
         await getMensajes(refresh: false);
         return true;
       } else {
-        throw new Exception('Error enviando mensaje');
+        throw new Exception('No hay conexion');
       }
     } catch (e) {
       throw 'Error';

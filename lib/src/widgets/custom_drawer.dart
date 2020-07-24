@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
+import 'package:snowin/src/share/preference.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key key}) : super(key: key);
@@ -10,6 +11,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  final _prefs = new Preferences();
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -38,9 +40,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           Consumer<UserProvider>(
                             builder: (context, user, _) => FittedBox(
                               child: Text(
-                                user.user != null
-                                    ? user.user.nombre
-                                    : 'Cargando...',
+                                _prefs.nombre,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 22),
                               ),

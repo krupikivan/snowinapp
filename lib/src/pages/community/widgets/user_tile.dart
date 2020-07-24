@@ -20,6 +20,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(context) {
+    // double dist = dist.truncate()
     final chat = Provider.of<ChatProvider>(context, listen: false);
     final User user = userProvider.users.usuarios[index];
     return Container(
@@ -35,7 +36,7 @@ class UserTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                '${user.distancia}',
+                '${user.distancia.truncate()} mts',
                 style: TextStyle(fontSize: 12),
               ),
               SizedBox(width: 10),

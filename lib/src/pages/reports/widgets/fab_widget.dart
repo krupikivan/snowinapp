@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/reports/new_report.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/pages/reports/widgets/filter_dialog.dart';
+import 'package:snowin/src/utils/dialogs.dart';
 import 'package:snowin/src/widgets/custom_dropdown.dart';
 import 'package:snowin/src/widgets/custom_fab_icon.dart';
 import 'package:snowin/src/widgets/custom_sort.dart';
@@ -46,22 +47,25 @@ class FabWidget extends StatelessWidget {
                       heroTag: "btn1",
                       isPrimary: false,
                       icon: Icons.filter_list,
-                      action: () => showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) => FilterDialog(
-                              size: size,
-                            ),
-                          )),
+                      action: () => !report.conexion
+                          ? showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => FilterDialog(
+                                size: size,
+                              ),
+                            )
+                          : DialogHelper.showSimpleDialog(
+                              context, 'Revise su conexion a internet')),
                   SizedBox(
                     width: 10,
                   ),
                   CustomFabIcon(
-                      heroTag: "btn2",
-                      isPrimary: true,
-                      icon: Icons.add,
-                      action: () {
-                        Navigator.push(
+                    heroTag: "btn2",
+                    isPrimary: true,
+                    icon: Icons.add,
+                    action: () => !report.conexion
+                        ? Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) => NewReport(
@@ -77,8 +81,10 @@ class FabWidget extends StatelessWidget {
                                   // report.refreshing(mounted);
                                   // },
                                   ),
-                            ));
-                      }),
+                            ))
+                        : DialogHelper.showSimpleDialog(
+                            context, 'Revise su conexion a internet'),
+                  ),
                   SizedBox(
                     width: 10,
                   ),

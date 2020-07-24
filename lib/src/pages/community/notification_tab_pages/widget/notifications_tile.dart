@@ -1,44 +1,12 @@
-import 'package:flutter/material.dart';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:snowin/src/config/config.dart';
-
+import 'package:flutter/material.dart';
 import 'package:snowin/src/models/notifications.dart';
 import 'package:snowin/src/pages/community/widgets/user_avatar.dart';
 
-import 'package:snowin/src/pages/reports/widgets/time.dart';
-import 'package:snowin/src/pages/reports/widgets/total_comments.dart';
-
-class NotificationsTile extends StatefulWidget {
+class NotificationsTile extends StatelessWidget {
   final Notifications notifications;
-  final int index;
-  final AfterSendCallback afterSend;
 
-  NotificationsTile({Key key, this.notifications, this.index, this.afterSend})
-      : super(key: key);
-
-  @override
-  NotificationsTileState createState() =>
-      new NotificationsTileState(notifications, index);
-}
-
-class NotificationsTileState extends State<NotificationsTile> {
-  Notifications notifications;
-  int index;
-
-  NotificationsTileState(this.notifications, this.index);
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  const NotificationsTile({Key key, this.notifications}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +32,9 @@ class NotificationsTileState extends State<NotificationsTile> {
                       onPressed: () {},
                     ),
                   ),
-                  UserAvatar(image: notifications.image.toString(), size: size),
+                  UserAvatar(
+                      image: notifications.userNotifica.image.toString(),
+                      size: size),
                   SizedBox(
                     width: 10,
                   ),
@@ -73,14 +43,14 @@ class NotificationsTileState extends State<NotificationsTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         AutoSizeText(
-                          notifications.user.toString(),
+                          notifications.userNotifica.nombre.toString(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 17,
                               color: Color.fromRGBO(159, 159, 159, 1)),
                         ),
                         AutoSizeText(
-                          notifications.level.toString(),
+                          notifications.notificacion.toString(),
                           style: TextStyle(fontSize: 13),
                         ),
                       ],
@@ -114,5 +84,3 @@ class NotificationsTileState extends State<NotificationsTile> {
     );
   }
 }
-
-typedef AfterSendCallback = void Function();

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/pages/reports/reports.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/share/preference.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -88,10 +90,12 @@ class _SplashScreenState extends State<SplashScreen>
   _checkRegistrationStatus() async {
     print('check registration status ...');
     _preferences.userid = '31';
+    _preferences.nombre = 'test_ivan';
     _preferences.token = Config.ivanTKN;
     if (_preferences.token.toString().isNotEmpty) {
       print('token found: ' + _preferences.token.toString());
       print('go to reports page');
+      Provider.of<UserProvider>(context, listen: false).fetchUserData();
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(builder: (context) => Reports()),

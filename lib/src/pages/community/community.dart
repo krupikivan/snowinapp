@@ -1,17 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:snowin/src/pages/community/search_tab.dart';
-
-import 'package:snowin/src/pages/reports/provider/report_provider.dart';
-
-import 'package:snowin/src/repository/snowin_repository.dart';
-
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
-import 'package:snowin/src/pages/community/widgets/notifications_list_tab.dart';
-import 'package:snowin/src/pages/community/widgets/friends_list_tab.dart';
+import 'package:snowin/src/pages/community/notification_tab_pages/notifications_list_tab.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 
 class Community extends StatefulWidget {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,10 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/models/message.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provider.dart';
+import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/widgets/custom_appbar_chat.dart';
 import 'package:snowin/src/widgets/custom_chat_message.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
+import 'package:snowin/src/widgets/toast.dart';
 
 class UserChat extends StatefulWidget {
   const UserChat({Key key}) : super(key: key);
@@ -25,19 +29,24 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
       new GlobalKey<ScaffoldState>();
   @override
   void dispose() {
-    // message.animationController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    Timer.periodic(Duration(seconds: 3), (timer) {
+      Provider.of<ChatProvider>(context, listen: false)
+          .getMensajes(refresh: false);
+    });
   }
 
   @override
   Widget build(context) {
-    final int userId =
+    final int idUserTapped =
         Provider.of<CommunityProvider>(context, listen: false).userTapped.id;
+    final int fromUserId =
+        Provider.of<UserProvider>(context, listen: false).user.id;
     return Scaffold(
       key: scaffoldDrawer,
       appBar: PreferredSize(
@@ -60,6 +69,7 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
               .sort((a, b) => DateTime.parse(b.fecha).millisecondsSinceEpoch);
           chat.messageList.forEach((element) {
             final ChatMessage message = ChatMessage(
+              myMessage: fromUserId == element.idEmisor ? true : false,
               message: element,
               animationController: AnimationController(
                 duration: Duration(milliseconds: 700),
@@ -85,7 +95,7 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
                                 _showPopup(_list[index].message.id, chat),
                             child: _list[index]);
                       })),
-              _buildTextComposer(chat, userId),
+              _buildTextComposer(chat, idUserTapped),
             ]),
           );
         }
@@ -137,7 +147,8 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
     if (_textController.text.isNotEmpty) {
       chat
           .sendMessage(_textController.text, userId)
-          .then((value) => value ? _textController.clear() : print(''));
+          .then((value) => value ? _textController.clear() : print(''))
+          .catchError((onError) => ShowToast().show('No hay conexion', 5));
     } else {
       print('Text:' + _textController.text.isNotEmpty.toString());
     }

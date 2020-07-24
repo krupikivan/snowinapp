@@ -15,8 +15,8 @@ class FacebookButton extends StatelessWidget {
       child: RaisedButton(
         color: Color.fromRGBO(59, 89, 152, 1),
         onPressed: () {
-          // user.initiateFacebookLogin();
-          Navigator.pushNamed(context, '/wellcome-conditions');
+          user.initiateFacebookLogin();
+          // Navigator.pushNamed(context, '/wellcome-conditions');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

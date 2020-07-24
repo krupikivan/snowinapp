@@ -153,11 +153,15 @@ class _ReportTopInfoState extends State<ReportTopInfo> {
   void goToMapPage(ReportProvider user) {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
 
-    if (user.center.id != 0) {
-      Navigator.pushNamed(context, '/pistes-map');
+    if (user.center != null) {
+      if (user.center.id != 0) {
+        Navigator.pushNamed(context, '/pistes-map');
+      } else {
+        DialogHelper.showSimpleDialog(
+            context, 'No está cerca de ningún centro de ski.');
+      }
     } else {
-      DialogHelper.showSimpleDialog(
-          context, 'No está cerca de ningún centro de ski.');
+      DialogHelper.showSimpleDialog(context, 'Revise su conexion a internet');
     }
   }
 }

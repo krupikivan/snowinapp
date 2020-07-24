@@ -44,10 +44,11 @@ class CommunityProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  int _page;
-  int get page => _page;
-  set page(int value) {
-    _page = value;
+  //Manage Connection------------------------------
+  bool _hasConnection;
+  bool get hasConnection => _hasConnection;
+  set hasConnection(bool value) {
+    _hasConnection = value;
     notifyListeners();
   }
 
@@ -66,26 +67,36 @@ class CommunityProvider with ChangeNotifier {
   }
 
   initiateData() {
-    _page = 0;
     _limit = 10;
+    _hasConnection = true;
   }
 
-  void getUsers({int limit, int page}) {
-    int offset = (page ?? _page) * (limit ?? _limit);
-    int lim = (limit ?? _limit);
+  loadMore() {
+    getUsers(sum: 10);
+  }
+
+  void getUsers({int sum}) {
+    int offset = 0;
+    _limit = sum != null ? _limit + sum : _limit;
+    print('Limite: $_limit');
     CommunityRepository()
         .nearestUsers(
-      lim.toString(),
+      _limit.toString(),
       offset.toString(),
     )
         .then((response) {
       print(response);
       if (response['ok']) {
+        _hasConnection = true;
         compute(usersFromJson, response['data']['usuarios']).then((value) {
           _users = UsersNear.fromJson(response['data'], value);
           notifyListeners();
         });
       } else {
+        if (response['errores'][0]['field'] == 'error_conexion') {
+          _hasConnection = false;
+          notifyListeners();
+        }
         throw new Exception('Error');
       }
     }).catchError((error) {

@@ -65,8 +65,11 @@ class CustomAppbarChat extends StatelessWidget {
           SizedBox(width: 10),
           Text(
             user.userTapped.nombre,
+            maxLines: 2,
             style: TextStyle(
-                fontWeight: FontWeight.w400, color: Colors.white, fontSize: 25),
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+            ),
           ),
         ],
       ),

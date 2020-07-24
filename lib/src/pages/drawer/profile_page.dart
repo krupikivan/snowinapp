@@ -9,6 +9,7 @@ import 'package:snowin/src/pages/drawer/widget/profile_image.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_loading_image.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
+import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/widgets/custom_icon_button.dart';
 import 'package:snowin/src/widgets/thumbnail.dart';
 
@@ -31,6 +32,7 @@ class ProfilePage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final user = Provider.of<UserProvider>(context);
     final reports = Provider.of<ReportProvider>(context, listen: false);
+    final _prefs = Preferences();
     return Scaffold(
       backgroundColor: Colors.white,
       key: scaffoldDrawer,
@@ -42,10 +44,9 @@ class ProfilePage extends StatelessWidget {
             title: "MI PERFIL",
           ),
           preferredSize: Size(double.infinity, 70)),
-      body: user.user == null
-          ? CircularProgressIndicator()
-          : SingleChildScrollView(
-              child: Stack(
+      body: SingleChildScrollView(
+        child: user.hasConnection
+            ? Stack(
                 overflow: Overflow.visible,
                 children: <Widget>[
                   Container(
@@ -93,25 +94,7 @@ class ProfilePage extends StatelessWidget {
                           'PERFIL PUBLICO EN SNOWIN',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
-                        CustomUserInfoDetail(
-                          action: () {
-                            _controller.text = user.user.biografia;
-                            _showPopupBio(context, user, _controller);
-                          },
-                          info: 'Bio',
-                          title1: user.user.biografia,
-                          title2: user.user.localidad,
-                        ),
-                        CustomUserInfoDetail(
-                          action: () => _showPopupActividad(context, user),
-                          info: 'Practica',
-                          title1: user.user.actividad,
-                        ),
-                        CustomUserInfoDetail(
-                          action: () => _showPopupNivel(context, user),
-                          info: 'Nivel',
-                          title1: user.user.nivel,
-                        ),
+                        ..._buildUserInfoData(user, context, _controller),
                         SizedBox(
                           height: 15,
                         ),
@@ -188,14 +171,46 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ],
+              )
+            : ListTile(
+                title: Text('Verifique su conexion'),
               ),
-            ),
+      ),
       drawerScrimColor: Colors.black54,
       endDrawer: CustomDrawer(),
       bottomNavigationBar: CustomBottomMenu(
         item: 3,
       ),
     );
+  }
+
+  List<Widget> _buildUserInfoData(UserProvider user, BuildContext context,
+      TextEditingController controller) {
+    List<Widget> elements = List<Widget>();
+    final bio = CustomUserInfoDetail(
+      action: () {
+        controller.text = user.user.biografia;
+        _showPopupBio(context, user, controller);
+      },
+      info: 'Bio',
+      title1: user.user.biografia,
+      title2: user.user.localidad,
+    );
+    final practica = CustomUserInfoDetail(
+      action: () => _showPopupActividad(context, user),
+      info: 'Practica',
+      title1: user.user.actividad,
+    );
+    final nivel = CustomUserInfoDetail(
+      action: () => _showPopupNivel(context, user),
+      info: 'Nivel',
+      title1: user.user.nivel,
+    );
+
+    elements.add(bio);
+    elements.add(practica);
+    elements.add(nivel);
+    return elements;
   }
 
   _showPopupProfile(BuildContext context1, UserProvider user) {

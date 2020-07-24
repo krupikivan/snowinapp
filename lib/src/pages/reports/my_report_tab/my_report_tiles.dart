@@ -49,7 +49,9 @@ class MyReportTiles extends StatelessWidget {
                 : ListView(
                     children: <Widget>[
                       ListTile(
-                        title: Text('No hay registros'),
+                        title: Text(report.conexion
+                            ? 'Verifique su conexion'
+                            : 'No hay registros'),
                       ),
                     ],
                   )

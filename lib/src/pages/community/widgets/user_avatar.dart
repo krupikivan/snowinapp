@@ -11,8 +11,8 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Container(
-        width: 0.15 * size.width,
-        height: 0.15 * size.width,
+        width: 0.12 * size.width,
+        height: 0.12 * size.width,
         decoration: BoxDecoration(
           color: Colors.grey,
           shape: BoxShape.circle,

@@ -35,22 +35,26 @@ class _UserMapState extends State<UserMap> {
 
   @override
   Widget build(BuildContext context) {
-    List<User> users = Provider.of<CommunityProvider>(context).users.usuarios;
-    if (users != null) {
+    final user = Provider.of<CommunityProvider>(context);
+    if (user.users != null && user.users.usuarios != null) {
       Provider.of<MarkerProvider>(context, listen: false)
-          .getUsersPosition(users);
+          .getUsersPosition(user.users.usuarios);
     }
     //Con esto consumis la ubicacion del usuario
     final userLocation = Provider.of<Position>(context);
     return SizedBox(
       height: MediaQuery.of(context).size.height / 2.5,
-      child: userLocation != null
+      child: userLocation != null && user.hasConnection
           ? Consumer<MarkerProvider>(
               builder: (context, marker, _) => marker != null
                   ? _buildMap(marker, userLocation)
                   : Text('Cargando mapa...'),
             )
-          : Center(child: Text('Tomando ubicacion...')),
+          : user.hasConnection
+              ? Center(child: Text('Tomando ubicacion...'))
+              : ListTile(
+                  title: Text('Verifique su conexion'),
+                ),
     );
   }
 

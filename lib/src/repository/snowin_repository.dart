@@ -414,7 +414,7 @@ class SnowinRepository {
   retornarErrorConexion() {
     List decodeResp = List();
     decodeResp.add({
-      'field': 'error_desconocido',
+      'field': 'error_conexion',
       'message':
           'Usted no tiene conexión en estos momentos! Verifique e inténtelo más tarde.'
     });

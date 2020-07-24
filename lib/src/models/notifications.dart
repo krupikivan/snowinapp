@@ -1,32 +1,21 @@
+import 'package:snowin/src/models/user.dart';
+
 class Notifications {
   var id;
-  var user;
-  var level;
-  var image;
-  var time;
-  var reports;
-  var points;
-  var awards;
-  var comments;
-  var ranking;
-  var votes;
-  var position;
+  var notificacion;
+  var visto;
+  User userNotifica;
 
-  Notifications(this.id, this.user, this.level, this.image, this.time, this.reports, this.points, this.awards,
-          this.comments, this.ranking, this.votes, this.position);
+  Notifications(this.id, this.notificacion, this.visto, this.userNotifica);
 
   Notifications.map(dynamic data) {
-    this.id = data.containsKey('id')? data['id'] : 0;
-    this.user = data.containsKey('user')? data['user'].toString() : "";
-    this.level = data.containsKey('level')? data['level'].toString() : "";
-    this.image= data.containsKey('img')? data['img'].toString() : "";
-    this.time= data.containsKey('time')? data['time'].toString() : "";
-    this.reports = data.containsKey('reports')? data['reports'].toString() : "";
-    this.points = data.containsKey('points')? data['points'].toString() : "";
-    this.awards = data.containsKey('awards')? data['awards'].toString() : "";
-    this.comments= data.containsKey('comments')? data['comments'].toString() : "";
-    this.ranking = data.containsKey('ranking')? data['ranking'].toString() : "";
-    this.votes = data.containsKey('votes')? data['votes'].toString() : "";
-    this.position = data.containsKey('position')? data['position'].toString() : "";
+    this.id =
+        data.containsKey('idnotificaciones') ? data['idnotificaciones'] : 0;
+    this.notificacion =
+        data.containsKey('notificacion') ? data['notificacion'] : '';
+    this.visto = data.containsKey('visto') ? data['visto'] : 0;
+    this.userNotifica = data.containsKey('user_notifica')
+        ? User.map(data['user_notifica'][0])
+        : 0;
   }
 }
