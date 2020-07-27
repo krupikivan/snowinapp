@@ -40,54 +40,47 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getMensajes({int id, bool refresh}) async {
-    if (refresh == null) {
+  Future getConversacion(int id) async {
+    try {
+      _total = 0;
       _messageList.clear();
       _loading = true;
       notifyListeners();
-    }
-    // _messageList.clear();
-    _userId = (id ?? _userId);
-    try {
-      var response = await ChatRepository().getConversacion(_userId);
-      print(response);
+      _conversacion = null;
+      var response = await ChatRepository().getConversacion(id);
       if (response['ok']) {
-        List list = [];
         _conversacion = response['data']['data'][0]['id'];
-        //Obtuve el id de la conversacion ahora busco los mensajes
-        var mensajes = await ChatRepository().getAllMessages(_conversacion);
-        print(mensajes);
-        if (mensajes['ok']) {
-          list = mensajes['data']['data'];
-          if (_total != mensajes['data']['total']) {
-            _total = mensajes['data']['total'];
-            compute(messageFromJson, list).then((value) {
-              _messageList = value;
-              if (refresh == null) {
-                _loading = false;
-              }
-              notifyListeners();
-            });
-          }
-        } else {
-          if (refresh == null) {
-            _loading = false;
-            notifyListeners();
-          }
-          throw new Exception('Error trayendo los mensajes');
-        }
       } else {
-        if (refresh == null) {
-          _loading = false;
-          notifyListeners();
-        }
         throw new Exception('Error trayendo la conversacion');
       }
-    } catch (e) {
-      if (refresh == null) {
+    } catch (e) {}
+  }
+
+  Future getMensajes() async {
+    try {
+      List list = [];
+      //Obtuve el id de la conversacion ahora busco los mensajes
+      var mensajes = await ChatRepository().getAllMessages(_conversacion);
+      if (mensajes['ok']) {
+        list = mensajes['data']['data'];
+        if (_total == 0 || _total != mensajes['data']['total']) {
+          _total = mensajes['data']['total'];
+          compute(messageFromJson, list).then((value) {
+            _messageList = value;
+            messageList
+                .sort((a, b) => DateTime.parse(b.fecha).millisecondsSinceEpoch);
+            _loading = false;
+            notifyListeners();
+          });
+        }
+      } else {
         _loading = false;
         notifyListeners();
+        throw new Exception('Error trayendo los mensajes');
       }
+    } catch (e) {
+      _loading = false;
+      notifyListeners();
     }
   }
 
@@ -96,7 +89,7 @@ class ChatProvider with ChangeNotifier {
       var response = await ChatRepository().sendMessage(text, id);
       print(response);
       if (response['ok']) {
-        await getMensajes(refresh: false);
+        await getMensajes();
         return true;
       } else {
         throw new Exception('No hay conexion');
@@ -111,7 +104,7 @@ class ChatProvider with ChangeNotifier {
       var response = await ChatRepository().delete(id);
       print(response);
       if (response['ok']) {
-        await getMensajes(refresh: false);
+        await getMensajes();
         return true;
       } else {
         throw new Exception('Error eliminando mensaje');

@@ -46,10 +46,10 @@ class UserTile extends StatelessWidget {
               ),
             ],
           ),
-          onTap: () {
+          onTap: () async {
             userProvider.userTapped = user;
-            chat.getMensajes(id: user.id);
-            Navigator.pushNamed(context, '/userChat');
+            await chat.getConversacion(user.id);
+            Navigator.of(context).pushNamed('/userChat', arguments: context);
           }),
     );
   }

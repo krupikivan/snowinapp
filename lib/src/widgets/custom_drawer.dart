@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
+import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/utils/dialogs.dart';
@@ -125,9 +126,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
         txt,
         style: style,
       ),
-      onTap: () {
+      onTap: () async {
+        if (txt == 'Consultas') {
+          await Provider.of<ChatProvider>(context, listen: false)
+              .getConversacion(3);
+        }
         Navigator.pop(context);
-        Navigator.pushNamed(context, _getRoute(txt));
+        Navigator.of(context).pushNamed(_getRoute(txt), arguments: context);
       },
     );
   }

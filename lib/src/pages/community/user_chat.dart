@@ -13,30 +13,39 @@ import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 
 class UserChat extends StatefulWidget {
-  const UserChat({Key key}) : super(key: key);
+  @required
+  final BuildContext oldContext;
+  const UserChat({Key key, this.oldContext}) : super(key: key);
   @override
-  _UserChatState createState() => _UserChatState();
+  _UserChatState createState() => _UserChatState(oldContext);
 }
 
 class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
-  // final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController =
       new TextEditingController(text: '');
-  // bool _isComposing = false;
   final GlobalKey<ScaffoldState> scaffoldDrawer =
       new GlobalKey<ScaffoldState>();
+
+  final BuildContext oldContext;
+  Timer timer;
+  _UserChatState(this.oldContext);
+  List<ChatMessage> _list = [];
   @override
   void dispose() {
+    // timer?.cancel();
+    timer.cancel();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 3), (timer) {
-      Provider.of<ChatProvider>(context, listen: false)
-          .getMensajes(refresh: false);
-    });
+    _list.clear();
+    Provider.of<ChatProvider>(oldContext, listen: false).getMensajes();
+    timer = Timer.periodic(
+        Duration(seconds: 5),
+        (timer) =>
+            Provider.of<ChatProvider>(oldContext, listen: false).getMensajes());
   }
 
   @override
@@ -45,6 +54,7 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
         Provider.of<CommunityProvider>(context, listen: false).userTapped.id;
     final int fromUserId =
         Provider.of<UserProvider>(context, listen: false).user.id;
+
     return Scaffold(
       key: scaffoldDrawer,
       appBar: PreferredSize(
@@ -62,9 +72,6 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
         if (chat.messageList == null || chat.loading) {
           return Center(child: CircularProgressIndicator());
         } else {
-          List<ChatMessage> _list = [];
-          chat.messageList
-              .sort((a, b) => DateTime.parse(b.fecha).millisecondsSinceEpoch);
           chat.messageList.forEach((element) {
             final ChatMessage message = ChatMessage(
               myMessage: fromUserId == element.idEmisor ? true : false,

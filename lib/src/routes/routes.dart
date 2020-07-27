@@ -34,6 +34,7 @@ class MyCustomRoute<T> extends MaterialPageRoute<T> {
 MaterialPageRoute getRoute(RouteSettings settings) {
   print(settings);
   print(settings.name);
+  print(settings.arguments);
   switch (settings.name) {
     case '/wellcome':
       return MyCustomRoute(
@@ -110,7 +111,9 @@ MaterialPageRoute getRoute(RouteSettings settings) {
       );
     case '/userChat':
       return MyCustomRoute(
-        builder: (_) => UserChat(),
+        builder: (_) => UserChat(
+          oldContext: settings.arguments,
+        ),
         settings: settings,
       );
 /**
@@ -136,7 +139,9 @@ MaterialPageRoute getRoute(RouteSettings settings) {
 
     case '/ask':
       return MyCustomRoute(
-        builder: (_) => Ask(),
+        builder: (_) => Ask(
+          oldContext: settings.arguments,
+        ),
         settings: settings,
       );
 

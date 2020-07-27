@@ -83,6 +83,11 @@ class CommunityProvider with ChangeNotifier {
     getUsers(sum: 10);
   }
 
+//Todo: El admin id esta harcodeado
+  int getUserAdminId() {
+    return 3;
+  }
+
   void getUsers({int sum}) {
     int offset = 0;
     _limit = sum != null ? _limit + sum : _limit;
