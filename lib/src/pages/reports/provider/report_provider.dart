@@ -516,7 +516,6 @@ class ReportProvider with ChangeNotifier {
   void fetchData(bool value) {
     _isLoading = true;
     value ? fetchAllReports(true) : fetchAllMyReports(true);
-    // pageSum();
     notifyListeners();
   }
 
@@ -719,10 +718,6 @@ class ReportProvider with ChangeNotifier {
     } catch (e) {
       throw new Exception(e.toString());
     }
-
-    // }).catchError((error) {
-    //   print(error.toString());
-    // });
   }
 
   Future<void> centroSki() async {
@@ -860,27 +855,31 @@ class ReportProvider with ChangeNotifier {
   }
 
   Future<void> detalleCentroSki() async {
-    ReportRepository().detalleCentroSki(_center.id.toString()).then((response) {
-      print('detalle-centro-ski response: ');
-      print(response);
-      if (response['ok']) {
-        var data = response['data'];
-        _center = data['centro_ski'] != null
-            ? SkiCenter.map(data['centro_ski'])
-            : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
-        _recomendedTraks = List<Pist>();
-        if (data['pistas_recomendadas'] != null) {
-          final _castDataType =
-              data['pistas_recomendadas'].cast<Map<String, dynamic>>();
-          _recomendedTraks =
-              _castDataType.map<Pist>((json) => Pist.map(json)).toList();
-          notifyListeners();
+    if (_center != null) {
+      ReportRepository()
+          .detalleCentroSki(_center.id.toString())
+          .then((response) {
+        print('detalle-centro-ski response: ');
+        print(response);
+        if (response['ok']) {
+          var data = response['data'];
+          _center = data['centro_ski'] != null
+              ? SkiCenter.map(data['centro_ski'])
+              : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
+          _recomendedTraks = List<Pist>();
+          if (data['pistas_recomendadas'] != null) {
+            final _castDataType =
+                data['pistas_recomendadas'].cast<Map<String, dynamic>>();
+            _recomendedTraks =
+                _castDataType.map<Pist>((json) => Pist.map(json)).toList();
+            notifyListeners();
+          }
+        } else {
+          throw new Exception('Error');
         }
-      } else {
-        throw new Exception('Error');
-      }
-    }).catchError((error) {
-      print(error.toString());
-    });
+      }).catchError((error) {
+        print(error.toString());
+      });
+    }
   }
 }

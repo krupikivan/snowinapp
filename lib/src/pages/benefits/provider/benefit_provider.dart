@@ -36,21 +36,53 @@ class BenefitProvider with ChangeNotifier {
 
   BenefitProvider.init() {
     _loading = false;
+    _limit = 10;
     fetchBenefits();
     fetchMyBenefits();
+  }
+
+  void refreshing() {
+    print(" refreshing ... ");
+    _limit = 10;
+    fetchBenefits();
+  }
+
+  //Manage Limit fetching benefits------------------------------
+  int _limit;
+  int get limit => _limit;
+  set limit(int value) {
+    _limit = value;
+    notifyListeners();
+  }
+
+  void loadMore({bool myBenefits}) {
+    _limit += 10;
+    if (myBenefits) {
+      fetchMyBenefits();
+    } else {
+      fetchBenefits();
+    }
   }
 
   void fetchBenefits() {
     _loading = true;
     notifyListeners();
-    BenefitRepository().getBenefits().then((response) {
+    int offset = _limit - 10;
+    BenefitRepository()
+        .getBenefits(_limit.toString(), offset.toString(), prepareFilters())
+        .then((response) async {
       print(response);
       if (response['ok']) {
+        print('Cantidad de beneficios: ' +
+            response['data']['data'].length.toString());
+        if (response['data']['data'].isNotEmpty) {
+          await compute(beneficioFromJson, response['data']['data'])
+              .then((value) {
+            _listBenefit = value;
+          });
+        }
         _loading = false;
-        compute(beneficioFromJson, response['data']['data']).then((value) {
-          _listBenefit = value;
-          notifyListeners();
-        });
+        notifyListeners();
       } else {
         if (response['errores'][0]['field'] == 'error_conexion') {
           _loading = false;
@@ -60,19 +92,28 @@ class BenefitProvider with ChangeNotifier {
       }
     }).catchError((error) {
       print(error.toString());
+      _loading = false;
+      notifyListeners();
     });
   }
 
   void fetchMyBenefits() {
     _loading = true;
     notifyListeners();
-    BenefitRepository().getMyBenefits().then((response) {
+    int offset = _limit - 10;
+    BenefitRepository()
+        .getMyBenefits(_limit.toString(), offset.toString(), prepareFilters())
+        .then((response) async {
       print(response);
       if (response['ok']) {
-        compute(misBeneficiosFromJson, response['data']['data']).then((value) {
-          _listMyBenefit = value;
-          notifyListeners();
-        });
+        if (response['data']['data'].isNotEmpty) {
+          await compute(misBeneficiosFromJson, response['data']['data'])
+              .then((value) {
+            _listMyBenefit = value;
+          });
+        }
+        _loading = false;
+        notifyListeners();
       } else {
         if (response['errores'][0]['field'] == 'error_conexion') {
           _loading = false;
@@ -82,7 +123,14 @@ class BenefitProvider with ChangeNotifier {
       }
     }).catchError((error) {
       print(error.toString());
+      _loading = false;
+      notifyListeners();
     });
+  }
+
+  String prepareFilters() {
+    List<String> filters = List<String>();
+    return filters.join('&');
   }
 
   Benefit _benefitTapped;

@@ -42,128 +42,151 @@ class ProfilePage extends StatelessWidget {
           ),
           preferredSize: Size(double.infinity, 70)),
       body: conex != null && conex.status == Status.HasConnection
-          ? Stack(
-              overflow: Overflow.visible,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.zero,
-                  decoration: BoxDecoration(color: Colors.black),
-                  height: size.height * 0.18,
-                  width: double.infinity,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 20, bottom: 10),
-                    child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: IconButton(
-                          icon: Icon(Icons.edit, color: Colors.white),
-                          onPressed: () {
-                            _controller.text = user.user.username;
-                            _showPopupProfile(context, user);
-                          },
-                        )),
-                  ),
-                ),
-                SafeArea(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: size.height * 0.05,
-                      ),
-                      Text(
-                        'Nombre de Usuario',
-                        style: TextStyle(color: Colors.grey[400], fontSize: 15),
-                      ),
-                      Text(
-                        user.user.username,
-                        style: TextStyle(color: Colors.grey[400], fontSize: 30),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Center(
-                        child: user.loading ? UserLoadingImage() : UserImage(),
-                      ),
-                      Text(
+          ? SafeArea(
+              child: Container(
+                alignment: Alignment.center,
+                child: ListView(
+                  children: <Widget>[
+                    Stack(
+                      overflow: Overflow.visible,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(color: Colors.black),
+                          height: size.height * 0.18,
+                          width: double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 20, bottom: 10),
+                            child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: IconButton(
+                                  icon: Icon(Icons.edit, color: Colors.white),
+                                  onPressed: () {
+                                    _controller.text = user.user.username;
+                                    _showPopupProfile(context, user);
+                                  },
+                                )),
+                          ),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: size.height * 0.05,
+                            ),
+                            Align(
+                              child: Text(
+                                'Nombre de Usuario',
+                                style: TextStyle(
+                                    color: Colors.grey[400], fontSize: 15),
+                              ),
+                            ),
+                            Align(
+                              child: Text(
+                                user.user.username,
+                                style: TextStyle(
+                                    color: Colors.grey[400], fontSize: 30),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Center(
+                              child: user.loading
+                                  ? UserLoadingImage()
+                                  : UserImage(),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Align(
+                      child: Text(
                         'PERFIL PUBLICO EN SNOWIN',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      ..._buildUserInfoData(user, context, _controller),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
+                    ),
+                    ..._buildUserInfoData(user, context, _controller),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Align(
+                      child: Text(
                         'MIS REPORTES',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      CustomRowData(
-                        title1: 'Publicados',
-                        num1: reports.allMyReports.length,
-                        title2: 'Puntos',
-                        num2: user.user.puntos,
-                        title3: 'Ranking',
-                        num3: user.user.ranking,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    CustomRowData(
+                      title1: 'Publicados',
+                      num1: reports.allMyReports.length,
+                      title2: 'Puntos',
+                      num2: user.user.puntos,
+                      title3: 'Ranking',
+                      num3: user.user.ranking,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Align(
+                      child: Text(
                         'COMUNIDAD',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      CustomRowData(
-                        title1: 'Amigos',
-                        num1: 10,
-                        title2: 'Mensajes',
-                        num2: 5,
-                        title3: 'Solicitudes',
-                        num3: user.user.ranking,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    CustomRowData(
+                      title1: 'Amigos',
+                      num1: 10,
+                      title2: 'Mensajes',
+                      num2: 5,
+                      title3: 'Solicitudes',
+                      num3: user.user.ranking,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Align(
+                      child: Text(
                         'MI CUENTA',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      SizedBox(
-                        height: 15,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        children: <Widget>[
+                          AccountDetailTile(
+                            title: 'Notificaciones',
+                            action: () => null,
+                          ),
+                          AccountDetailTile(
+                            title: 'Privacidad',
+                            action: () => null,
+                          ),
+                          AccountDetailTile(
+                            title: 'Reportar un problema',
+                            action: () => null,
+                          ),
+                          AccountDetailTile(
+                            title: 'Salir de mi cuenta',
+                            action: () => null,
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                        ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Column(
-                          children: <Widget>[
-                            AccountDetailTile(
-                              title: 'Notificaciones',
-                              action: () => null,
-                            ),
-                            AccountDetailTile(
-                              title: 'Privacidad',
-                              action: () => null,
-                            ),
-                            AccountDetailTile(
-                              title: 'Reportar un problema',
-                              action: () => null,
-                            ),
-                            AccountDetailTile(
-                              title: 'Salir de mi cuenta',
-                              action: () => null,
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             )
           : ErrorConnection(),
       drawerScrimColor: Colors.black54,

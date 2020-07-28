@@ -41,7 +41,9 @@ class CustomAppbarDrawer extends StatelessWidget {
                         height: 55,
                         width: 55,
                       )
-                    : SizedBox(),
+                    : SizedBox(
+                        width: 0,
+                      ),
                 Text(
                   title,
                   style: TextStyle(color: Colors.white, fontSize: 20),

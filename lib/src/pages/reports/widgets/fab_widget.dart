@@ -9,13 +9,9 @@ class FabWidget extends StatelessWidget {
   const FabWidget({
     Key key,
     this.scrollController,
-    // this.controllerTitle,
-    // this.controllerComment
   }) : super(key: key);
 
   final ScrollController scrollController;
-  // final TextEditingController controllerTitle;
-  // final TextEditingController controllerComment;
 
   @override
   Widget build(BuildContext context) {
@@ -60,19 +56,7 @@ class FabWidget extends StatelessWidget {
                     action: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => NewReport(
-                              // youAre: report.center.name.toString(),
-                              // trackItems: report.trackItems,
-                              // calidadNieveItems: report.calidadNieveItems,
-                              // climaItems: report.climaItems,
-                              // vientoItems: report.vientoItems,
-                              // sensacionGeneralItems:
-                              //     report.sensacionGeneralItems,
-                              // esperaMediosItems: report.esperaMediosItems,
-                              // onSend: () {
-                              // report.refreshing(mounted);
-                              // },
-                              ),
+                          builder: (BuildContext context) => NewReport(),
                         )),
                   ),
                   SizedBox(
@@ -99,8 +83,4 @@ class FabWidget extends StatelessWidget {
       alignment: FractionalOffset.bottomCenter,
     );
   }
-
-  // void showFiltersDialog(context, ReportProvider report) {
-
-  // }
 }

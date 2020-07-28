@@ -24,7 +24,6 @@ class Reports extends StatefulWidget {
 class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   Timer _speedTimer;
   TabController _tabControllerReports;
-  // bool _dialogTopVisible = false, _dialogBottomVisible = false;
 
   @override
   void initState() {
@@ -43,10 +42,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    // final reports = Provider.of<ReportProvider>(context);
-    // if (reports.showReportWarnning) {
-    //   showWarningsDialog();
-    // }
     final conex = Provider.of<ConnectionStatus>(context);
     return WillPopScope(
       child: Scaffold(
@@ -139,8 +134,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     );
   }
 
-//////////////////////////////////////////////////////////////Widgets
-
   void showWarningsDialog() {
     print('show warnings dialog');
     final size = MediaQuery.of(context).size;
@@ -183,200 +176,24 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     );
   }
 
-  // Widget _dialogTopContent() {
-  //   final size = MediaQuery.of(context).size;
-  //   return Container(
-  //     width: size.width * 0.90,
-  //     margin: EdgeInsets.symmetric(vertical: 10, horizontal: size.width * 0.01),
-  //     decoration: BoxDecoration(
-  //         color: Color.fromRGBO(255, 216, 52, 1),
-  //         borderRadius: BorderRadius.circular(15)),
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(10.0),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         children: [
-  //           Row(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               Container(
-  //                 height: 45,
-  //                 child: ClipPolygon(
-  //                   sides: 8,
-  //                   borderRadius: 5.0,
-  //                   rotate: 113.0,
-  //                   child: Container(
-  //                     color: Color.fromRGBO(29, 29, 27, 1),
-  //                     child: Center(
-  //                       child: FaIcon(
-  //                         FontAwesomeIcons.exclamation,
-  //                         size: 20,
-  //                         color: Color.fromRGBO(255, 216, 52, 1),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //               Container(
-  //                 child: Column(
-  //                   mainAxisAlignment: MainAxisAlignment.start,
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     AutoSizeText(_t(context, "warning").toUpperCase() + "!",
-  //                         style: TextStyle(
-  //                           fontSize: 20,
-  //                           fontWeight: FontWeight.bold,
-  //                           color: Colors.black,
-  //                           decoration: TextDecoration.none,
-  //                         )),
-  //                     Container(
-  //                         width: size.width * 0.6,
-  //                         child: AutoSizeText(_t(context, "recomendedPistes"),
-  //                             style: TextStyle(
-  //                                 fontSize: 14,
-  //                                 color: Colors.black,
-  //                                 decoration: TextDecoration.none))),
-  //                   ],
-  //                 ),
-  //               ),
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   _hideDialog(1);
-  //                 },
-  //                 child: Container(
-  //                   child: Icon(Icons.cancel),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           Container(
-  //             padding: EdgeInsets.symmetric(horizontal: 10),
-  //             child: Column(
-  //               children: buildRecomendedTraks(),
-  //             ),
-  //           ),
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               Container(
-  //                 child: RaisedButton(
-  //                   color: Color.fromRGBO(80, 79, 79, 1),
-  //                   onPressed: goToMapPage,
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(25.0),
-  //                   ),
-  //                   child: Row(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                     children: [
-  //                       Icon(
-  //                         Icons.map,
-  //                         color: Color.fromRGBO(255, 216, 52, 1),
-  //                         size: 20,
-  //                       ),
-  //                       SizedBox(
-  //                         width: 3,
-  //                       ),
-  //                       AutoSizeText(
-  //                         _t(context, "pistesMap").toUpperCase(),
-  //                         style: TextStyle(
-  //                             color: Color.fromRGBO(255, 216, 52, 1),
-  //                             fontSize: 13),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //               Container(
-  //                 child: RaisedButton(
-  //                   color: Color.fromRGBO(29, 29, 27, 1),
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(25.0),
-  //                   ),
-  //                   child: Row(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       AutoSizeText(
-  //                         _t(context, "understood").toUpperCase(),
-  //                         style: TextStyle(color: Colors.white, fontSize: 13),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  void setLocationState() async {
+    final reports = Provider.of<ReportProvider>(context, listen: false);
+    await reports.centroSki();
 
-  // Widget _dialogBottomContent() {
-  //   final size = MediaQuery.of(context).size;
-  //   return Container(
-  //     width: size.width * 0.90,
-  //     margin: EdgeInsets.symmetric(vertical: 10, horizontal: size.width * 0.01),
-  //     decoration: BoxDecoration(
-  //         color: Colors.white, borderRadius: BorderRadius.circular(15)),
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(10.0),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         children: [
-  //           GestureDetector(
-  //             onTap: () {
-  //               _hideDialog(2);
-  //             },
-  //             child: Container(
-  //               alignment: Alignment.centerRight,
-  //               child: Icon(Icons.cancel),
-  //             ),
-  //           ),
-  //           Container(
-  //               padding: EdgeInsets.symmetric(horizontal: 5),
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                 children: [
-  //                   Icon(
-  //                     Icons.group,
-  //                     color: Theme.of(context).primaryColor,
-  //                     size: 35,
-  //                   ),
-  //                   Column(
-  //                     children: buildFriends(),
-  //                   ),
-  //                 ],
-  //               )),
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               RaisedButton(
-  //                 color: Theme.of(context).primaryColor,
-  //                 onPressed: () {},
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(25.0),
-  //                 ),
-  //                 child: Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children: [
-  //                     AutoSizeText(
-  //                       _t(context, "toContact").toUpperCase(),
-  //                       style: TextStyle(color: Colors.white, fontSize: 13),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+    //cargar pistas recomendadas
+    await reports.fetchRecommendTracks().then((value) async {
+      if (value != null) {
+        DialogHelper.showSimpleDialog(context, value.toString());
+      }
+
+      //cargar amigos cerca
+      var show = await reports.fetchClosestFriends();
+      if (show != null && show && !reports.showed) {
+        reports.showed = true;
+        showWarningsDialog();
+      }
+    });
+  }
 
   // List<Widget> buildFriends() {
   //   List<Widget> elements = new List<Widget>();
@@ -436,139 +253,8 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   //   }
   // }
 
-//////////////////////////////////////////////////////////////Functions
-  void setLocationState() async {
-    final reports = Provider.of<ReportProvider>(context, listen: false);
-    await reports.centroSki(); //.then((value) {
-    // if (mounted) setState(() {});
-
-    //cargar pistas recomendadas
-    await reports.fetchRecommendTracks().then((value) async {
-      // print(_session.recomendedTraks.length.toString());
-      if (value != null) {
-        DialogHelper.showSimpleDialog(context, value.toString());
-      }
-
-      //cargar amigos cerca
-      var show = await reports.fetchClosestFriends();
-      if (show != null && show && !reports.showed) {
-        reports.showed = true;
-        showWarningsDialog();
-      }
-      //.then((value) {
-      // print(_session.closestFriends.length.toString());
-
-      // setState(() {});
-    });
-    // if (reports.showReportWarnning) {
-    // reports.changeWarningDialog(true);
-    // showWarningsDialog();
-    // }
-    //   });
-    // });
-  }
-
-  // Future<void> centroSki() async {
-  //   SnowinRepository().centroSki().then((response) {
-  //     print('centro-ski response: ');
-  //     print(response);
-  //     if (response['ok']) {
-  //       var data = response['data'];
-
-  //       setState(() {
-  //         _session.center = data['centroSki'] != null
-  //             ? SkiCenter.map(data['centroSki'])
-  //             : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
-  //         _session.pist = data['pista'] != null
-  //             ? Pist.map(data['pista'])
-  //             : Pist(0, 'No hay pista', 0, 0, '', '', '', 0.0, 0.0);
-  //         if (data['amigos'] != null) {
-  //           final _castDataType = data['amigos'].cast<Map<String, dynamic>>();
-  //           _session.closestFriends =
-  //               _castDataType.map<User>((json) => User.map(json)).toList();
-  //         }
-  //       });
-  //     } else {
-  //       throw new Exception('Error');
-  //     }
-  //   }).catchError((error) {
-  //     print(error.toString());
-  //   });
-  // }
-
-  // Future<void> recomendedTraks() async {
-  //   await ReportRepository().recomendedTraks().then((response) {
-  //     print('advertencias response: ');
-  //     print(response);
-  //     if (response['ok']) {
-  //       var data = response['data'];
-
-  //       if (data != false) {
-  //         if (data is String) {
-  //           if (_session.showLocationWarnning) {
-  //             DialogHelper.showSimpleDialog(context, data.toString());
-  //             _session.showLocationWarnning = false;
-  //             _dialogTopVisible =
-  //                 _session.recomendedTraks.length > 0 ? true : false;
-  //           }
-  //         } else {
-  //           final _castDataType = data.cast<Map<String, dynamic>>();
-  //           _session.recomendedTraks =
-  //               _castDataType.map<Pist>((json) => Pist.map(json)).toList();
-  //           _dialogTopVisible =
-  //               _session.recomendedTraks.length > 0 ? true : false;
-  //         }
-  //       }
-  //     } else {
-  //       throw new Exception('Error');
-  //     }
-  //   }).catchError((error) {
-  //     print(error.toString());
-  //   });
-  // }
-
-  // Future<void> closestFriends() async {
-  //   await ReportRepository().closestFriends().then((response) {
-  //     print('coordenadas-amigos response: ');
-  //     print(response);
-  //     if (response['ok']) {
-  //       var data = response['data'];
-
-  //       final _castDataType = data['amigos_serca'].cast<Map<String, dynamic>>();
-  //       _session.closestFriends =
-  //           _castDataType.map<User>((json) => User.map(json)).toList();
-  //       _dialogBottomVisible =
-  //           _session.closestFriends.length > 0 ? true : false;
-
-  //       if (_session.showReportWarnning &&
-  //           (_dialogTopVisible || _dialogBottomVisible)) {
-  //         showWarningsDialog();
-  //       }
-  //     } else {
-  //       throw new Exception('Error');
-  //     }
-  //   }).catchError((error) {
-  //     print(error.toString());
-  //   });
-  // }
-
-  // void goToMapPage() {
-  //   Navigator.popUntil(context, ModalRoute.withName('/reports'));
-
-  //   if (_session.center.id != 0) {
-  //     Navigator.pushNamed(context, '/pistes-map');
-  //   } else {
-  //     DialogHelper.showSimpleDialog(
-  //         context, 'No está cerca de ningún centro de ski.');
-  //   }
-  // }
-
   Future<bool> goBack() async {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
     return false;
   }
-
-  // String _t(BuildContext context, String label) {
-  //   return AppLocalizations.of(context).translate(label);
-  // }
 }

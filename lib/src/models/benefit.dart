@@ -4,6 +4,7 @@ List<Benefit> beneficioFromJson(var list) {
 
 class Benefit {
   int id;
+  int puntos;
   String nombre;
   String descripcion;
   String imagen;
@@ -12,6 +13,7 @@ class Benefit {
 
   Benefit({
     this.id,
+    this.puntos,
     this.nombre,
     this.descripcion,
     this.imagen,
@@ -26,5 +28,6 @@ class Benefit {
         imagen: json["urlImagen"],
         latitud: json["latitud"] as double,
         longitud: json["longitud"] as double,
+        puntos: json["puntos"] as int,
       );
 }

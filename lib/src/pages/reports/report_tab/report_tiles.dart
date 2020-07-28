@@ -50,7 +50,7 @@ class ReportTiles extends StatelessWidget {
                 : ListView(
                     children: <Widget>[
                       ListTile(
-                        title: Text('No hay registros'),
+                        title: Text('No hay reportes'),
                       ),
                     ],
                   )

@@ -12,9 +12,11 @@ class BenefitRepository {
   BenefitRepository._internal();
   factory BenefitRepository() => _instance;
 
-  Future getBenefits() async {
+  Future getBenefits(String limit, String offset, [String filters = '']) async {
     //configurar servicio
     String service = Config.apiBeneficiosUrl;
+    service += '?limit=' + limit + '&offset=' + offset;
+    service += filters.isNotEmpty ? ('&' + filters) : '';
     //Respuesta
     http.Response response;
     try {
@@ -40,9 +42,12 @@ class BenefitRepository {
     }
   }
 
-  Future getMyBenefits() async {
+  Future getMyBenefits(String limit, String offset,
+      [String filters = '']) async {
     //configurar servicio
     String service = Config.apiMisBeneficiosUrl;
+    service += '?limit=' + limit + '&offset=' + offset;
+    service += filters.isNotEmpty ? ('&' + filters) : '';
     //Respuesta
     http.Response response;
     try {

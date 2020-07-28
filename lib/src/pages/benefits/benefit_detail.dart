@@ -110,7 +110,7 @@ class _BenefitDetailState extends State<BenefitDetail> {
             padding: const EdgeInsets.only(top: 10),
             child: Center(
               child: Text(
-                'Usa este beneficio y suma 10 puntos!',
+                'Usa este beneficio y suma ${benefit.benefitTapped.puntos} puntos!',
                 style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: 20,

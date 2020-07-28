@@ -41,15 +41,15 @@ class FilterDialog extends StatelessWidget {
                               report.title =
                                   value.trim().isNotEmpty ? value.trim() : '';
                             })),
-                    ListTile(
-                        title: Text('Comentario'),
-                        subtitle: CustomTextField(
-                            width: size.width * 0.9,
-                            controller: controllerComment,
-                            onChanged: (value) {
-                              report.comment =
-                                  value.trim().isNotEmpty ? value.trim() : '';
-                            })),
+                    // ListTile(
+                    //     title: Text('Comentario'),
+                    //     subtitle: CustomTextField(
+                    //         width: size.width * 0.9,
+                    //         controller: controllerComment,
+                    //         onChanged: (value) {
+                    //           report.comment =
+                    //               value.trim().isNotEmpty ? value.trim() : '';
+                    //         })),
                     ListTile(
                         title: Text('Calidad nieve'),
                         subtitle: CustomDropdownd(
@@ -94,17 +94,17 @@ class FilterDialog extends StatelessWidget {
                               print(value);
                               report.esperaMedios = value;
                             })),
-                    ListTile(
-                        title: Text('Ordenar'),
-                        subtitle: CustomSort(
-                            width: size.width * 0.9,
-                            height: 50,
-                            text: 'Id de reporte',
-                            value: report.sortIdReporte,
-                            onChanged: (value) {
-                              print(value);
-                              report.sortIdReporte = value;
-                            })),
+                    // ListTile(
+                    //     title: Text('Ordenar'),
+                    //     subtitle: CustomSort(
+                    //         width: size.width * 0.9,
+                    //         height: 50,
+                    //         text: 'Id de reporte',
+                    //         value: report.sortIdReporte,
+                    //         onChanged: (value) {
+                    //           print(value);
+                    //           report.sortIdReporte = value;
+                    //         })),
                     ListTile(
                         subtitle: CustomSort(
                             width: size.width * 0.9,
@@ -196,8 +196,8 @@ class FilterDialog extends StatelessWidget {
                         ),
                         color: Theme.of(context).primaryColor,
                         onPressed: () {
+                          report.fetchAllReports(false);
                           Navigator.of(context).pop(false);
-                          // refreshing();
                         },
                       ),
                     ]),

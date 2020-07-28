@@ -56,8 +56,6 @@ class ReportDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final report = Provider.of<ReportProvider>(context);
-    // final user = Provider.of<UserProvider>(context);
-
     return Scaffold(
         drawerScrimColor: Colors.black54,
         endDrawer: CustomDrawer(),
@@ -271,7 +269,8 @@ class ReportDetail extends StatelessWidget {
                                               text: report.calidadNieveItems
                                                   .firstWhere((element) =>
                                                       element.key.toString() ==
-                                                      report.calidadNieve
+                                                      report.reportSelected
+                                                          .calidadNieve
                                                           .toString())
                                                   .value
                                                   .toString()
@@ -295,7 +294,9 @@ class ReportDetail extends StatelessWidget {
                                               text: report.climaItems
                                                   .firstWhere((element) =>
                                                       element.key.toString() ==
-                                                      report.clima.toString())
+                                                      report
+                                                          .reportSelected.clima
+                                                          .toString())
                                                   .value
                                                   .toString()
                                                   .trim(),
@@ -317,7 +318,9 @@ class ReportDetail extends StatelessWidget {
                                               text: report.vientoItems
                                                   .firstWhere((element) =>
                                                       element.key.toString() ==
-                                                      report.viento.toString())
+                                                      report
+                                                          .reportSelected.viento
+                                                          .toString())
                                                   .value
                                                   .toString()
                                                   .trim(),
@@ -340,28 +343,12 @@ class ReportDetail extends StatelessWidget {
                                               text: report.esperaMediosItems
                                                   .firstWhere((element) =>
                                                       element.key.toString() ==
-                                                      report.esperaMedios
+                                                      report.reportSelected
+                                                          .esperaMedios
                                                           .toString())
                                                   .value
                                                   .toString()
                                                   .trim(),
-                                              style: TextStyle(
-                                                  color: Colors.orange,
-                                                  fontSize: 17),
-                                            ),
-                                          ]),
-                                        ),
-                                        RichText(
-                                          text: TextSpan(children: [
-                                            TextSpan(
-                                              text:
-                                                  _t(context, "traffic") + ": ",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17),
-                                            ),
-                                            TextSpan(
-                                              text: "Congestionado",
                                               style: TextStyle(
                                                   color: Colors.orange,
                                                   fontSize: 17),

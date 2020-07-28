@@ -13,7 +13,6 @@ class ReportsListTab extends StatefulWidget {
 
 class ReportsListTabState extends State<ReportsListTab> {
   double deviceHeight = 0;
-  bool _showTopButon = false;
   ScrollController _scrollController;
 
   @override
@@ -55,20 +54,6 @@ class ReportsListTabState extends State<ReportsListTab> {
   }
 
   void scrollListener() {
-    if (_scrollController.position.pixels > deviceHeight) {
-      if (!_showTopButon) {
-        setState(() {
-          _showTopButon = true;
-        });
-      }
-    } else {
-      if (_showTopButon) {
-        setState(() {
-          _showTopButon = false;
-        });
-      }
-    }
-
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       startLoader();
@@ -78,63 +63,5 @@ class ReportsListTabState extends State<ReportsListTab> {
   void startLoader() {
     if (mounted)
       Provider.of<ReportProvider>(context, listen: false).fetchData(true);
-    // fetchData();
-  }
-
-  // void fetchData() async {
-  //   final report = Provider.of<ReportProvider>(context, listen: false);
-  //   await report.fetchAllReports(); //.then((elements) {
-  //   if (mounted) {
-  //     if (report.page == 0) {
-  //       // report.clearReports();
-  //     }
-  //     report.changeLoading();
-  //     report.pageSum();
-  //   }
-  // }
-
-  void showWarningsDialog(String message) {
-    print('show warnings dialog');
-    showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (context) {
-          return new AlertDialog(
-            backgroundColor: Colors.transparent,
-            content: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 224, 0, 1),
-                        border: Border.all(style: BorderStyle.none),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: ListTile(
-                      title: Column(
-                        children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 0.0)),
-                          ListTile(
-                            title: Text(
-                              message,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                              softWrap: true,
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 0.0)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
   }
 }
