@@ -49,6 +49,36 @@ class CommunityRepository {
     }
   }
 
+  Future notificacionLeida(int id) async {
+    print('call end point: leer notificacion');
+    //configurar servicio
+    String service = Config.apiNotificationsUrl + "$id/leida";
+
+    //Respuesta
+    http.Response response;
+
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response = await http.put(Uri.encodeFull(service),
+            headers: snowinProvider.securedHeaders);
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'ok': true,
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return snowinProvider.manejadorErroresResp(response);
+        }
+      } else {
+        return snowinProvider.retornarErrorConexion();
+      }
+    } catch (e) {
+      return snowinProvider.retornarErrorDesconocido();
+    }
+  }
+
   Future<Map> nearestUsers(String limit, String offset,
       [String filters = '']) async {
     print('call end point: usuarios-cercanos');

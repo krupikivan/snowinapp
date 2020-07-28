@@ -201,7 +201,8 @@ class NotificationProvider with ChangeNotifier {
     getNotifications();
   }
 
-  Future<List<Notifications>> getNotifications({int sum, int limit}) async {
+  Future<List<Notifications>> getNotifications(
+      {int sum, int limit, bool deleted}) async {
     List<Notifications> _list = new List<Notifications>();
     int offset = 0;
     _limit = sum != null ? _limit + sum : _limit;
@@ -217,7 +218,8 @@ class NotificationProvider with ChangeNotifier {
         _list = _castDataType
             .map<Notifications>((json) => Notifications.map(json))
             .toList();
-        if (response['data']['data'].isNotEmpty) {
+        if (response['data']['data'].isNotEmpty ||
+            (deleted != null && deleted)) {
           _notificationList = _list;
           notifyListeners();
         }
@@ -230,6 +232,20 @@ class NotificationProvider with ChangeNotifier {
     });
 
     return elements;
+  }
+
+  Future updateNotification(int id) async {
+    try {
+      var response = await CommunityRepository().notificacionLeida(id);
+      if (response['ok']) {
+        getNotifications(deleted: true);
+      } else {
+        if (response['errores'][0]['field'] == 'error_conexion') {}
+        throw new Exception('Error');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   String prepareFilters() {

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:snowin/src/pages/community/notification_tab_pages/provider/notification_provider.dart';
+
+import 'custom_count_notif.dart';
 
 class CustomBottomMenu extends StatelessWidget {
   final int item;
@@ -15,20 +20,20 @@ class CustomBottomMenu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           _createIconButton(
-              context, (item == 1), '/reports', Icons.report, "Reportes", ""),
-          _createIconButton(context, (item == 2), '/community', Icons.people,
-              "Comunidad", "4"),
-          _createIconButton(context, (item == 3), '/benefits', Icons.beenhere,
-              "Bneficios", ""),
+              context, (item == 1), '/reports', Icons.report, "Reportes"),
           _createIconButton(
-              context, (item == 4), '/sos', Icons.change_history, "S.O.S", ""),
+              context, (item == 2), '/community', Icons.people, "Comunidad"),
+          _createIconButton(
+              context, (item == 3), '/benefits', Icons.beenhere, "Bneficios"),
+          _createIconButton(
+              context, (item == 4), '/sos', Icons.change_history, "S.O.S"),
         ],
       ),
     );
   }
 
   Widget _createIconButton(BuildContext context, bool selected, String route,
-      IconData icon, String text, String notification) {
+      IconData icon, String text) {
     final size = MediaQuery.of(context).size;
     //if(selected){
     return GestureDetector(
@@ -46,22 +51,13 @@ class CustomBottomMenu extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            (notification != "")
+            route == '/community'
                 ? Stack(
+                    overflow: Overflow.visible,
                     children: [
                       Icon(icon,
                           size: 35, color: Color.fromRGBO(200, 205, 208, 1)),
-                      Positioned(
-                        left: 15,
-                        child: CircleAvatar(
-                          radius: 10,
-                          backgroundColor: Color.fromRGBO(255, 216, 52, 1),
-                          child: Text(
-                            notification,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      )
+                      Positioned(right: -15, child: CustomCountNotif())
                     ],
                   )
                 : Icon(icon, size: 32, color: Color.fromRGBO(200, 205, 208, 1)),

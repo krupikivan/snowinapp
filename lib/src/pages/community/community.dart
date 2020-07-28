@@ -7,6 +7,7 @@ import 'package:snowin/src/pages/community/search_tab.dart';
 import 'package:snowin/src/widgets/custom_appbar.dart';
 import 'package:snowin/src/widgets/custom_bottom_menu.dart';
 import 'package:snowin/src/pages/community/notification_tab_pages/notifications_list_tab.dart';
+import 'package:snowin/src/widgets/custom_count_notif.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:snowin/src/widgets/error_connection.dart';
 
@@ -71,11 +72,16 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
                             indicatorSize: TabBarIndicatorSize.tab,
                             tabs: [
                               Tab(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: AutoSizeText('NOTIFICACIONES',
-                                      maxLines: 1,
-                                      style: TextStyle(fontSize: 17)),
+                                child: Row(
+                                  children: <Widget>[
+                                    CustomCountNotif(),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: AutoSizeText('NOTIFICACIONES',
+                                          maxLines: 1,
+                                          style: TextStyle(fontSize: 17)),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Tab(

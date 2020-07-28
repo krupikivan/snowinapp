@@ -26,7 +26,7 @@ class ListNotificationTiles extends StatelessWidget {
                   title: Text('Buscando ...'),
                 )
               : ListTile(
-                  title: Text('No hay registros'),
+                  title: Text('No tiene notificaciones nuevas'),
                 ),
     );
   }
