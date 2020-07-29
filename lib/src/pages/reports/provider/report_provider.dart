@@ -15,7 +15,6 @@ class ReportProvider with ChangeNotifier {
     fetchClosestFriends();
     fetchAllReports(false);
     fetchAllMyReports(false);
-    loadTraks();
     loadEmuns();
     detalleCentroSki();
   }
@@ -35,6 +34,7 @@ class ReportProvider with ChangeNotifier {
     _shareFacebook = false;
     _shareInstagram = false;
     _showed = false;
+    _speed = false;
     _title = '';
     _comment = '';
     _calidadNieve = '';
@@ -44,9 +44,15 @@ class ReportProvider with ChangeNotifier {
     _sensacionGeneral = '';
     _track = '';
     _viento = '';
-    _reportFrom = '0';
+    _reportFrom = [
+      ItemKV('', 'Todos'),
+      ItemKV('CENTRO_DE_SKI', 'Centro de Ski'),
+      ItemKV('PISTA', 'Pista'),
+    ];
+    _reportFromItem = '';
     // _page = 0;
     _medias = [];
+    _pistasRecomendadas = [];
     _mounted = false;
   }
 
@@ -59,10 +65,10 @@ class ReportProvider with ChangeNotifier {
   }
 
 //Manage Pista------------------------------
-  Pist _pist;
-  Pist get pist => _pist;
-  set pist(Pist pista) {
-    _pist = pista;
+  Pista _pista;
+  Pista get pista => _pista;
+  set pista(Pista pista) {
+    _pista = pista;
     notifyListeners();
   }
 
@@ -79,6 +85,14 @@ class ReportProvider with ChangeNotifier {
   bool get mounted => _mounted;
   set mounted(bool value) {
     _mounted = value;
+    notifyListeners();
+  }
+
+//Speed------------------------------
+  bool _speed;
+  bool get speed => _speed;
+  set speed(bool value) {
+    _speed = value;
     notifyListeners();
   }
 
@@ -138,11 +152,11 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
-//Manage Recommend Traks------------------------------
-  List<Pist> _recomendedTraks;
-  List<Pist> get recomendedTraks => _recomendedTraks;
-  set recomendedTraks(List<Pist> list) {
-    _recomendedTraks = list;
+//Manage Centro ski warning------------------------------
+  List<Pista> _pistasRecomendadas;
+  List<Pista> get pistasRecomendadas => _pistasRecomendadas;
+  set pistasRecomendadas(List<Pista> list) {
+    _pistasRecomendadas = list;
     notifyListeners();
   }
 
@@ -223,6 +237,14 @@ class ReportProvider with ChangeNotifier {
   List<ItemKV> get calidadNieveItems => _calidadNieveItems;
   set calidadNieveItems(List<ItemKV> value) {
     _calidadNieveItems = value;
+    notifyListeners();
+  }
+
+//Manage Reporte de------------------------------
+  List<ItemKV> _reportFrom;
+  List<ItemKV> get reportFrom => _reportFrom;
+  set reportFrom(List<ItemKV> value) {
+    _reportFrom = value;
     notifyListeners();
   }
 
@@ -328,7 +350,6 @@ class ReportProvider with ChangeNotifier {
         .reportes(_limit.toString(), offset.toString(), prepareFilters())
         .then((response) {
       print('reporte/listar response: ');
-      print(response);
       if (response['ok']) {
         _isLoading = false;
         if (response['data'].isNotEmpty) {
@@ -358,7 +379,6 @@ class ReportProvider with ChangeNotifier {
             _limit.toString(), offset.toString(), prepareCommentsFilters())
         .then((response) {
       print('reporte/comentarios response: ');
-      print(response);
       if (response['ok']) {
         final _castDataType =
             response['data']['data'].cast<Map<String, dynamic>>();
@@ -383,7 +403,6 @@ class ReportProvider with ChangeNotifier {
         .reportes(_limit.toString(), offset.toString(), prepareMyFilters())
         .then((response) {
       print('reporte/listar propios response: ');
-      print(response);
       if (response['ok']) {
         if (response['data'].isNotEmpty) {
           final _castDataType = response['data'].cast<Map<String, dynamic>>();
@@ -459,10 +478,10 @@ class ReportProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String _reportFrom;
-  String get reportFrom => _reportFrom;
-  set reportFrom(String value) {
-    _reportFrom = value;
+  String _reportFromItem;
+  String get reportFromItem => _reportFromItem;
+  set reportFromItem(String value) {
+    _reportFromItem = value;
     notifyListeners();
   }
 
@@ -507,7 +526,7 @@ class ReportProvider with ChangeNotifier {
     _medias.clear();
     _clima = '';
     _viento = '';
-    _reportFrom = '';
+    _reportFromItem = '';
     _esperaMedios = '';
     _sensacionGeneral = '';
     notifyListeners();
@@ -533,29 +552,34 @@ class ReportProvider with ChangeNotifier {
   }
 
   Future<void> sendReport() async {
+    _isLoading = true;
+    notifyListeners();
     List<File> multimedias = List<File>();
     _medias.forEach((media) {
       multimedias.add(File(media.value));
     });
+
     await ReportRepository()
-        .sendReport(/*_track*/ '1', _title, _comment, _calidadNieve,
-            _esperaMedios, _viento, _clima, _sensacionGeneral, multimedias)
+        .sendReport(_track, _title, _comment, _calidadNieve, _esperaMedios,
+            _viento, _clima, _sensacionGeneral, multimedias)
         .then((response) async {
-      print(response);
       if (response['ok']) {
         initiateData();
-        // notifyListeners();
         fetchAllReports(false);
       } else {
+        _isLoading = false;
+        notifyListeners();
         throw new Exception('Error');
       }
     }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
       print(error.toString());
     });
   }
 
   bool formIsValid() {
-    return (/*_track.isNotEmpty*/ true &&
+    return (_track.isNotEmpty &&
         _title.isNotEmpty &&
         _comment.isNotEmpty &&
         _calidadNieve.isNotEmpty &&
@@ -657,12 +681,10 @@ class ReportProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> fetchClosestFriends() async {
+  Future<void> fetchClosestFriends() async {
     try {
-      var response =
-          await ReportRepository().closestFriends(); //.then((response) {
+      var response = await ReportRepository().closestFriends();
       print('coordenadas-amigos response: ');
-      print(response);
       if (response['ok']) {
         var data = response['data'];
 
@@ -671,44 +693,34 @@ class ReportProvider with ChangeNotifier {
             _castDataType.map<User>((json) => User.map(json)).toList();
         _dialogBottomVisible = closestFriends.length > 0 ? true : false;
         notifyListeners();
-        if (_showReportWarnning &&
-            (_dialogTopVisible || _dialogBottomVisible)) {
-          return true;
-        }
       } else {
         throw new Exception('Error');
       }
     } catch (e) {
       throw Exception(e.toString());
     }
-
-    // }).catchError((error) {
-    //   print(error.toString());
-    // });
   }
 
-  Future fetchRecommendTracks() async {
+  Future fetchCentroSkiWarning() async {
     try {
-      var response =
-          await ReportRepository().recomendedTraks(); //.then((response) async {
+      var response = await ReportRepository()
+          .centroSkiWarning(); //.then((response) async {
       print('advertencias response: ');
-      print(response);
       var data;
       if (response['ok']) {
         data = response['data'];
-
         if (data != false) {
           if (data is String) {
             if (_showLocationWarnning) {
               _showLocationWarnning = false;
-              _dialogTopVisible = _recomendedTraks.length > 0 ? true : false;
+              _dialogTopVisible = _pistasRecomendadas.length > 0 ? true : false;
               return data;
             }
           } else {
-            final _castDataType = data.cast<Map<String, dynamic>>();
-            _recomendedTraks =
-                _castDataType.map<Pist>((json) => Pist.map(json)).toList();
-            _dialogTopVisible = _recomendedTraks.length > 0 ? true : false;
+            // final _castDataType = data.cast<Map<String, dynamic>>();
+            // _pistasRecomendadas =
+            //     _castDataType.map<Pista>((json) => Pista.map(json)).toList();
+            // _dialogTopVisible = _pistasRecomendadas.length > 0 ? true : false;
           }
           notifyListeners();
         }
@@ -721,35 +733,43 @@ class ReportProvider with ChangeNotifier {
   }
 
   Future<void> centroSki() async {
-    ReportRepository().centroSki().then((response) {
+    try {
+      var response = await ReportRepository().centroSki();
       print('centro-ski response: ');
-      print(response);
       if (response['ok']) {
         var data = response['data'];
-        _center = data['centroSki'] != null
-            ? SkiCenter.map(data['centroSki'])
-            : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
-        _pist = data['pista'] != null
-            ? Pist.map(data['pista'])
-            : Pist(0, 'No hay pista', 0, 0, '', '', '', 0.0, 0.0);
-        if (data['amigos'] != null) {
-          final _castDataType = data['amigos'].cast<Map<String, dynamic>>();
-          _closestFriends =
-              _castDataType.map<User>((json) => User.map(json)).toList();
+        if (data['centroSki'] != null) {
+          _center = SkiCenter.map(data['centroSki']);
+
+          if (_center.pistas.isNotEmpty) {
+            loadTraks();
+            _pista = _center
+                .pistas[0]; //Todo: Se deberia poder cargar la mas cercana
+          }
+
+          if (data['pista'] != null) {
+            Pista pistaRec = Pista.map(data['pista']);
+            _pistasRecomendadas.add(pistaRec);
+          }
           notifyListeners();
         }
+        // if (data['amigos'] != null) {
+        //   final _castDataType = data['amigos'].cast<Map<String, dynamic>>();
+        //   _closestFriends =
+        //       _castDataType.map<User>((json) => User.map(json)).toList();
+        //   notifyListeners();
+        // }
       } else {
         throw new Exception('Error');
       }
-    }).catchError((error) {
-      print(error.toString());
-    });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> loadEmuns() async {
     await SnowinRepository().loadEmuns().then((response) {
       print('enums response: ');
-      print(response);
       if (response['ok']) {
         var data = response['data'];
 
@@ -817,7 +837,6 @@ class ReportProvider with ChangeNotifier {
         .valorar(_reportSelected.id.toString(), copos.round().toString())
         .then((response) {
       print('valorar: ');
-      print(response);
       if (response['ok'] && response['data'] == true) {
         // setState(() {
         _showReportDetailTutorial = false;
@@ -840,7 +859,6 @@ class ReportProvider with ChangeNotifier {
         .comentario(_reportSelected.id.toString(), comment)
         .then((response) {
       print('commenta: ');
-      print(response);
       if (response['ok']) {
         _showReportDetailTutorial = false;
         _reportSelected.cantComentarios =
@@ -860,18 +878,17 @@ class ReportProvider with ChangeNotifier {
           .detalleCentroSki(_center.id.toString())
           .then((response) {
         print('detalle-centro-ski response: ');
-        print(response);
         if (response['ok']) {
           var data = response['data'];
           _center = data['centro_ski'] != null
               ? SkiCenter.map(data['centro_ski'])
-              : SkiCenter(0, 'No hay centro', 0.0, 0.0, []);
-          _recomendedTraks = List<Pist>();
+              : SkiCenter(0, 'No hay centro', 0.0, 0.0, [], '');
+          _pistasRecomendadas = List<Pista>();
           if (data['pistas_recomendadas'] != null) {
             final _castDataType =
                 data['pistas_recomendadas'].cast<Map<String, dynamic>>();
-            _recomendedTraks =
-                _castDataType.map<Pist>((json) => Pist.map(json)).toList();
+            _pistasRecomendadas =
+                _castDataType.map<Pista>((json) => Pista.map(json)).toList();
             notifyListeners();
           }
         } else {

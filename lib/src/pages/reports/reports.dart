@@ -147,7 +147,7 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
         child: Consumer<ReportProvider>(
           builder: (context, reports, _) => Column(
             children: [
-              reports.recomendedTraks.length > 0
+              reports.pistasRecomendadas.length > 0
                   ? Container(
                       margin: EdgeInsets.symmetric(
                           vertical: 10, horizontal: size.width * 0.05),
@@ -180,19 +180,22 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
     final reports = Provider.of<ReportProvider>(context, listen: false);
     await reports.centroSki();
 
-    //cargar pistas recomendadas
-    await reports.fetchRecommendTracks().then((value) async {
-      if (value != null) {
-        DialogHelper.showSimpleDialog(context, value.toString());
-      }
+    //cargar novedades del centro ski cercano
+    final warning = await reports.fetchCentroSkiWarning();
+    if (warning != null) {
+      DialogHelper.showSimpleDialog(context, warning.toString());
+    }
 
-      //cargar amigos cerca
-      var show = await reports.fetchClosestFriends();
-      if (show != null && show && !reports.showed) {
-        reports.showed = true;
-        showWarningsDialog();
-      }
-    });
+    // cargar amigos cerca
+    await reports.fetchClosestFriends();
+
+    //Mostramos los mensajes en popup
+    if (reports.showReportWarnning &&
+        (reports.dialogTopVisible || reports.dialogBottomVisible) &&
+        !reports.showed) {
+      reports.showed = true;
+      showWarningsDialog();
+    }
   }
 
   // List<Widget> buildFriends() {
@@ -238,19 +241,6 @@ class _ReportsState extends State<Reports> with TickerProviderStateMixin {
   //   );
 
   //   return elements;
-  // }
-
-  // void _hideDialog(int identifier) {
-  // setState(() {
-  //   (identifier == 1)
-  //       ? _dialogTopVisible = false
-  //       : _dialogBottomVisible = false;
-  // });
-  //   Navigator.pop(context);
-  //   showWarningsDialog();
-  //   if (!_dialogTopVisible && !_dialogBottomVisible) {
-  //     Navigator.pop(context);
-  //   }
   // }
 
   Future<bool> goBack() async {

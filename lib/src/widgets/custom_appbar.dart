@@ -76,9 +76,31 @@ class CustomAppbar extends StatelessWidget {
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       )
-                    : Image(
-                        height: 60,
-                        image: AssetImage("assets/images/logo-snowin.png"),
+                    : Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image(
+                              height: 60,
+                              image: AssetImage("assets/images/logopng.png"),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: 'SNOW',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w300)),
+                                TextSpan(
+                                    text: 'IN',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ]),
+                            )
+                          ],
+                        ),
                       ),
                 IconButton(
                   onPressed: () {

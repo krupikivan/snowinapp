@@ -25,7 +25,7 @@ class Report {
   var coposUsuarios;
 
   User user;
-  Pist pista;
+  Pista pista;
   SkiCenter centro;
   List<Multimedia> multimedias;
 
@@ -98,7 +98,7 @@ class Report {
     this.user = data.containsKey('user') ? User.map(data['user']) : null;
 
     this.pista = data.containsKey('pistaSki') && data['pistaSki'] != null
-        ? Pist.map(data['pistaSki'])
+        ? Pista.map(data['pistaSki'])
         : null;
 
     this.centro =

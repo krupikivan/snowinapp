@@ -255,7 +255,7 @@ class ReportRepository {
     }
   }
 
-  Future<Map> recomendedTraks() async {
+  Future<Map> centroSkiWarning() async {
     print('call end point: advertencias');
 
     //configurar servicio
@@ -399,7 +399,7 @@ class ReportRepository {
           mediaFile.add(file);
         });
         formData = FormData.fromMap({
-          'pista_id': '28',
+          'pista_id': pistaId,
           'titulo': titulo,
           'comentario': comentario,
           'calidad_nieve': calidadNieve,

@@ -159,7 +159,7 @@ class DialogTopContent extends StatelessWidget {
     elements.add(SizedBox(
       height: 15.0,
     ));
-    reports.recomendedTraks.forEach((element) {
+    reports.pistasRecomendadas.forEach((element) {
       elements.add(Container(
           width: size.width * 0.55,
           child: AutoSizeText(
@@ -182,78 +182,15 @@ class DialogTopContent extends StatelessWidget {
     return AppLocalizations.of(context).translate(label);
   }
 
-  // List<Widget> buildRecomendedTraks(
-  //     ReportProvider reports, BuildContext context) {
-  //   final size = MediaQuery.of(context).size;
-  //   List<Widget> elements = new List<Widget>();
-
-  //   elements.add(SizedBox(
-  //     height: 15.0,
-  //   ));
-  //   reports.recomendedTraks.forEach((element) {
-  //     elements.add(Container(
-  //         width: size.width * 0.55,
-  //         child: AutoSizeText(
-  //           element.descripcion.toString().trim(),
-  //           style: TextStyle(
-  //               fontSize: 15,
-  //               color: Colors.black,
-  //               decoration: TextDecoration.none),
-  //           maxLines: 2,
-  //         )));
-  //     elements.add(SizedBox(
-  //       height: 10.0,
-  //     ));
-  //   });
-  //     }
   // void _hideDialog(int identifier, ReportProvider reports, context) {
-  //   // setState(() {
   //   reports.changeDialog(identifier);
   //   // (identifier == 1)
   //   //     ? _dialogTopVisible = false
   //   //     : _dialogBottomVisible = false;
-  //   // });
   //   Navigator.pop(context);
   //   showWarningsDialog(reports, context);
   //   if (!reports.dialogTopVisible && !reports.dialogBottomVisible) {
   //     Navigator.pop(context);
   //   }
-  // }
-
-  // void showWarningsDialog(ReportProvider reports, BuildContext context) {
-  //   print('show warnings dialog');
-  //   final size = MediaQuery.of(context).size;
-  //   reports.showReportWarnning = false;
-  //   showDialog(
-  //     context: context,
-  //     child: Container(
-  //       padding: EdgeInsets.only(top: 15),
-  //       color: Colors.transparent,
-  //       child: Column(
-  //         children: [
-  //           reports.recomendedTraks.length > 0
-  //               ? Container(
-  //                   margin: EdgeInsets.symmetric(
-  //                       vertical: 10, horizontal: size.width * 0.05),
-  //                   decoration: BoxDecoration(
-  //                       color: Color.fromRGBO(255, 216, 52, 1),
-  //                       borderRadius: BorderRadius.circular(15)),
-  //                   child: DialogTopContent(),
-  //                 )
-  //               : Container(),
-  //           reports.closestFriends.length > 0
-  //               ? Container(
-  //                   margin: EdgeInsets.symmetric(
-  //                       vertical: 10, horizontal: size.width * 0.05),
-  //                   decoration: BoxDecoration(
-  //                       color: Colors.white,
-  //                       borderRadius: BorderRadius.circular(15)),
-  //                   child: _dialogBottomContent(),
-  //                 )
-  //               : Container(),
-  //         ],
-  //       ),
-  //     ),
-  //   );
   // }
 }

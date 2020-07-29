@@ -5,15 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/utils/dialogs.dart';
 
-class ReportTopInfo extends StatefulWidget {
-  const ReportTopInfo({Key key}) : super(key: key);
-  @override
-  _ReportTopInfoState createState() => _ReportTopInfoState();
-}
-
-class _ReportTopInfoState extends State<ReportTopInfo> {
-  bool _speedOn = false;
-
+class ReportTopInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userLocation = Provider.of<Position>(context);
@@ -48,8 +40,8 @@ class _ReportTopInfoState extends State<ReportTopInfo> {
                           maxLines: 1,
                           style: TextStyle(fontSize: 14, color: Colors.white)),
                       AutoSizeText(
-                          user.pist != null
-                              ? user.pist.descripcion.toString()
+                          user.pista != null
+                              ? user.pista.descripcion.toString()
                               : '',
                           maxLines: 1,
                           style: TextStyle(
@@ -70,7 +62,7 @@ class _ReportTopInfoState extends State<ReportTopInfo> {
             width: 2,
           ),
           GestureDetector(
-            onTap: () => goToMapPage(user),
+            onTap: () => goToMapPage(user, context),
             child: Container(
               padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
@@ -85,32 +77,31 @@ class _ReportTopInfoState extends State<ReportTopInfo> {
             width: 1,
             color: Colors.white,
           ),
-          Row(
-            children: [
-              IconButton(
-                padding: EdgeInsets.all(0),
-                icon: Icon(
-                  Icons.av_timer,
-                  size: 28,
-                  color:
-                      _speedOn ? Color.fromRGBO(255, 224, 0, 1) : Colors.white,
+          Consumer<ReportProvider>(
+            builder: (context, report, _) => Row(
+              children: [
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(
+                    Icons.av_timer,
+                    size: 28,
+                    color: report.speed
+                        ? Color.fromRGBO(255, 224, 0, 1)
+                        : Colors.white,
+                  ),
+                  onPressed: () => report.speed = !report.speed,
                 ),
-                onPressed: () {
-                  setState(() {
-                    _speedOn = _speedOn ? false : true;
-                  });
-                },
-              ),
-              SizedBox(
-                width: 3,
-              ),
-              AutoSizeText(
-                  _speedOn
-                      ? '${userLocation.speed.toStringAsFixed(2)} Km/h'
-                      : '0.00 Km/h',
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 15, color: Colors.white)),
-            ],
+                SizedBox(
+                  width: 3,
+                ),
+                AutoSizeText(
+                    report.speed
+                        ? '${userLocation.speed.toStringAsFixed(2)} Km/h'
+                        : '0.00 Km/h',
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 15, color: Colors.white)),
+              ],
+            ),
           ),
           Container(
             height: 26,
@@ -150,12 +141,12 @@ class _ReportTopInfoState extends State<ReportTopInfo> {
     );
   }
 
-  void goToMapPage(ReportProvider user) {
+  void goToMapPage(ReportProvider user, BuildContext context) {
     Navigator.popUntil(context, ModalRoute.withName('/reports'));
 
     if (user.center != null) {
       if (user.center.id != 0) {
-        Navigator.pushNamed(context, '/pistes-map');
+        Navigator.pushNamed(context, '/mapa-pista');
       } else {
         DialogHelper.showSimpleDialog(
             context, 'No está cerca de ningún centro de ski.');

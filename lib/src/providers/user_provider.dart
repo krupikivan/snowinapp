@@ -74,7 +74,6 @@ class UserProvider with ChangeNotifier {
   Future<void> fetchUserData() async {
     await SnowinRepository().getUserLoginData().then((response) {
       print('User data response');
-      print(response);
       if (response['ok']) {
         var data = response['data'];
         _user = User.map(data);

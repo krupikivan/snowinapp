@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
+import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/models/pist.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
 import '../../widgets/custom_appbar_pages.dart';
 import '../../widgets/custom_drawer.dart';
 
-class PistesMap extends StatefulWidget {
+class MapaPista extends StatefulWidget {
   @override
-  _PistesMapState createState() => _PistesMapState();
+  _MapaPistaState createState() => _MapaPistaState();
 }
 
-class _PistesMapState extends State<PistesMap> {
+class _MapaPistaState extends State<MapaPista> {
   // UserProvider _session = new UserProvider();
 
   TextEditingController _controllerYouAre;
-  List<Pist> _recomendedTraks = List<Pist>();
 
   @override
   void initState() {
@@ -38,6 +38,7 @@ class _PistesMapState extends State<PistesMap> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final report = Provider.of<ReportProvider>(context, listen: false);
+    _controllerYouAre.text = report.center.name;
     return Scaffold(
       appBar: PreferredSize(
           child: CustomAppbarPages(
@@ -54,7 +55,7 @@ class _PistesMapState extends State<PistesMap> {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -64,62 +65,68 @@ class _PistesMapState extends State<PistesMap> {
                     controller: _controllerYouAre,
                     readOnly: true,
                   ),
-                  AutoSizeText(
-                    "Las pistas que recomendamos según tu experiencia son",
-                    style: TextStyle(fontSize: 15),
-                    maxLines: 2,
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.13),
+                    child: AutoSizeText(
+                      "Las pistas que recomendamos según tu experiencia son",
+                      style: TextStyle(fontSize: 20),
+                      maxLines: 2,
+                    ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
                     child: Wrap(
-                      children: buildRecomendedTraks(),
+                      children: buildRecomendedTraks(report),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: PhotoView(
-              minScale: PhotoViewComputedScale.contained * 0.8,
-              maxScale: PhotoViewComputedScale.covered * 2,
-              enableRotation: true,
-              backgroundDecoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
-              ),
-              imageProvider: NetworkImage(
-                  "https://www.willflyforfood.net/wp-content/uploads/2017/12/oak-valley-snow-park-trail-map.jpg"),
-            ),
-          ),
+          report.center.imagen != null
+              ? Expanded(
+                  flex: 3,
+                  child: PhotoView(
+                    minScale: PhotoViewComputedScale.contained * 1.5,
+                    maxScale: PhotoViewComputedScale.covered * 2,
+                    enableRotation: true,
+                    backgroundDecoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
+                    ),
+                    imageProvider: NetworkImage(
+                        Config.apiImageBaseUrl + report.center.imagen),
+                  ),
+                )
+              : SizedBox(),
         ],
       ),
     );
   }
 
-  List<Widget> buildRecomendedTraks() {
+  List<Widget> buildRecomendedTraks(ReportProvider report) {
     List<Widget> elements = new List<Widget>();
 
     elements.add(SizedBox(
       height: 5,
     ));
 
-    _recomendedTraks.forEach((element) {
+    report.pistasRecomendadas.forEach((element) {
       elements.add(Row(children: [
-        // Container(
-        //     height: 15,
-        //     width: 15,
-        //     decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         color: Colors.green,
-        //     ),
-        // ),
+        Container(
+          height: 15,
+          width: 15,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.green,
+          ),
+        ),
         SizedBox(
           width: 10,
         ),
         AutoSizeText(
           element.descripcion.toString().trim(),
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 20),
           maxLines: 2,
         ),
       ]));

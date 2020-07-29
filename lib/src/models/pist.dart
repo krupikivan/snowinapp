@@ -1,4 +1,4 @@
-class Pist {
+class Pista {
   var id;
   var descripcion;
   var idCentro;
@@ -9,10 +9,10 @@ class Pist {
   var longitud;
   var latitud;
 
-  Pist(this.id, this.descripcion, this.idCentro, this.visible, this.nivel,
+  Pista(this.id, this.descripcion, this.idCentro, this.visible, this.nivel,
       this.calidadNieve, this.categoria, this.longitud, this.latitud);
 
-  Pist.map(dynamic data) {
+  Pista.map(dynamic data) {
     this.id = data.containsKey('idpista') ? data['idpista'] : 0;
     this.descripcion =
         data.containsKey('descripcion') ? data['descripcion'].toString() : "";

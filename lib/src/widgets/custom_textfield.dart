@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-
   final TextEditingController controller;
   final double width;
   final bool readOnly;
@@ -12,18 +11,16 @@ class CustomTextField extends StatelessWidget {
   final OnChangedCallback onChanged;
   final bool error;
 
-
-  CustomTextField({
-    this.controller,
-    this.width,
-    this.readOnly = false,
-    this.prefix = '',
-    this.hint = '',
-    this.maxLength,
-    this.maxLines = 1,
-    this.onChanged,
-    this.error = false
-  });
+  CustomTextField(
+      {this.controller,
+      this.width,
+      this.readOnly = false,
+      this.prefix = '',
+      this.hint = '',
+      this.maxLength,
+      this.maxLines = 1,
+      this.onChanged,
+      this.error = false});
 
   @override
   Widget build(BuildContext context) {
@@ -38,30 +35,31 @@ class CustomTextField extends StatelessWidget {
             decoration: ShapeDecoration(
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  width: 1.0,
-                  style: BorderStyle.solid,
-                  color: error? Colors.red : Color.fromRGBO(74, 74, 73, 1)
-                ),
+                    width: 1.0,
+                    style: BorderStyle.solid,
+                    color: error ? Colors.red : Color.fromRGBO(74, 74, 73, 1)),
                 borderRadius: BorderRadius.all(Radius.circular(15.0)),
               ),
             ),
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: TextFormField(
-                controller: controller,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefixText: prefix,
-                    prefixStyle: TextStyle(color: Colors.black, fontSize: 18),
-                    hintText: hint,
-                    hintStyle: TextStyle(color: Colors.black, fontSize: 18),
-                ),
-                style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 18),
-                readOnly: readOnly,
-                maxLength: maxLength,
-                maxLines: maxLines,
-                onChanged: (val) {
-                    onChanged(val);
-                },
+              controller: controller,
+              decoration: InputDecoration(
+                labelText: prefix,
+                border: InputBorder.none,
+                prefixStyle: TextStyle(color: Colors.black, fontSize: 18),
+                hintStyle: TextStyle(color: Colors.black, fontSize: 18),
+              ),
+              style: TextStyle(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+              readOnly: readOnly,
+              maxLength: maxLength,
+              maxLines: maxLines,
+              onChanged: (val) {
+                onChanged(val);
+              },
             ),
           ),
         ],
@@ -69,7 +67,5 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
-
-
 
 typedef OnChangedCallback = void Function(String value);
