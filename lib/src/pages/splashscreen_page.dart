@@ -95,14 +95,9 @@ class _SplashScreenState extends State<SplashScreen>
       print('token found: ' + _preferences.token.toString());
       print('go to reports page');
       Provider.of<UserProvider>(context, listen: false).fetchUserData();
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Reports()),
-      // );
       Navigator.pushNamed(context, '/reports');
     } else {
       print('no token found, go to registration page');
-
       Navigator.of(context).pushNamedAndRemoveUntil(
           '/wellcome', (Route<dynamic> route) => false);
     }

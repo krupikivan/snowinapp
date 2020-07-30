@@ -5,6 +5,7 @@ import 'package:snowin/src/pages/community/community.dart';
 import 'package:snowin/src/pages/community/user_chat.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
 import 'package:snowin/src/pages/drawer/export.dart';
+import 'package:snowin/src/pages/drawer/privacy_page.dart';
 import 'package:snowin/src/pages/drawer/profile_page.dart';
 import 'package:snowin/src/pages/home/home.dart';
 import 'package:snowin/src/pages/sos/sos.dart';
@@ -142,6 +143,12 @@ MaterialPageRoute getRoute(RouteSettings settings) {
         builder: (_) => Ask(
           oldContext: settings.arguments,
         ),
+        settings: settings,
+      );
+
+    case '/privacy':
+      return MyCustomRoute(
+        builder: (_) => PrivacyPage(),
         settings: settings,
       );
 

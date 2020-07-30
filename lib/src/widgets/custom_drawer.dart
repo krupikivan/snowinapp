@@ -5,6 +5,7 @@ import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provi
 import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/utils/dialogs.dart';
+import 'package:flutter_share/flutter_share.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key key}) : super(key: key);
@@ -113,7 +114,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget _drawerListTextStyle(
       String txt, IconData icon, int index, bool selected) {
     final TextStyle style = TextStyle(
-        color: selected == true
+        color: selected
             ? Theme.of(context).primaryColor
             : Theme.of(context).disabledColor,
         fontSize: 18);
@@ -127,14 +128,31 @@ class _CustomDrawerState extends State<CustomDrawer> {
         style: style,
       ),
       onTap: () async {
-        if (txt == 'Consultas') {
-          await Provider.of<ChatProvider>(context, listen: false)
-              .getConversacion(3);
+        if (txt == 'Compartir SNOWIN') {
+          //TODO: Modificar el compartir app
+          await FlutterShare.share(
+              title: 'Snowin APP',
+              linkUrl: 'https://play.google.com/store',
+              text: 'Una app toda una comunidad');
+        } else {
+          if (txt == 'Consultas') {
+            await Provider.of<ChatProvider>(context, listen: false)
+                .getConversacion(3);
+          } else if (txt == 'Salir') {
+            _logout();
+            Navigator.of(context).popAndPushNamed('/wellcome');
+          }
+          Navigator.pop(context);
+          Navigator.of(context).pushNamed(_getRoute(txt), arguments: context);
         }
-        Navigator.pop(context);
-        Navigator.of(context).pushNamed(_getRoute(txt), arguments: context);
       },
     );
+  }
+
+  _logout() {
+    _prefs.token = '';
+    _prefs.userid = '';
+    _prefs.nombre = '';
   }
 
   String _getRoute(name) {

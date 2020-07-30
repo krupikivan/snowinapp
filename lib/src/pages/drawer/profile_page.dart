@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
+import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provider.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_image.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_loading_image.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
@@ -164,15 +165,23 @@ class ProfilePage extends StatelessWidget {
                         children: <Widget>[
                           AccountDetailTile(
                             title: 'Notificaciones',
-                            action: () => null,
+                            action: () =>
+                                Navigator.pushNamed(context, '/community'),
                           ),
                           AccountDetailTile(
                             title: 'Privacidad',
-                            action: () => null,
+                            action: () =>
+                                Navigator.pushNamed(context, '/privacy'),
                           ),
                           AccountDetailTile(
                             title: 'Reportar un problema',
-                            action: () => null,
+                            action: () async {
+                              await Provider.of<ChatProvider>(context,
+                                      listen: false)
+                                  .getConversacion(3);
+                              Navigator.pushNamed(context, '/ask',
+                                  arguments: context);
+                            },
                           ),
                           AccountDetailTile(
                             title: 'Salir de mi cuenta',

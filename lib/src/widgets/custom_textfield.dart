@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -10,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final OnChangedCallback onChanged;
   final bool error;
+  final bool onlyDigits;
 
   CustomTextField(
       {this.controller,
@@ -20,6 +22,7 @@ class CustomTextField extends StatelessWidget {
       this.maxLength,
       this.maxLines = 1,
       this.onChanged,
+      this.onlyDigits = false,
       this.error = false});
 
   @override
@@ -43,6 +46,13 @@ class CustomTextField extends StatelessWidget {
             ),
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: TextFormField(
+              inputFormatters: <TextInputFormatter>[
+                onlyDigits
+                    ? WhitelistingTextInputFormatter.digitsOnly
+                    : WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]"))
+              ],
+              keyboardType:
+                  onlyDigits ? TextInputType.number : TextInputType.text,
               controller: controller,
               decoration: InputDecoration(
                 labelText: prefix,

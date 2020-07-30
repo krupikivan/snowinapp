@@ -6,9 +6,11 @@ class CustomAppbarDrawer extends StatelessWidget {
     this.title,
     this.context,
     this.showLogo,
+    this.route = '/reports',
   });
   final GlobalKey<ScaffoldState> scaffoldDrawer;
   final String title;
+  final String route;
   final BuildContext context;
   final bool showLogo;
 
@@ -28,7 +30,7 @@ class CustomAppbarDrawer extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/reports'),
+                      Navigator.pushReplacementNamed(context, route),
                   icon: Icon(
                     Icons.arrow_back,
                     size: 30,

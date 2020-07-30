@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
+import 'package:snowin/src/pages/benefits/benefit_filter.dart';
 import 'package:snowin/src/pages/benefits/provider/benefit_provider.dart';
 import 'package:snowin/src/widgets/custom_appbar_pages.dart';
 import 'package:snowin/src/widgets/custom_benefit_card.dart';
@@ -36,6 +37,7 @@ class _BenefitsState extends State<Benefits> {
   @override
   Widget build(BuildContext context) {
     final conex = Provider.of<ConnectionStatus>(context);
+    final size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () => goBack(context),
       child: RefreshIndicator(
@@ -99,8 +101,10 @@ class _BenefitsState extends State<Benefits> {
                           flex: 3,
                           child: Consumer<BenefitProvider>(
                             builder: (context, benefit, _) => benefit
-                                    .listBenefit.isNotEmpty
+                                        .listBenefit.isNotEmpty &&
+                                    benefit.hasData
                                 ? ListView.builder(
+                                    physics: AlwaysScrollableScrollPhysics(),
                                     controller: _scrollController,
                                     itemCount: benefit.listBenefit.length,
                                     itemBuilder: (BuildContext context,
@@ -114,11 +118,14 @@ class _BenefitsState extends State<Benefits> {
                                                 context, '/benefitDetail');
                                           },
                                         ))
-                                : benefit.loading
-                                    ? Center(child: CircularProgressIndicator())
+                                : !benefit.hasData
+                                    ? ListTile(
+                                        title: Text(
+                                            'No se encontraron beneficios'),
+                                      )
                                     : ListTile(
                                         title: Text(
-                                            'No hay beneficios por el momento'),
+                                            'No se encontraron beneficios'),
                                       ),
                           ),
                         ),
@@ -142,7 +149,14 @@ class _BenefitsState extends State<Benefits> {
                                         heroTag: "btnFilter",
                                         isPrimary: false,
                                         icon: Icons.filter_list,
-                                        action: () => null),
+                                        action: () => showDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (context) =>
+                                                  BenefitFilterDialog(
+                                                size: size,
+                                              ),
+                                            )),
                                     SizedBox(
                                       width: 15,
                                     ),

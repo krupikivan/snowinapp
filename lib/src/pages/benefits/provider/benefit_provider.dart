@@ -34,9 +34,27 @@ class BenefitProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //Manage no data show------------------------------
+  bool _hasData;
+  bool get hasData => _hasData;
+  set hasData(bool value) {
+    _hasData = value;
+    notifyListeners();
+  }
+
+  //Manage discount filter------------------------------
+  int _discount;
+  int get discount => _discount;
+  set discount(int value) {
+    _discount = value;
+    notifyListeners();
+  }
+
   BenefitProvider.init() {
     _loading = false;
+    _hasData = false;
     _limit = 10;
+    _discount = 0;
     fetchBenefits();
     fetchMyBenefits();
   }
@@ -44,6 +62,7 @@ class BenefitProvider with ChangeNotifier {
   void refreshing() {
     print(" refreshing ... ");
     _limit = 10;
+    clearFilter();
     fetchBenefits();
   }
 
@@ -64,22 +83,30 @@ class BenefitProvider with ChangeNotifier {
     }
   }
 
-  void fetchBenefits() {
+  void clearFilter() {
+    _discount = 0;
+  }
+
+  void fetchBenefits({bool fromFilter = false}) {
     _loading = true;
     notifyListeners();
+    if (fromFilter) {
+      _limit = 10;
+    }
     int offset = _limit - 10;
     BenefitRepository()
         .getBenefits(_limit.toString(), offset.toString(), prepareFilters())
         .then((response) async {
       print(response);
       if (response['ok']) {
-        print('Cantidad de beneficios: ' +
-            response['data']['data'].length.toString());
         if (response['data']['data'].isNotEmpty) {
           await compute(beneficioFromJson, response['data']['data'])
               .then((value) {
             _listBenefit = value;
           });
+          _hasData = true;
+        } else if (response['data']['data'].isEmpty && fromFilter) {
+          _hasData = false;
         }
         _loading = false;
         notifyListeners();
@@ -130,6 +157,7 @@ class BenefitProvider with ChangeNotifier {
 
   String prepareFilters() {
     List<String> filters = List<String>();
+    filters.add('filtros[descuento]=$_discount');
     return filters.join('&');
   }
 

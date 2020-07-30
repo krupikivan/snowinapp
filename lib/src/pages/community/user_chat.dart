@@ -72,19 +72,23 @@ class _UserChatState extends State<UserChat> with TickerProviderStateMixin {
         if (chat.messageList == null || chat.loading) {
           return Center(child: CircularProgressIndicator());
         } else {
-          chat.messageList.forEach((element) {
-            final ChatMessage message = ChatMessage(
-              myMessage: fromUserId == element.idEmisor ? true : false,
-              message: element,
-              animationController: AnimationController(
-                duration: Duration(milliseconds: 700),
-                vsync: this,
-              ),
-              fecha: element.fecha,
-            );
-            _list.insert(0, message);
-            message.animationController.fling();
-          });
+          if (_list.length != chat.messageList.length) {
+            _list.clear();
+            chat.messageList.forEach((element) {
+              //TODO: Seria mejor que directamente agregue el ultimo sin actualizar todo
+              final ChatMessage message = ChatMessage(
+                myMessage: fromUserId == element.idEmisor ? true : false,
+                message: element,
+                animationController: AnimationController(
+                  duration: Duration(milliseconds: 700),
+                  vsync: this,
+                ),
+                fecha: element.fecha,
+              );
+              _list.insert(0, message);
+              message.animationController.fling();
+            });
+          }
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             color: Colors.white,
