@@ -14,9 +14,9 @@ class FacebookButton extends StatelessWidget {
       height: 48,
       child: RaisedButton(
         color: Color.fromRGBO(59, 89, 152, 1),
-        onPressed: () {
-          user.initiateFacebookLogin();
-          // Navigator.pushNamed(context, '/wellcome-conditions');
+        onPressed: () async {
+          await user.initiateFacebookLogin();
+          Navigator.pushNamed(context, '/wellcome-conditions');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

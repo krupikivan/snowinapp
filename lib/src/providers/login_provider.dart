@@ -11,11 +11,11 @@ import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/utils/exceptions.dart';
 
 class LoginProvider with ChangeNotifier {
-  LoginProvider.init() {
-    _loadConditions();
-    _loadProfileTypes();
-    _loadLevels();
-  }
+  // LoginProvider.init() {
+  //   _loadConditions();
+  //   _loadProfileTypes();
+  //   _loadLevels();
+  // }
 
   var facebookLogin = FacebookLogin();
   static final Preferences _preferences = Preferences();
@@ -62,6 +62,12 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void retrieveInitialData() {
+    _loadConditions();
+    _loadProfileTypes();
+    _loadLevels();
+  }
+
   Future<void> initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
     var facebookLoginResult = await facebookLogin.logIn(['email']);
@@ -100,7 +106,7 @@ class LoginProvider with ChangeNotifier {
         }
         _preferences.registerFrom = '1';
         print(profile.toString());
-        // _isLoggedIn = true;
+        _isLoggedIn = true;
         break;
     }
     notifyListeners();

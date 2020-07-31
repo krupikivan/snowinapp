@@ -52,6 +52,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void dispose() {
     super.dispose();
+    animationController?.dispose();
   }
 
   @override
@@ -88,9 +89,9 @@ class _SplashScreenState extends State<SplashScreen>
 //////////////////////////////////////////////////////////////Functions
   _checkRegistrationStatus() async {
     print('check registration status ...');
-    _preferences.userid = '31';
-    _preferences.nombre = 'test_ivan';
-    _preferences.token = Config.ivanTKN;
+    // _preferences.userid = '31';
+    // _preferences.nombre = 'test_ivan';
+    // _preferences.token = Config.ivanTKN;
     if (_preferences.token.toString().isNotEmpty) {
       print('token found: ' + _preferences.token.toString());
       print('go to reports page');
