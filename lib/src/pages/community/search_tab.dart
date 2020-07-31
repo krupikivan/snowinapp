@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/provider/export.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/export.dart';
+import 'package:snowin/src/pages/community/search_tabs_pages/provider/marker_provider.dart';
 
 class SearchTab extends StatelessWidget {
   SearchTab({Key key}) : super(key: key);
   final String txt = "5 Amigos y 29 usuarios en Chapelco";
   @override
   Widget build(BuildContext context) {
+    final pos = Provider.of<Position>(context, listen: false);
+    final user = Provider.of<CommunityProvider>(context, listen: false);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       child: Column(
@@ -54,6 +58,8 @@ class SearchTab extends StatelessWidget {
               case 1:
                 return UserSwipe();
               case 2:
+                Provider.of<MarkerProvider>(context, listen: false)
+                    .getPositions(pos, user.users.usuarios);
                 return UserMap();
               default:
                 return UserList();

@@ -46,10 +46,10 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String _perfilSelected;
-  String get perfilSelected => _perfilSelected;
-  set perfilSelected(String list) {
-    _perfilSelected = list;
+  UserActivity _perfilSelected;
+  UserActivity get perfilSelected => _perfilSelected;
+  set perfilSelected(UserActivity value) {
+    _perfilSelected = value;
     notifyListeners();
   }
 
@@ -147,7 +147,7 @@ class UserProvider with ChangeNotifier {
     _user.actividad = _perfilSelected;
     notifyListeners();
     await SnowinRepository()
-        .actualizarActividad(_perfilSelected)
+        .actualizarActividad(User().getActividadString(_perfilSelected))
         .then((response) {
       print(response);
       if (response['success']) {

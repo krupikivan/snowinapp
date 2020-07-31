@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
+import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/pages/community/search_tabs_pages/provider/chat_provider.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_image.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_loading_image.dart';
@@ -221,7 +222,7 @@ class ProfilePage extends StatelessWidget {
     final practica = CustomUserInfoDetail(
       action: () => _showPopupActividad(context, user),
       info: 'Practica',
-      title1: user.user.actividad,
+      title1: User().getActividadString(user.user.actividad),
     );
     final nivel = CustomUserInfoDetail(
       action: () => _showPopupNivel(context, user),
@@ -375,7 +376,10 @@ class ProfilePage extends StatelessWidget {
             child: Text('Cancelar',
                 style: TextStyle(
                     color: Theme.of(context).primaryColor, fontSize: 18)),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              user.nivelesSelected = user.user.nivel;
+              Navigator.of(context).pop();
+            },
           )
         ],
         shape: RoundedRectangleBorder(
@@ -421,7 +425,10 @@ class ProfilePage extends StatelessWidget {
             child: Text('Cancelar',
                 style: TextStyle(
                     color: Theme.of(context).primaryColor, fontSize: 18)),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              user.perfilSelected = user.user.actividad;
+              Navigator.of(context).pop();
+            },
           )
         ],
         shape: RoundedRectangleBorder(
@@ -434,9 +441,9 @@ class ProfilePage extends StatelessWidget {
               width: size.width * 0.9,
               height: 50,
               items: user.perfil,
-              value: user.perfilSelected,
+              value: User().getActividadString(user.perfilSelected),
               onChanged: (value) {
-                user.perfilSelected = value;
+                user.perfilSelected = User().getActividadEnum(value);
               }),
         ),
       ),

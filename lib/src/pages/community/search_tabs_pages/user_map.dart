@@ -34,10 +34,12 @@ class _UserMapState extends State<UserMap> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CommunityProvider>(context);
-    if (user.users != null && user.users.usuarios != null) {
-      Provider.of<MarkerProvider>(context, listen: false)
-          .getUsersPosition(user.users.usuarios);
-    }
+    final markers = Provider.of<MarkerProvider>(context, listen: false);
+    // if (user.users != null &&
+    //     user.users.usuarios != null &&
+    //     markers.getMapMarkers.isEmpty) {
+    //   markers.fillMarkers(user.users.usuarios);
+    // }
     //Con esto consumis la ubicacion del usuario
     final userLocation = Provider.of<Position>(context);
     return SizedBox(
@@ -57,7 +59,7 @@ class _UserMapState extends State<UserMap> {
   }
 
   _buildMap(marker, userLocation) {
-    marker.getMyLocation(userLocation);
+    // marker.getMyLocation(userLocation);
     return GoogleMap(
         mapType: MapType.normal,
         onMapCreated: _onMapCreated,

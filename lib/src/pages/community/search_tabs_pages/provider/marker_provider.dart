@@ -10,41 +10,37 @@ class MarkerProvider with ChangeNotifier {
   Set<Marker> get getMapMarkers => _markers;
 
   BitmapDescriptor _locPin;
-  BitmapDescriptor _bitPin1;
-  BitmapDescriptor _bitPin2;
+  BitmapDescriptor _skyPinD; //Sky Disable
+  BitmapDescriptor _snowPinE; //Snow Enable
+  BitmapDescriptor _snowPinD; //Snow Disable
+  BitmapDescriptor _skyPinE; //Ski Enable
 
-  MarkerProvider.init() {
-    fetchUsersPosition();
-  }
-
-  void fetchUsersPosition() {}
-
-  getUsersPosition(List<User> list) async {
-    list.forEach((element) {
-      _markers.add(Marker(
-          markerId: MarkerId('${element.id}'),
-          position: LatLng(element.latitud, element.longitud),
-          icon: _bitPin1));
-    });
-    notifyListeners();
-  }
-
-  getMyLocation(Position pos) async {
+  getPositions(Position pos, List<User> list) async {
     await _setIcons();
     _markers.add(Marker(
         markerId: MarkerId('locPin'),
         position: LatLng(pos.latitude, pos.longitude),
         icon: _locPin));
+    list.forEach((element) {
+      _markers.add(Marker(
+          markerId: MarkerId('${element.id}'),
+          position: LatLng(element.latitud, element.longitud),
+          icon: _getIcon(element.actividad)));
+    });
     notifyListeners();
   }
 
-  getMarkers(Position userPos) async {
-    await _setIcons();
-    _markers.add(Marker(
-        markerId: MarkerId('locPin'),
-        position: LatLng(userPos.latitude, userPos.longitude),
-        icon: _locPin));
-    notifyListeners();
+  BitmapDescriptor _getIcon(UserActivity actividad) {
+    switch (actividad) {
+      case UserActivity.SKY:
+        return _skyPinE;
+        break;
+      case UserActivity.SNOWBOARD:
+        return _snowPinE;
+        break;
+      default:
+        return _snowPinE;
+    }
   }
 
   Future _setIcons() async {
@@ -54,10 +50,16 @@ class MarkerProvider with ChangeNotifier {
         ImageConfiguration(devicePixelRatio: ratio),
         'assets/pin/locationPin.png');
 
-    _bitPin1 = await BitmapDescriptor.fromAssetImage(
+    _skyPinD = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(devicePixelRatio: ratio), 'assets/pin/skyPinD.png');
 
-    _bitPin2 = await BitmapDescriptor.fromAssetImage(
+    _skyPinE = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: ratio), 'assets/pin/skyPinE.png');
+
+    _snowPinD = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: ratio), 'assets/pin/snowPinD.png');
+
+    _snowPinE = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(devicePixelRatio: ratio), 'assets/pin/snowPinE.png');
 
     notifyListeners();

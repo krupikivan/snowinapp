@@ -70,7 +70,7 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
-    var facebookLoginResult = await facebookLogin.logIn(['email']);
+    final facebookLoginResult = await facebookLogin.logIn(['email']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
@@ -83,7 +83,7 @@ class LoginProvider with ChangeNotifier {
         break;
       case FacebookLoginStatus.loggedIn:
         print("LoggedIn");
-        var graphResponse = await http.get(
+        final graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}');
         var profile = json.decode(graphResponse.body);
         Map response = await fbLogin(facebookLoginResult.accessToken.token);

@@ -2,6 +2,8 @@ List<User> usersFromJson(var list) {
   return list.map<User>((item) => User.fromJson(item)).toList();
 }
 
+enum UserActivity { SNOWBOARD, SKY, BOTH, OTHER }
+
 class User {
   var id;
   var username;
@@ -17,7 +19,7 @@ class User {
   var altura;
   var telefono;
   var nivel;
-  var actividad;
+  UserActivity actividad;
   var visible;
   var ranking;
   var fechaCambioRanking;
@@ -101,8 +103,9 @@ class User {
     this.nivel = data.containsKey('nivel')
         ? data['nivel'] != null ? data['nivel'].toString() : ""
         : "";
-    this.actividad =
-        data.containsKey('actividad') ? data['actividad'].toString() : "";
+    this.actividad = data.containsKey('actividad')
+        ? getActividadEnum(data['actividad'].toString())
+        : UserActivity.OTHER;
     this.biografia =
         data.containsKey('biografia') ? data['biografia'].toString() : "";
 
@@ -151,6 +154,38 @@ class User {
     this.image = data.containsKey('img')
         ? data['img'] != null ? data['img'].toString() : ""
         : "";
+  }
+
+  UserActivity getActividadEnum(String acti) {
+    switch (acti) {
+      case 'Esquiador':
+        return UserActivity.SKY;
+        break;
+      case 'Snowboardista':
+        return UserActivity.SNOWBOARD;
+        break;
+      case 'Ambos':
+        return UserActivity.BOTH;
+        break;
+      default:
+        return UserActivity.OTHER;
+    }
+  }
+
+  String getActividadString(UserActivity acti) {
+    switch (acti) {
+      case UserActivity.SKY:
+        return 'Esquiador';
+        break;
+      case UserActivity.SNOWBOARD:
+        return 'Snowboardista';
+        break;
+      case UserActivity.BOTH:
+        return 'Ambos';
+        break;
+      default:
+        return 'Otro';
+    }
   }
 
   factory User.fromJson(Map<String, dynamic> json) => User(

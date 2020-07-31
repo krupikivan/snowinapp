@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CommunityProvider.init()),
         ChangeNotifierProvider(
             create: (context) => CommunityTabsProvider.init()),
-        ChangeNotifierProvider(create: (context) => MarkerProvider.init()),
+        ChangeNotifierProvider(create: (context) => MarkerProvider()),
         ChangeNotifierProvider(create: (context) => BenefitProvider.init()),
         ChangeNotifierProvider(create: (context) => AwardsProvider.init()),
         ChangeNotifierProvider(create: (context) => LoginProvider()),

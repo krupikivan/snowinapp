@@ -100,7 +100,6 @@ class CommunityProvider with ChangeNotifier {
       offset.toString(),
     )
         .then((response) {
-      print(response);
       if (response['ok']) {
         if (response['data']['name'] == 'Unauthorized') {
           _hasConnection = true;
@@ -129,7 +128,6 @@ class CommunityProvider with ChangeNotifier {
   void getSolicitudesEnviadas() {
     List<Solicitud> _list = [];
     CommunityRepository().getSolicitudesEnviadas().then((response) {
-      print(response);
       if (response['ok']) {
         response['data']['data']
             .forEach((element) => _list.add(Solicitud.fromJson(element)));
