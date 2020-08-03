@@ -313,7 +313,7 @@ class SnowinRepository {
 
   Future<Map> cambiarVisibilidad(String visible) async {
     //configurar servicio
-    String service = Config.apiUserUrl + 'cambiar-visibilidad?visible=$visible';
+    String service = Config.apiUserUrl + 'cambiar-visibilidad/$visible';
     //Respuesta
     http.Response response;
     try {

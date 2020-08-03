@@ -34,12 +34,6 @@ class _UserMapState extends State<UserMap> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CommunityProvider>(context);
-    final markers = Provider.of<MarkerProvider>(context, listen: false);
-    // if (user.users != null &&
-    //     user.users.usuarios != null &&
-    //     markers.getMapMarkers.isEmpty) {
-    //   markers.fillMarkers(user.users.usuarios);
-    // }
     //Con esto consumis la ubicacion del usuario
     final userLocation = Provider.of<Position>(context);
     return SizedBox(

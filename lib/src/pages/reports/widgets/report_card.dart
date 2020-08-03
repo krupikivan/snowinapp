@@ -227,7 +227,6 @@ class ReportCard extends StatelessWidget {
         .comentario(actualReport.id.toString(), comment)
         .then((response) {
       print('commenta: ');
-      print(response);
       if (response['ok']) {
         // setState(() {
         actualReport.cantComentarios =

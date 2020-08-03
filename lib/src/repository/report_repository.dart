@@ -31,6 +31,7 @@ class ReportRepository {
       if (conex) {
         //Automaticamente al agregar un reporte se agrega un header content-type => null
         Map head = snowinProvider.securedHeaders;
+        print(snowinProvider.securedHeaders['Authorization']);
         head.removeWhere((k, v) => v == null);
         response = await http.get(Uri.encodeFull(service), headers: head);
 

@@ -182,7 +182,7 @@ class NotificationProvider with ChangeNotifier {
     getNotifications();
   }
 
-  Future<void> refreshing() {
+  refreshing() {
     print(" refreshing ... ");
     notifyListeners();
     getNotifications(limit: 10);
@@ -249,7 +249,7 @@ class NotificationProvider with ChangeNotifier {
   }
 
   String prepareFilters() {
-    List<String> filters = List<String>();
+    // List<String> filters = List<String>();
     // if(_title.isNotEmpty) filters.add('filtros[titulo]='+_title);
     // if(_comment.isNotEmpty) filters.add('filtros[comentario]='+_comment);
     // if(_calidadNieve.isNotEmpty) filters.add('filtros[calidad_nieve]='+_calidadNieve);
@@ -263,5 +263,6 @@ class NotificationProvider with ChangeNotifier {
     // filters.add(_sortSeed ? 'ordenes[visto]=ASC' : 'ordenes[visto]=DESC');
 
     // return filters.join('&');
+    return '';
   }
 }

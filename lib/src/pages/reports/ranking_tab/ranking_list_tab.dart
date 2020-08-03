@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:snowin/src/models/user.dart';
 import 'package:snowin/src/repository/report_repository.dart';
-
-import 'package:snowin/src/repository/snowin_repository.dart';
-
 import 'package:snowin/src/pages/reports/ranking_tab/ranking_tile.dart';
 
 class RankingListTab extends StatefulWidget {
@@ -185,7 +181,6 @@ class RankingListTabState extends State<RankingListTab> {
         .rankings(limit.toString(), offset.toString())
         .then((response) {
       print('listar-ranking: ');
-      print(response);
       if (response['ok']) {
         final _castDataType = response['data'].cast<Map<String, dynamic>>();
         elements = _castDataType.map<User>((json) => User.map(json)).toList();

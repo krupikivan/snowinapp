@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/providers/login_provider.dart';
+import 'package:snowin/src/providers/welcome_provider.dart';
 
 class Level extends StatelessWidget {
 //   @override
@@ -35,66 +36,68 @@ class Level extends StatelessWidget {
                   ),
               child: ListView(
                 children: [
-                  Container(
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          height: size.height * 0.53,
-                          child: Image(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(//TODO: Esto traer de DB
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSTSftEmC2SSZt9XSIPQvuAtli2YEi-OGqrqilZwY_DdJGkqua0&usqp=CAU"),
-                          ),
-                        ),
-                        Container(
-                          height: size.height * 0.55,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Consumer<WelcomeProvider>(
+                    builder: (context, model, _) => model == null
+                        ? SizedBox()
+                        : Stack(
                             children: [
                               Container(
-                                padding:
-                                    EdgeInsets.only(top: size.height * 0.045),
-                                alignment: Alignment.center,
+                                width: double.infinity,
+                                height: size.height * 0.53,
                                 child: Image(
-                                  height: size.height * 0.18,
-                                  image: AssetImage(
-                                      "assets/images/logo-snowin.png"),
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        model.listSlider[1].image)),
+                              ),
+                              Container(
+                                height: size.height * 0.55,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: size.height * 0.045),
+                                      alignment: Alignment.center,
+                                      child: Image(
+                                        height: size.height * 0.18,
+                                        image: AssetImage(
+                                            "assets/images/logo-snowin.png"),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: size.height * 0.05),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 25, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(18),
+                                          color: Colors.white,
+                                        ),
+                                        child: Text(
+                                          "Foto de ${model.listSlider[1].author}.",
+                                          style: TextStyle(fontSize: 19),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Container(
-                                padding:
-                                    EdgeInsets.only(bottom: size.height * 0.05),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(18),
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: FaIcon(
+                                    FontAwesomeIcons.arrowLeft,
                                     color: Colors.white,
-                                  ),
-                                  child: Text(
-                                    //TODO: Esto traer de DB
-                                    "Foto de Foto de CarlitosRobles.",
-                                    style: TextStyle(fontSize: 19),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        Container(
-                          child: IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            icon: FaIcon(
-                              FontAwesomeIcons.arrowLeft,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                   SizedBox(
                     height: size.height * 0.015,

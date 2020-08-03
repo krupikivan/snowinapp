@@ -4,7 +4,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
-import 'package:snowin/src/models/pist.dart';
 import 'package:snowin/src/widgets/custom_textfield.dart';
 import '../../widgets/custom_appbar_pages.dart';
 import '../../widgets/custom_drawer.dart';

@@ -62,11 +62,11 @@ TextStyle textStyleValidate = const TextStyle(
   fontStyle: FontStyle.italic,
 );
 
-TextTheme _buildTextTheme(TextTheme base) {
-  return base.copyWith(
-    title: base.title.copyWith(),
-  );
-}
+// TextTheme _buildTextTheme(TextTheme base) {
+//   return base.copyWith(
+//     title: base.title.copyWith(),
+//   );
+// }
 
 TextStyle textGreen = const TextStyle(
   color: const Color(0xFF00c497),
@@ -93,9 +93,9 @@ ThemeData appTheme = new ThemeData(
   buttonTheme: const ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
   ),
-  textTheme: _buildTextTheme(base.textTheme),
-  primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
-  accentTextTheme: _buildTextTheme(base.accentTextTheme),
+  // textTheme: _buildTextTheme(base.textTheme),
+  // primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
+  // accentTextTheme: _buildTextTheme(base.accentTextTheme),
 );
 
 ThemeData snowinTheme = new ThemeData(

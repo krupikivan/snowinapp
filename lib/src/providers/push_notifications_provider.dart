@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'dart:io';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:snowin/src/config/config.dart';

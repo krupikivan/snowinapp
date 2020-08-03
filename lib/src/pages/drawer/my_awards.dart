@@ -51,22 +51,22 @@ class MyAwards extends StatelessWidget {
         ));
   }
 
-  String _getText(int length) {
-    switch (length) {
-      case 1:
-        return 'Obtuviste $length premio';
-        break;
-      default:
-        return 'Obtuviste $length premios';
-        break;
-    }
-  }
+  // String _getText(int length) {
+  //   switch (length) {
+  //     case 1:
+  //       return 'Obtuviste $length premio';
+  //       break;
+  //     default:
+  //       return 'Obtuviste $length premios';
+  //       break;
+  //   }
+  // }
 
-  Widget _noAwards() {
-    return Center(
-        child: Text(
-      'No existen premios ganados',
-      style: TextStyle(fontSize: 25),
-    ));
-  }
+  // Widget _noAwards() {
+  //   return Center(
+  //       child: Text(
+  //     'No existen premios ganados',
+  //     style: TextStyle(fontSize: 25),
+  //   ));
+  // }
 }

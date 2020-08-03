@@ -90,7 +90,6 @@ class UserProvider with ChangeNotifier {
   Future<void> getNiveles() async {
     await SnowinRepository().getNiveles().then((response) {
       print('User niveles response');
-      print(response);
       if (response['ok']) {
         var data = response['data'];
         _niveles = data;
@@ -105,7 +104,6 @@ class UserProvider with ChangeNotifier {
   Future<void> getPerfiles() async {
     await SnowinRepository().getPerfiles().then((response) {
       print('User perfiles response');
-      print(response);
       if (response['ok']) {
         var data = response['data'];
         _perfil = data;
@@ -119,7 +117,6 @@ class UserProvider with ChangeNotifier {
 
   Future<void> editBio() async {
     await SnowinRepository().actualizarBio(_user.biografia).then((response) {
-      print(response);
       if (response['success']) {
       } else {
         throw Exception('Error');
@@ -131,7 +128,6 @@ class UserProvider with ChangeNotifier {
     _loading = true;
     notifyListeners();
     await SnowinRepository().actualizarUserImage(_uploading).then((response) {
-      print(response);
       if (response['ok']) {
         _uploading = null;
       } else {
@@ -149,7 +145,6 @@ class UserProvider with ChangeNotifier {
     await SnowinRepository()
         .actualizarActividad(User().getActividadString(_perfilSelected))
         .then((response) {
-      print(response);
       if (response['success']) {
       } else {
         throw Exception('Error');
@@ -159,7 +154,6 @@ class UserProvider with ChangeNotifier {
 
   Future<void> cambiarVisible(String visible) async {
     await SnowinRepository().cambiarVisibilidad(visible).then((response) {
-      print(response);
       if (response['success']) {
       } else {
         throw Exception('Error');
@@ -171,7 +165,6 @@ class UserProvider with ChangeNotifier {
     _user.nivel = _nivelesSelected;
     notifyListeners();
     await SnowinRepository().actualizarNivel(_nivelesSelected).then((response) {
-      print(response);
       if (response['success']) {
       } else {
         throw Exception('Error');

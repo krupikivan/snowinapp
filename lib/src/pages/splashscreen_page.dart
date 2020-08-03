@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snowin/src/config/config.dart';
 import 'package:snowin/src/providers/firebase_analytics_provider.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/share/preference.dart';
 
@@ -22,7 +20,6 @@ class _SplashScreenState extends State<SplashScreen>
   AnimationController animationController;
   final _preferences = new Preferences();
   final firebaseAnalyticsProvider = FirebaseAnalyticsProvider();
-  static final FacebookLogin facebookSignIn = new FacebookLogin();
   @override
   void initState() {
     super.initState();

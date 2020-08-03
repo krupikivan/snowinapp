@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/providers/login_provider.dart';
+import 'package:snowin/src/providers/welcome_provider.dart';
 
 class ProfileType extends StatelessWidget {
   @override
@@ -18,63 +19,67 @@ class ProfileType extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 5.0),
             child: ListView(
               children: [
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: size.height * 0.53,
-                      child: Image(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                            //TODO: Esto traer de DB
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTcio_1z_94JA-CqwYu8IDb-Dv1936xqgLP9x9gOqhjKXg1UMUk&usqp=CAU"),
-                      ),
-                    ),
-                    Container(
-                      height: size.height * 0.55,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(top: size.height * 0.045),
-                            alignment: Alignment.center,
-                            child: Image(
-                              height: size.height * 0.18,
-                              image:
-                                  AssetImage("assets/images/logo-snowin.png"),
-                            ),
-                          ),
-                          Container(
-                            padding:
-                                EdgeInsets.only(bottom: size.height * 0.05),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 4),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18),
-                                color: Colors.white,
-                              ),
-                              child: Text(
-                                "Foto de Diegoadmin.", //TODO: Esto traer de DB
-                                style: TextStyle(fontSize: 19),
+                Consumer<WelcomeProvider>(
+                  builder: (context, model, _) => model == null
+                      ? SizedBox()
+                      : Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: size.height * 0.53,
+                              child: Image(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(model.listSlider[0].image),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: FaIcon(
-                          FontAwesomeIcons.arrowLeft,
-                          color: Colors.white,
+                            Container(
+                              height: size.height * 0.55,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        top: size.height * 0.045),
+                                    alignment: Alignment.center,
+                                    child: Image(
+                                      height: size.height * 0.18,
+                                      image: AssetImage(
+                                          "assets/images/logo-snowin.png"),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: size.height * 0.05),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(18),
+                                        color: Colors.white,
+                                      ),
+                                      child: Text(
+                                        "Foto de ${model.listSlider[0].author}.",
+                                        style: TextStyle(fontSize: 19),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: FaIcon(
+                                  FontAwesomeIcons.arrowLeft,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  ],
                 ),
                 SizedBox(
                   height: size.height * 0.015,

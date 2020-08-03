@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:snowin/src/models/benefit.dart';
 import 'package:snowin/src/models/my_benefit.dart';
 import 'package:snowin/src/repository/benefit_repository.dart';
-import 'package:snowin/src/repository/snowin_repository.dart';
 
 class BenefitProvider with ChangeNotifier {
   List<Benefit> _listBenefit = [];
@@ -97,7 +96,6 @@ class BenefitProvider with ChangeNotifier {
     BenefitRepository()
         .getBenefits(_limit.toString(), offset.toString(), prepareFilters())
         .then((response) async {
-      print(response);
       if (response['ok']) {
         if (response['data']['data'].isNotEmpty) {
           await compute(beneficioFromJson, response['data']['data'])
@@ -131,7 +129,6 @@ class BenefitProvider with ChangeNotifier {
     BenefitRepository()
         .getMyBenefits(_limit.toString(), offset.toString(), prepareFilters())
         .then((response) async {
-      print(response);
       if (response['ok']) {
         if (response['data']['data'].isNotEmpty) {
           await compute(misBeneficiosFromJson, response['data']['data'])

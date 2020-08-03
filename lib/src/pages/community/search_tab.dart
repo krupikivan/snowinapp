@@ -51,7 +51,7 @@ class SearchTab extends StatelessWidget {
             height: 1,
           ),
           Consumer<CommunityTabsProvider>(builder: (context, tab, _) {
-            tab.inSecondTab = true;
+            // tab.inSecondTab = true;
             switch (tab.currentIndex) {
               case 0:
                 return UserList();

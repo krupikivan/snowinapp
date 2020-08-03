@@ -201,7 +201,7 @@ class User {
         distancia: json["distancia"],
         image: json["img"],
         nivel: json["nivel"],
-        actividad: json["actividad"],
+        actividad: User().getActividadEnum(json["actividad"]),
         biografia: json["biografia"],
       );
 }

@@ -36,8 +36,6 @@ class CommentWState extends State<CommentW> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Container(
       child: Column(
         children: [

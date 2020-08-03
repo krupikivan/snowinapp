@@ -114,7 +114,6 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> _loadConditions() async {
     await RegisterRepository().legal().then((response) {
-      print(response);
       if (response['ok']) {
         _conditions = response['data'];
         notifyListeners();
@@ -129,7 +128,6 @@ class LoginProvider with ChangeNotifier {
   Future<void> _loadProfileTypes() async {
     List<String> _list = [];
     await RegisterRepository().perfiles().then((response) {
-      print(response);
       if (response['ok']) {
         response['data'].forEach((element) {
           _list.add(element);
@@ -148,7 +146,6 @@ class LoginProvider with ChangeNotifier {
   Future<void> saveProfileTypes() async {
     await RegisterRepository().perfil(_profileValue).then((response) {
       _prefs.profileType = _profileValue;
-      print(response);
       if (response['ok']) {
         // Navigator.pushNamed(context, '/wellcome-level');
       } else {
@@ -163,7 +160,6 @@ class LoginProvider with ChangeNotifier {
   Future<void> _loadLevels() async {
     List<String> _list = [];
     await RegisterRepository().niveles().then((response) {
-      print(response);
       if (response['ok']) {
         response['data'].forEach((element) {
           _list.add(element);
@@ -182,7 +178,6 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> saveLevel() async {
     await RegisterRepository().nivel(_levelValue).then((response) {
-      print(response);
       if (response['ok']) {
       } else {
         throw new Exception(response['errores'][0]['message']);

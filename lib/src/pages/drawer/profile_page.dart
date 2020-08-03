@@ -8,7 +8,6 @@ import 'package:snowin/src/pages/drawer/widget/profile_image.dart';
 import 'package:snowin/src/pages/drawer/widget/profile_loading_image.dart';
 import 'package:snowin/src/pages/reports/provider/report_provider.dart';
 import 'package:snowin/src/providers/user_provider.dart';
-import 'package:snowin/src/share/preference.dart';
 import 'package:snowin/src/widgets/custom_icon_button.dart';
 import 'package:snowin/src/widgets/error_connection.dart';
 import 'package:snowin/src/widgets/thumbnail.dart';
@@ -30,7 +29,6 @@ class ProfilePage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final user = Provider.of<UserProvider>(context);
     final reports = Provider.of<ReportProvider>(context, listen: false);
-    final _prefs = Preferences();
     final conex = Provider.of<ConnectionStatus>(context);
     return Scaffold(
       backgroundColor: Colors.white,

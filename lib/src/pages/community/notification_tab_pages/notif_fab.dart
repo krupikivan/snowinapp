@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/pages/community/notification_tab_pages/provider/notification_provider.dart';
-import 'package:snowin/src/pages/community/notification_tab_pages/widget/notif_filter_dialog.dart';
 import 'package:snowin/src/widgets/custom_fab_icon.dart';
 
 class NotificationFab extends StatelessWidget {
@@ -11,7 +10,6 @@ class NotificationFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final notif = Provider.of<NotificationProvider>(context);
     return Align(
       child: Container(

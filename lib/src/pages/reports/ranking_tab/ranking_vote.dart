@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:snowin/src/repository/report_repository.dart';
-
-import 'package:snowin/src/repository/snowin_repository.dart';
 
 class RankingVote extends StatefulWidget {
   final String reportId;
@@ -66,7 +63,6 @@ class RankingVoteState extends State<RankingVote> {
         .valorar(reportId, copos.round().toString())
         .then((response) {
       print('valorar: ');
-      print(response);
       if (response['ok'] && response['data'] == true) {
         setState(() {
           ranking = copos.toString();

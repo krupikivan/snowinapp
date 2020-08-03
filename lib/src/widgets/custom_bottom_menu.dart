@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
-import 'package:snowin/src/pages/community/notification_tab_pages/provider/notification_provider.dart';
 
 import 'custom_count_notif.dart';
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:snowin/src/models/connection_status.dart';
 

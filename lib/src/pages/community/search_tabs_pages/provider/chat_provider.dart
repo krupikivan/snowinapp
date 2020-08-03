@@ -87,7 +87,6 @@ class ChatProvider with ChangeNotifier {
   Future<bool> sendMessage(String text, int id) async {
     try {
       var response = await ChatRepository().sendMessage(text, id);
-      print(response);
       if (response['ok']) {
         await getMensajes();
         return true;
@@ -102,7 +101,6 @@ class ChatProvider with ChangeNotifier {
   Future<bool> delete(int id) async {
     try {
       var response = await ChatRepository().delete(id);
-      print(response);
       if (response['ok']) {
         await getMensajes();
         return true;
