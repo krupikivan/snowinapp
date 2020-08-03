@@ -4,11 +4,11 @@
 
     <!-- Replace "000000000000" with your Facebook App ID here. -->
     <!-- Replace "186746932743023" with your Facebook App ID here. -->
-    <string name="facebook_app_id">725406204939203</string>
+    <string name="facebook_app_id">728617944629125</string>
 
     <!--
       Replace "000000000000" with your Facebook App ID here.
       **NOTE**: The scheme needs to start with `fb` and then your ID.
     -->
-    <string name="fb_login_protocol_scheme">fb725406204939203</string>
+    <string name="fb_login_protocol_scheme">fb728617944629125</string>
 </resources>
