@@ -44,7 +44,7 @@ class Conditions extends StatelessWidget {
                   children: [
                     Consumer<LoginProvider>(
                       builder: (context, user, _) => user.conditions == null
-                          ? CircularProgressIndicator()
+                          ? Center(child: CircularProgressIndicator())
                           : Text(user.conditions,
                               style: TextStyle(
                                   fontSize: 18,

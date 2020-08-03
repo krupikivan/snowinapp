@@ -68,21 +68,17 @@ class LoginProvider with ChangeNotifier {
     _loadLevels();
   }
 
-  Future<void> initiateFacebookLogin() async {
+  Future<bool> initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
     final facebookLoginResult = await facebookLogin.logIn(['email']);
-
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
-        print("Error");
         _isLoggedIn = false;
         break;
       case FacebookLoginStatus.cancelledByUser:
-        print("CancelledByUser");
         _isLoggedIn = false;
         break;
       case FacebookLoginStatus.loggedIn:
-        print("LoggedIn");
         final graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}');
         var profile = json.decode(graphResponse.body);
@@ -102,7 +98,8 @@ class LoginProvider with ChangeNotifier {
               : '';
           _preferences.registerFrom = '1';
         } else {
-          throw new Exception(response['message']);
+          print(response['message']);
+          // throw new Exception(response['message']);
         }
         _preferences.registerFrom = '1';
         print(profile.toString());
@@ -110,6 +107,8 @@ class LoginProvider with ChangeNotifier {
         break;
     }
     notifyListeners();
+    print(facebookLoginResult.status);
+    return _isLoggedIn;
   }
 
   Future<void> _loadConditions() async {
