@@ -43,7 +43,7 @@ class Level extends StatelessWidget {
                           height: size.height * 0.53,
                           child: Image(
                             fit: BoxFit.cover,
-                            image: NetworkImage(
+                            image: NetworkImage(//TODO: Esto traer de DB
                                 "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSTSftEmC2SSZt9XSIPQvuAtli2YEi-OGqrqilZwY_DdJGkqua0&usqp=CAU"),
                           ),
                         ),
@@ -73,6 +73,7 @@ class Level extends StatelessWidget {
                                     color: Colors.white,
                                   ),
                                   child: Text(
+                                    //TODO: Esto traer de DB
                                     "Foto de Foto de CarlitosRobles.",
                                     style: TextStyle(fontSize: 19),
                                   ),

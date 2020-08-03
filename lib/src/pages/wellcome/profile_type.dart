@@ -26,6 +26,7 @@ class ProfileType extends StatelessWidget {
                       child: Image(
                         fit: BoxFit.cover,
                         image: NetworkImage(
+                            //TODO: Esto traer de DB
                             "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTcio_1z_94JA-CqwYu8IDb-Dv1936xqgLP9x9gOqhjKXg1UMUk&usqp=CAU"),
                       ),
                     ),
@@ -54,7 +55,7 @@ class ProfileType extends StatelessWidget {
                                 color: Colors.white,
                               ),
                               child: Text(
-                                "Foto de Diegoadmin.",
+                                "Foto de Diegoadmin.", //TODO: Esto traer de DB
                                 style: TextStyle(fontSize: 19),
                               ),
                             ),

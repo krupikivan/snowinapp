@@ -18,7 +18,7 @@ class LoginProvider with ChangeNotifier {
   // }
 
   var facebookLogin = FacebookLogin();
-  static final Preferences _preferences = Preferences();
+  static final Preferences _prefs = Preferences();
 
   bool _isLoggedIn;
   bool get isLoggedIn => _isLoggedIn;
@@ -79,32 +79,33 @@ class LoginProvider with ChangeNotifier {
         _isLoggedIn = false;
         break;
       case FacebookLoginStatus.loggedIn:
+        print(facebookLoginResult.accessToken.token);
         final graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}');
         var profile = json.decode(graphResponse.body);
         Map response = await fbLogin(facebookLoginResult.accessToken.token);
         if (response['success']) {
-          _preferences.email = profile['email'];
-          _preferences.nombre = profile['first_name'];
-          _preferences.apellidos = profile['last_name'];
-          _preferences.userid = response['data']['id'] != null
+          _prefs.email = profile['email'];
+          _prefs.nombre = profile['first_name'];
+          _prefs.apellidos = profile['last_name'];
+          _prefs.userid = response['data']['id'] != null
               ? (response['data']['id']).toString()
               : '';
-          _preferences.status = response['data']['status'] != null
+          _prefs.status = response['data']['status'] != null
               ? (response['data']['status']).toString()
               : '';
-          _preferences.token = response['data']['token'] != null
+          _prefs.token = response['data']['token'] != null
               ? response['data']['token']
               : '';
-          _preferences.registerFrom = '1';
+          _prefs.registerFrom = '1';
+          print(profile.toString());
+          _isLoggedIn = true;
+          break;
         } else {
           print(response['message']);
-          // throw new Exception(response['message']);
+          _isLoggedIn = false;
+          break;
         }
-        _preferences.registerFrom = '1';
-        print(profile.toString());
-        _isLoggedIn = true;
-        break;
     }
     notifyListeners();
     print(facebookLoginResult.status);
@@ -146,7 +147,7 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> saveProfileTypes() async {
     await RegisterRepository().perfil(_profileValue).then((response) {
-      _preferences.profileType = _profileValue;
+      _prefs.profileType = _profileValue;
       print(response);
       if (response['ok']) {
         // Navigator.pushNamed(context, '/wellcome-level');
@@ -286,16 +287,16 @@ class LoginProvider with ChangeNotifier {
 
 //                               LoginProvider().fbLogin(fbResponse.accessToken.token).then((response) {
 //                                   if(response['success']) {
-//                                       _preferences.email       = profile['email'];
-//                                       _preferences.nombre      = profile['first_name'];
-//                                       _preferences.apellidos   = profile['last_name'];
-//                                       _preferences.userid      = response['data']['id'] != null? (response['data']['id']).toString() : '';
-//                                       _preferences.status      = response['data']['status'] != null? (response['data']['status']).toString() : '';
-//                                       _preferences.token       = response['data']['token'] != null? response['data']['token'] : '';
+//                                       _prefs.email       = profile['email'];
+//                                       _prefs.nombre      = profile['first_name'];
+//                                       _prefs.apellidos   = profile['last_name'];
+//                                       _prefs.userid      = response['data']['id'] != null? (response['data']['id']).toString() : '';
+//                                       _prefs.status      = response['data']['status'] != null? (response['data']['status']).toString() : '';
+//                                       _prefs.token       = response['data']['token'] != null? response['data']['token'] : '';
 
 //                                       print('go to terms and conditions');
 //                                       fbLogin = false;
-//                                       _preferences.registerFrom = '1';
+//                                       _prefs.registerFrom = '1';
 //                                       Navigator.pushNamed(context, '/wellcome-conditions');
 //                                   } else {
 //                                      throw new Exception(response['message']);

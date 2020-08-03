@@ -17,6 +17,7 @@ class FacebookButton extends StatelessWidget {
         onPressed: () async {
           bool login = await user.initiateFacebookLogin();
           if (login) {
+            user.retrieveInitialData();
             Navigator.pushNamed(context, '/wellcome-conditions');
           }
         },

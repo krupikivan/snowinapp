@@ -115,8 +115,6 @@ class GetStarted extends StatelessWidget {
                           child: RaisedButton(
                             color: primaryColor,
                             onPressed: () {
-                              //TODO:Borrar esto
-                              _prefs.token = Config.ivanTKN;
                               Navigator.pushNamed(context, '/reports');
                             },
                             child: Row(
