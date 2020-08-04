@@ -173,9 +173,7 @@ class ReportCard extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => ReportDetail(
-                    // report.reportSelected: report,
-                    ),
+                builder: (BuildContext context) => ReportDetail(),
               ));
         },
       ),

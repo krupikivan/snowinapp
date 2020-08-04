@@ -60,15 +60,21 @@ class UserProvider with ChangeNotifier {
     _loading = false;
   }
 
-  changeVisible(bool value) {
-    if (value) {
-      _user.visible = "1";
-      cambiarVisible("1");
-    } else {
-      _user.visible = "0";
-      cambiarVisible("0");
+  changeVisible(bool value) async {
+    try {
+      if (value) {
+        _user.visible = "1";
+        notifyListeners();
+        await cambiarVisible("1");
+      } else {
+        _user.visible = "0";
+        notifyListeners();
+        await cambiarVisible("0");
+      }
+    } catch (e) {
+      _user.visible = value ? '0' : '1';
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> fetchUserData() async {
@@ -154,6 +160,15 @@ class UserProvider with ChangeNotifier {
 
   Future<void> cambiarVisible(String visible) async {
     await SnowinRepository().cambiarVisibilidad(visible).then((response) {
+      if (response['success']) {
+      } else {
+        throw Exception('Error');
+      }
+    });
+  }
+
+  Future<void> sendSOS() async {
+    await SnowinRepository().sendSOS().then((response) {
       if (response['success']) {
       } else {
         throw Exception('Error');

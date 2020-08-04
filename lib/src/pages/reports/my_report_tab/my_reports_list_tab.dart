@@ -13,60 +13,15 @@ class MyReportsListTab extends StatefulWidget {
 }
 
 class MyReportsListTabState extends State<MyReportsListTab> {
-  // UserProvider _session = new UserProvider();
   bool _showTopButon = false;
   double deviceHeight = 0;
-  // int page = 0, qtty = 10;
-  // bool _isLoading = false, _showTopButon = false;
   ScrollController _scrollController;
-  // List<Report> _allMyReports = new List<Report>();
-
-  // TextEditingController _controllerTitle;
-  // String _title = '';
-  // TextEditingController _controllerComment;
-  // String _comment = '';
-  // List<ItemKV> _trackItems;
-  // String _track = '';
-  // List<ItemKV> _calidadNieveItems;
-  // String _calidadNieve = '';
-  // List<ItemKV> _climaItems;
-  // String _clima = '';
-  // List<ItemKV> _vientoItems;
-  // String _viento = '';
-  // List<ItemKV> _sensacionGeneralItems;
-  // String _sensacionGeneral = '';
-  // List<ItemKV> _esperaMediosItems;
-  // String _esperaMedios = '';
-
-  // bool _sortIdReporte = false;
-  // bool _sortFecha = false;
-  // bool _sortCalificacion = false;
-
+  var refreshkey = GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     super.initState();
-
-    // _controllerTitle = TextEditingController();
-    // _controllerTitle.text = '';
-    // _controllerComment = TextEditingController();
-    // _controllerComment.text = '';
-
-    // _calidadNieveItems = [ItemKV('', 'Todos')];
-    // _climaItems = [ItemKV('', 'Todos')];
-    // _vientoItems = [ItemKV('', 'Todos')];
-    // _sensacionGeneralItems = [ItemKV('', 'Todos')];
-    // _esperaMediosItems = [ItemKV('', 'Todos')];
-
     _scrollController = new ScrollController()..addListener(scrollListener);
-    // startLoader();
     Provider.of<ReportProvider>(context, listen: false).startLoader(true);
-    // loadTraks().then((value) {
-    //   setState(() {});
-    // });
-
-    // loadEmuns().then((value) {
-    //   setState(() {});
-    // });
   }
 
   @override
@@ -79,9 +34,10 @@ class MyReportsListTabState extends State<MyReportsListTab> {
     final report = Provider.of<ReportProvider>(context, listen: false);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: new RefreshIndicator(
-        child: new Scrollbar(
-          child: new Stack(
+      child: RefreshIndicator(
+        key: refreshkey,
+        child: Scrollbar(
+          child: Stack(
             children: <Widget>[
               MyReportTiles(
                 controller: _scrollController,

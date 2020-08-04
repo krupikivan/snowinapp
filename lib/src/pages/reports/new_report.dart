@@ -332,10 +332,12 @@ class NewReport extends StatelessWidget {
                                 if (report.formIsValid()) {
                                   report.sendReport().then((value) {
                                     Navigator.of(context).pop(false);
-                                    _showPopup(context, "Reporte enviado");
-                                  });
+                                    _showPopup(context, 'Reporte enviado');
+                                  }).catchError(
+                                      (e) => _showPopup(context, e.toString()));
                                 } else {
-                                  _showPopup(context, "Complete todos los campos", false);
+                                  _showPopup(context,
+                                      "Complete todos los campos", false);
                                 }
                               },
                             ),
@@ -447,7 +449,6 @@ class NewReport extends StatelessWidget {
       ),
     );
   }
-
 }
 
 // typedef OnSendCallback = void Function();

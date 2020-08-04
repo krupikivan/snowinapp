@@ -371,13 +371,11 @@ class ReportProvider with ChangeNotifier {
   }
 
   Future<void> fetchReportComments() async {
-    List<ReportComments> _list = new List<ReportComments>();
-    // int offset = _page * _limit;
-    int offset = 0;
-    await ReportRepository()
-        .comentarios(
-            _limit.toString(), offset.toString(), prepareCommentsFilters())
-        .then((response) {
+    try {
+      List<ReportComments> _list = List<ReportComments>();
+      int offset = 0;
+      var response = await ReportRepository().comentarios(
+          _limit.toString(), offset.toString(), prepareCommentsFilters());
       print('reporte/comentarios response: ');
       if (response['ok']) {
         final _castDataType =
@@ -388,11 +386,11 @@ class ReportProvider with ChangeNotifier {
         _allComments = _list;
         notifyListeners();
       } else {
-        throw new Exception('Error');
+        throw ('Error');
       }
-    }).catchError((error) {
-      print(error.toString());
-    });
+    } catch (e) {
+      throw ('Error');
+    }
   }
 
   Future<void> fetchAllMyReports(bool sum, {int limit}) async {
@@ -552,35 +550,45 @@ class ReportProvider with ChangeNotifier {
   }
 
   Future<void> sendReport() async {
-    _isLoading = true;
-    notifyListeners();
-    List<File> multimedias = List<File>();
-    _medias.forEach((media) {
-      multimedias.add(File(media.value));
-    });
-
-    await ReportRepository()
-        .sendReport(_track, _title, _comment, _calidadNieve, _esperaMedios,
-            _viento, _clima, _sensacionGeneral, multimedias)
-        .then((response) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      List<File> multimedias = List<File>();
+      _medias.forEach((media) {
+        multimedias.add(File(media.value));
+      });
+      print(_center.id);
+      print(_track);
+      var response = await ReportRepository().sendReport(
+          calidadNieve: _calidadNieve,
+          clima: _clima,
+          comentario: _comment,
+          titulo: _title,
+          esperaMedios: _esperaMedios,
+          viento: _viento,
+          sensacionGeneral: _sensacionGeneral,
+          multimedias: multimedias,
+          pistaId: _track.isNotEmpty ? _track : null,
+          centerSky: _center.id.toString());
       if (response['ok']) {
         initiateData();
         fetchAllReports(false);
+        fetchAllMyReports(false);
       } else {
         _isLoading = false;
         notifyListeners();
         throw new Exception('Error');
       }
-    }).catchError((error) {
+    } catch (e) {
       _isLoading = false;
       notifyListeners();
-      print(error.toString());
-    });
+      throw e.toString();
+    }
   }
 
   bool formIsValid() {
-    return (
-        (_reportFromItem == _reportFrom[2].key && _track.isNotEmpty || _reportFromItem == _reportFrom[1].key) &&
+    return ((_reportFromItem == _reportFrom[2].key && _track.isNotEmpty ||
+            _reportFromItem == _reportFrom[1].key) &&
         _title.isNotEmpty &&
         _comment.isNotEmpty &&
         _calidadNieve.isNotEmpty &&
@@ -834,32 +842,31 @@ class ReportProvider with ChangeNotifier {
   }
 
   Future valorar(double copos) async {
-    ReportRepository()
-        .valorar(_reportSelected.id.toString(), copos.round().toString())
-        .then((response) {
-      print('valorar: ');
-      if (response['ok'] && response['data'] == true) {
-        // setState(() {
+    try {
+      var response = await ReportRepository()
+          .valorar(_reportSelected.id.toString(), copos.round().toString());
+      if (response['ok'] && response['data']['code'] != 0) {
         _showReportDetailTutorial = false;
         _reportSelected.copos = copos.toString();
         _reportSelected.coposUsuarios =
             int.parse(_reportSelected.coposUsuarios.toString()) + 1;
-        // });
-
+        notifyListeners();
       } else {
-        throw new Exception(response['data']['message']);
+        if (response['data']['code'] == 0) {
+          throw ('El reporte ya ha sido evaluado.');
+        } else {
+          throw ('Erro intente mas tarde');
+        }
       }
-    }).catchError((error) {
-      print(error.toString());
-    });
+    } catch (e) {
+      throw (e.toString());
+    }
   }
 
   Future comenta(String comment) async {
-    print(comment);
-    ReportRepository()
-        .comentario(_reportSelected.id.toString(), comment)
-        .then((response) {
-      print('commenta: ');
+    try {
+      var response = await ReportRepository()
+          .comentario(_reportSelected.id.toString(), comment);
       if (response['ok']) {
         _showReportDetailTutorial = false;
         _reportSelected.cantComentarios =
@@ -868,9 +875,7 @@ class ReportProvider with ChangeNotifier {
       } else {
         throw new Exception('Error al comentar');
       }
-    }).catchError((error) {
-      print(error.toString());
-    });
+    } catch (e) {}
   }
 
   Future<void> detalleCentroSki() async {

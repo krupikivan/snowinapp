@@ -321,25 +321,17 @@ class ReportRepository {
   }
 
   Future<Map> sendReport(
-      String pistaId,
+      {String pistaId,
       String titulo,
       String comentario,
+      String centerSky,
       String calidadNieve,
       String esperaMedios,
       String viento,
       String clima,
       String sensacionGeneral,
-      List<File> multimedias) async {
+      List<File> multimedias}) async {
     print('call end point: crear');
-    print(pistaId);
-    print(titulo);
-    print(comentario);
-    print(calidadNieve);
-    print(esperaMedios);
-    print(viento);
-    print(clima);
-    print(sensacionGeneral);
-    print(multimedias.length.toString());
 
     //configurar servicio
     String service = Config.apiReportsUrl + "crear";
@@ -350,48 +342,6 @@ class ReportRepository {
     try {
       final conex = await ConnectivityProvider().check();
       if (conex) {
-        // var request = new http.MultipartRequest("POST", Uri.parse(service));
-        // request.fields['pista_id'] = '28';
-        // request.fields['titulo'] = titulo;
-        // request.fields['comentario'] = comentario;
-        // request.fields['calidad_nieve'] = calidadNieve;
-        // request.fields['espera_medios'] = esperaMedios;
-        // request.fields['viento'] = viento;
-        // request.fields['clima'] = clima;
-        // request.fields['sensacion_general'] = sensacionGeneral;
-
-        // multimedias.forEach((media) {
-        //   var file = http.MultipartFile.fromPath('multimedia', )
-        //   request.files.add(http.MultipartFile.fromBytes(
-        //       'multimedia', media.readAsBytesSync(),
-        //       filename: basename(media.path)));
-
-        // });
-
-        // final mime =
-        //     lookupMimeType(media.path, headerBytes: [0xFF, 0xD8]).split('/');
-
-        // var stream =
-        //     new http.ByteStream(DelegatingStream.typed(media.openRead()));
-
-        // var length = await media.length();
-
-        // var mediaFile = await http.MultipartFile.fromPath('foto', media.path,
-        //     contentType: MediaType(mime[0], mime[1]));
-        // var mediaFile = http.MultipartFile('foto', stream, length,
-        //     filename: basename(media.path),
-        //     contentType: MediaType(mime[0], mime[1]));
-        // request.files.add(mediaFile);
-        // });
-
-        // FormData formData = FormData.fromMap(
-
-        // );
-
-        // request.headers['Authorization'] =
-        //     snowinProvider.securedHeaders['Authorization'];
-
-        // response = await request.send();
 //--------------------------DIO-----------------------------------
         FormData formData;
         List mediaFile = [];
@@ -400,11 +350,12 @@ class ReportRepository {
           mediaFile.add(file);
         });
         formData = FormData.fromMap({
-          'pista_id': pistaId,
+          if (pistaId != null) 'pista_id': pistaId,
           'titulo': titulo,
           'comentario': comentario,
           'calidad_nieve': calidadNieve,
           'espera_medios': esperaMedios,
+          'centro_ski_id': centerSky,
           'viento': viento,
           'clima': clima,
           'sensacion_general': sensacionGeneral,
@@ -418,16 +369,16 @@ class ReportRepository {
         });
 
         response = await dio.post(service,
-            data: formData.files.isEmpty ? "" : formData,
+            data: formData,
             options: Options(headers: snowinProvider.securedHeaders));
 
 //--------------------------DIO-----------------------------------
 
         if (response.statusCode >= 200 && response.statusCode <= 299) {
-          // final decodeResp = json.decode(response.body);
+          final decodeResp = response.data;
           return {
-            'ok': true,
-            // 'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+            'ok': decodeResp['success'],
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
           };
         } else {
           return snowinProvider.manejadorErroresResp(response);

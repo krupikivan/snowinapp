@@ -13,6 +13,7 @@ class ReportTiles extends StatelessWidget {
     return report.allReports != null
         ? report.allReports.length > 0
             ? ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(5.0),
                 controller: controller,
                 scrollDirection: Axis.vertical,

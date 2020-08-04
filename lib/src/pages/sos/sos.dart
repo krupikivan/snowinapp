@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:snowin/src/models/connection_status.dart';
 import 'package:snowin/src/pages/sos/widget/appbar_sos.dart';
+import 'package:snowin/src/providers/user_provider.dart';
 import 'package:snowin/src/utils/dialogs.dart';
 import 'package:snowin/src/widgets/custom_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -176,7 +177,7 @@ class _SosState extends State<Sos> {
               Colors.yellow,
               'AVISAR A AMIGOS',
               () => conex.status == Status.HasConnection
-                  ? _showPopup()
+                  ? _sendSOS()
                   : DialogHelper.showSimpleDialog(
                       context, 'Revise su conexion a internet'),
               false),
@@ -186,6 +187,15 @@ class _SosState extends State<Sos> {
         ],
       ),
     );
+  }
+
+  _sendSOS() async {
+    try {
+      await Provider.of<UserProvider>(context, listen: false).sendSOS();
+      _showPopup(Icons.check, 'Se ha avisado a sus amigos');
+    } catch (e) {
+      _showPopup(Icons.error, 'No se ha podido enviar la alerta');
+    }
   }
 
   Widget _getButton(IconData icon, Color color, String txt, VoidCallback action,
@@ -251,14 +261,14 @@ class _SosState extends State<Sos> {
     );
   }
 
-  _showPopup() {
+  _showPopup(IconData icon, String msg) {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         insetPadding: EdgeInsets.zero,
         actions: <Widget>[
           FlatButton(
-            child: Text('OK',
+            child: Text('Ok',
                 style: TextStyle(
                     color: Theme.of(context).primaryColor, fontSize: 18)),
             onPressed: () => Navigator.of(context).pop(),
@@ -272,12 +282,12 @@ class _SosState extends State<Sos> {
           width: MediaQuery.of(context).size.width / 1.3,
           child: ListTile(
             title: Text(
-              'Se ha avisado a sus amigos',
+              msg,
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
             leading: Icon(
-              Icons.check,
+              icon,
               size: 30,
             ),
           ),

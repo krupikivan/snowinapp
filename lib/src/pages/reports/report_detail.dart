@@ -15,42 +15,19 @@ import 'package:snowin/src/widgets/ranking_w.dart';
 import 'package:snowin/src/widgets/comment_w.dart';
 import 'package:snowin/src/widgets/marquee.dart';
 
-class ReportDetail extends StatelessWidget {
-  // Report report;
+class ReportDetail extends StatefulWidget {
+  @override
+  _ReportDetailState createState() => _ReportDetailState();
+}
 
-  // _ReportDetailState(this.report);
-
+class _ReportDetailState extends State<ReportDetail> {
   CarouselController buttonCarouselController = CarouselController();
+
   int _currentIndex = 0;
+
   IconData iconData;
+
   double rate;
-  // final OnBackCallback onBack;
-
-  // ReportDetail({Key key, this.onBack}) : super(key: key);
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  // switch (report.sensacionGeneral.toString()) {
-  //   case 'REGULAR':
-  //     iconData = Icons.sentiment_neutral;
-  //     break;
-  //   case 'MALA':
-  //     iconData = Icons.mood_bad;
-  //     break;
-  //   default:
-  //     iconData = Icons.insert_emoticon;
-  //     break;
-  // }
-  // rate = double.parse(report.copos.toString());
-  // setState(() {});
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -205,15 +182,17 @@ class ReportDetail extends StatelessWidget {
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    TextSpan(
-                                      text: report
-                                          .reportSelected.pista.descripcion
-                                          .toString()
-                                          .trim(),
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 22),
-                                    )
+                                    if (report.reportSelected.pista != null)
+                                      TextSpan(
+                                        text: report
+                                            .reportSelected.pista.descripcion
+                                            .toString()
+                                            .trim(),
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 22),
+                                      )
                                   ]),
                                 ),
                                 AutoSizeText(
@@ -744,16 +723,7 @@ class ReportDetail extends StatelessWidget {
                       child: Column(
                         children: [
                           RankingW(
-                            afterRate: (value) {
-                              report
-                                  .valorar(value)
-                                  .then((value) =>
-                                      DialogHelper.showSimpleDialog(
-                                          context, 'Reporte evaluado'))
-                                  .catchError((e) =>
-                                      DialogHelper.showErrorDialog(
-                                          context, e.toString()));
-                            },
+                            afterRate: (value) => valorar(value, report),
                           )
                         ],
                       ),
@@ -764,6 +734,24 @@ class ReportDetail extends StatelessWidget {
             ),
           );
         });
+  }
+
+  valorar(double value, ReportProvider report) async {
+    try {
+      await report.valorar(value);
+      DialogHelper.showSimpleDialog(context, 'Reporte evaluado');
+    } catch (e) {
+      DialogHelper.showErrorDialog(context, e.toString());
+    }
+  }
+
+  comenta(String value, ReportProvider report) async {
+    try {
+      await report.comenta(value);
+      DialogHelper.showSimpleDialog(context, 'Reporte comentado');
+    } catch (e) {
+      DialogHelper.showErrorDialog(context, e.toString());
+    }
   }
 
   void showCommentDialog(ReportProvider report, context) {
@@ -790,16 +778,7 @@ class ReportDetail extends StatelessWidget {
                       child: Column(
                         children: [
                           CommentW(
-                            afterComment: (value) {
-                              report
-                                  .comenta(value)
-                                  .then((value) =>
-                                      DialogHelper.showSimpleDialog(
-                                          context, 'Reporte comentado'))
-                                  .catchError((onError) =>
-                                      DialogHelper.showErrorDialog(
-                                          context, 'Error al comentar'));
-                            },
+                            afterComment: (value) => comenta(value, report),
                           )
                         ],
                       ),

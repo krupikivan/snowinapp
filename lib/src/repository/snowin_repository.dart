@@ -320,11 +320,38 @@ class SnowinRepository {
       final conex = await ConnectivityProvider().check();
       if (conex) {
         response =
-            await http.post(Uri.encodeFull(service), headers: _securedHeaders);
+            await http.get(Uri.encodeFull(service), headers: _securedHeaders);
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           final decodeResp = json.decode(response.body);
           return {
-            'success': true,
+            'success': decodeResp['success'],
+            'data': (decodeResp == null) ? decodeResp : decodeResp['data']
+          };
+        } else {
+          return manejadorErroresResp(response);
+        }
+      } else {
+        return retornarErrorConexion();
+      }
+    } catch (e) {
+      return retornarErrorDesconocido();
+    }
+  }
+
+  Future<Map> sendSOS() async {
+    //configurar servicio
+    String service = Config.apiUserUrl + 'enviar-sos';
+    //Respuesta
+    http.Response response;
+    try {
+      final conex = await ConnectivityProvider().check();
+      if (conex) {
+        response =
+            await http.get(Uri.encodeFull(service), headers: _securedHeaders);
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          final decodeResp = json.decode(response.body);
+          return {
+            'success': decodeResp['success'],
             'data': (decodeResp == null) ? decodeResp : decodeResp['data']
           };
         } else {
