@@ -30,7 +30,7 @@ class Location extends StatelessWidget {
                                 child: Image(
                                   fit: BoxFit.cover,
                                   image:
-                                      NetworkImage(model.listSlider[2].image),
+                                      NetworkImage(model.listSlider[3].image),
                                 ),
                               ),
                               Container(
@@ -61,7 +61,7 @@ class Location extends StatelessWidget {
                                           color: Colors.white,
                                         ),
                                         child: Text(
-                                          "Foto de ${model.listSlider[2].author}.",
+                                          "Foto de ${model.listSlider[3].author}.",
                                           style: TextStyle(fontSize: 19),
                                         ),
                                       ),

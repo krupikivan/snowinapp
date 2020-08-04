@@ -29,7 +29,7 @@ class ProfileType extends StatelessWidget {
                               height: size.height * 0.53,
                               child: Image(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(model.listSlider[0].image),
+                                image: NetworkImage(model.listSlider[4].image),
                               ),
                             ),
                             Container(
@@ -59,7 +59,7 @@ class ProfileType extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       child: Text(
-                                        "Foto de ${model.listSlider[0].author}.",
+                                        "Foto de ${model.listSlider[4].author}.",
                                         style: TextStyle(fontSize: 19),
                                       ),
                                     ),

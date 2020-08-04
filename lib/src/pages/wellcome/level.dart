@@ -47,7 +47,7 @@ class Level extends StatelessWidget {
                                 child: Image(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                        model.listSlider[1].image)),
+                                        model.listSlider[5].image)),
                               ),
                               Container(
                                 height: size.height * 0.55,
@@ -77,7 +77,7 @@ class Level extends StatelessWidget {
                                           color: Colors.white,
                                         ),
                                         child: Text(
-                                          "Foto de ${model.listSlider[1].author}.",
+                                          "Foto de ${model.listSlider[5].author}.",
                                           style: TextStyle(fontSize: 19),
                                         ),
                                       ),
