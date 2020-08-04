@@ -329,9 +329,14 @@ class NewReport extends StatelessWidget {
                               height: 55,
                               width: size.width * 0.35,
                               onPressed: () {
-                                if (report.formIsValid())
-                                  report.sendReport().then((value) =>
-                                      /*Navigator.of(context).pop(false)*/ true);
+                                if (report.formIsValid()) {
+                                  report.sendReport().then((value) {
+                                    Navigator.of(context).pop(false);
+                                    _showPopup(context, "Reporte enviado");
+                                  });
+                                } else {
+                                  _showPopup(context, "Complete todos los campos", false);
+                                }
                               },
                             ),
                           ],
@@ -407,6 +412,42 @@ class NewReport extends StatelessWidget {
       });
     });
   }
+
+  _showPopup(context, text, [success = true]) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        actions: <Widget>[
+          FlatButton(
+            child: Text('OK',
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18)),
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ],
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        content: Container(
+          padding: const EdgeInsets.only(top: 20),
+          height: 80,
+          width: MediaQuery.of(context).size.width / 1.3,
+          child: ListTile(
+            title: Text(
+              text,
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 20),
+            ),
+            leading: Icon(
+              success ? Icons.check : Icons.error,
+              size: 30,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }
 
 // typedef OnSendCallback = void Function();

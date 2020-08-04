@@ -49,7 +49,7 @@ class CustomTextField extends StatelessWidget {
               inputFormatters: <TextInputFormatter>[
                 onlyDigits
                     ? WhitelistingTextInputFormatter.digitsOnly
-                    : WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]"))
+                    : WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9 ]"))
               ],
               keyboardType:
                   onlyDigits ? TextInputType.number : TextInputType.text,

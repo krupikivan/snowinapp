@@ -579,7 +579,8 @@ class ReportProvider with ChangeNotifier {
   }
 
   bool formIsValid() {
-    return (_track.isNotEmpty &&
+    return (
+        (_reportFromItem == _reportFrom[2].key && _track.isNotEmpty || _reportFromItem == _reportFrom[1].key) &&
         _title.isNotEmpty &&
         _comment.isNotEmpty &&
         _calidadNieve.isNotEmpty &&
